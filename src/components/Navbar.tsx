@@ -18,7 +18,7 @@ import { Button } from "./ui/button"
 
 const Navbar = () => {
     return (
-        <NavigationMenu className="bg-white shadow-lg p-2 mx-10 my-4 rounded-2xl bg-opacity-40">
+        <NavigationMenu className="bg-white shadow-lg p-2 mx-10 rounded-2xl bg-opacity-40 ">
             <Image src={logo} alt="Logo" width={150} height={100} />
             <NavigationMenuList>
                 <div className="flex gap-2">

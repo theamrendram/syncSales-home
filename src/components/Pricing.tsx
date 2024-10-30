@@ -6,10 +6,10 @@ import { Button } from "./ui/button";
 const Pricing = () => {
     return (
         <section className="py-10">
-            <p className="text-4xl sm:text-7xl font-bold relative z-20 bg-clip-text text-transparent bg-gradient-to-b from-neutral-200 to-neutral-500 py-8 text-center">
+            <p className="text-3xl sm:text-5xl font-bold relative z-20 bg-clip-text text-transparent bg-gradient-to-b from-neutral-200 to-neutral-500 py-8 text-center px-10">
                 Simple and Transparent Pricing
             </p>
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 max-w-7xl mx-auto w-full">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 max-w-7xl mx-4 sm:mx-auto px-4 sm:px-10">
                 <WobbleCard
                     containerClassName="h-full bg-black/80 min-h-[500px] lg:min-h-[300px] border-white"
                     className="flex flex-col gap-4">

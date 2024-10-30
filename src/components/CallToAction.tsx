@@ -30,11 +30,11 @@ const CallToAction = () => {
         setEmail("")
     }
     return (
-        <section className='min-h-[50vh] flex flex-col items-center justify-center px-20 bg-primary'>
-            <p className='text-5xl font-bold text-center py-4'>Get Early Access and Exclusive Discounts</p>
+        <section className='min-h-[50vh] flex flex-col items-center justify-center px-8 sm:px-20 bg-primary'>
+            <p className='text-4xl sm:text-5xl font-bold text-center py-4'>Get Early Access and Exclusive Discounts</p>
             <p className='text-2xl text-center'>Join our waiting list to be among the first to experience SyncSales and receive special offers.</p>
-            <div className='w-2/5 py-4'>
-                <form onSubmit={(e) => handleSubmit(e)} className='flex gap-4 px-20'>
+            <div className='w-full md:w-3/5 lg:w-2/5 py-4'>
+                <form onSubmit={(e) => handleSubmit(e)} className='flex gap-4'>
                     <Input type="email" placeholder="Enter your email" className="w-full" name="email" value={email} onChange={(e) => handleChange(e)} />
                     <Button type='submit' className='bg-white text-black' variant={"ghost"}>Submit</Button>
                 </form>

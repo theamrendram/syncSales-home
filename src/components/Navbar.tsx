@@ -18,9 +18,9 @@ import { Button } from "./ui/button"
 
 const Navbar = () => {
     return (
-        <NavigationMenu className="bg-white shadow-lg p-2 mx-10 rounded-2xl bg-opacity-40 ">
+        <NavigationMenu className="bg-white shadow-lg p-2 sm:m-4 rounded-2xl bg-opacity-40">
             <Image src={logo} alt="Logo" width={150} height={100} />
-            <NavigationMenuList>
+            <NavigationMenuList className="hidden md:flex">
                 <div className="flex gap-2">
                     <NavigationMenuItem>
                         <Link href="/docs" legacyBehavior passHref>

@@ -9,7 +9,7 @@ const Features = () => {
             <p className="text-4xl sm:text-7xl font-bold relative z-20 bg-clip-text text-transparent bg-gradient-to-b from-neutral-200 to-neutral-500 py-8 text-center">
                 Key Features
             </p>
-            <div className="max-w-6xl mx-auto">
+            <div className="max-w-6xl mx-4 sm:mx-auto">
                 <HoverEffect items={projects} />
             </div>
         </div>

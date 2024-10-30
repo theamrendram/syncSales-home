@@ -7,7 +7,7 @@ const Setup = () => {
       <p className="text-4xl sm:text-7xl font-bold relative z-20 bg-clip-text text-transparent bg-gradient-to-b from-neutral-200 to-neutral-500 py-8 text-center">
         3 Step Setup
       </p>
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-6xl mx-4 sm:mx-auto">
         <HoverEffect items={steps} />
       </div>
     </section>
@@ -28,13 +28,13 @@ const steps = [
     title: "Create Campaign",
     description: "Create campaigns and share api keys and with you sellers.",
     link: "https://google.com",
-    icon: <Tally3 size={40} />,
+    icon: <Tally2 size={40} />,
   },
   {
     title: "Lead Generation",
     description:
       "Capture leads effortlessly from your landing pages and forms, ensuring a steady flow of potential customers.",
     link: "https://netflix.com",
-    icon: <Tally2 size={40} />,
+    icon: <Tally3 size={40} />,
   },
 ];

@@ -5,12 +5,14 @@ export async function POST(req: NextRequest) {
   console.log("data", data);
 
   try {
-    const res = axios.post(
-      "https://script.google.com/macros/s/AKfycbyQRFpLvkLyR2ygBfSmqy-SDKzm-oS2eCD4ewPmq6rypO40NaHPOblBC5yfgI59170U/exec",
-      data
+    const res = await axios.post(
+      "https://script.google.com/macros/s/AKfycbyak4XxqVfH9HFBHGXD5SpXqkQpZ6VIN0aKN9TdUc5cKexjl-2DDip-WQgULZeFllM/exec",
+      {
+        Email: data.email,
+        Date: new Date().toISOString(),
+      }
     );
     console.log("res", res);
-    return NextResponse.json({ data: res });
   } catch (err) {
     console.log(err);
   }

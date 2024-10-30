@@ -1,20 +1,32 @@
 'use client'
 import React, { useState } from 'react'
 import axios from "axios"
+import { useToast } from "@/hooks/use-toast"
 import { Input } from './ui/input'
 import { Button } from './ui/button'
 
 const CallToAction = () => {
+    const { toast } = useToast()
 
     const [email, setEmail] = useState('')
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setEmail(e.target.value)
     }
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        const res = axios.post("/api/email", { email })
-        console.log(res)
+        const res = await axios.post("/api/email", { email })
+        if (res.status === 200) {
+            toast({
+                title: "Success",
+                description: "Thanks for signing up!",
+            })
+        } else {
+            toast({
+                title: "Error",
+                description: "Something went wrong!",
+            })
+        }
         setEmail("")
     }
     return (

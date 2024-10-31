@@ -10,14 +10,14 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "px-8 py-2 rounded-full bg-gradient-to-b from-rose-600 to-rose-900 text-white focus:ring-2 focus:ring-blue-400 hover:shadow-xl transition duration-200",
+          "px-8 py-2 rounded-xl bg-gradient-to-b from-gray-800 to-black text-white focus:ring-2 focus:ring-blue-400 hover:shadow-xl transition duration-200",
         destructive:
           "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
         outline:
           "border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground",
         secondary:
           "bg-gradient-to-br from-secondary to-zinc-700 text-secondary-foreground shadow-sm rounded-xl hover:bg-secondary/80",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
+        ghost: "",
         link: "text-primary underline-offset-4 hover:underline",
         accent: "bg-accent text-accent-foreground hover:bg-accent/90",
         white: "bg-white text-foreground hover:bg-accent hover:text-accent-foreground",

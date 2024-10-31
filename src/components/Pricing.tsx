@@ -5,7 +5,7 @@ import { Check } from "lucide-react";
 import { Button } from "./ui/button";
 const Pricing = () => {
     return (
-        <section className="py-10">
+        <section id="pricing" className="py-10">
             <p className="text-3xl sm:text-5xl font-bold relative z-20 bg-clip-text text-transparent bg-gradient-to-b from-neutral-200 to-neutral-500 py-8 text-center px-10">
                 Simple and Transparent Pricing
             </p>

@@ -14,44 +14,46 @@ import {
     navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu"
 import logo from "@/public/syncsales_logo.png"
+import logoWhite from "@/public/syncsales white logo.png"
 import { Button } from "./ui/button"
 
 const Navbar = () => {
     return (
-        <NavigationMenu className="bg-white shadow-lg p-2 sm:m-4 rounded-2xl bg-opacity-40">
-            <Image src={logo} alt="Logo" width={150} height={100} />
+        <NavigationMenu className="bg-white shadow-lg p-2 sm:m-4 lg:w-[80vw] lg:mx-auto rounded-2xl bg-opacity-40">
+            <Image src={logoWhite} alt="Logo" width={150} height={100} />
             <NavigationMenuList className="hidden md:flex">
                 <div className="flex gap-2">
                     <NavigationMenuItem>
-                        <Link href="/docs" legacyBehavior passHref>
+                        <Link href="#features" legacyBehavior passHref className="">
                             <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                                Documentation
+                                <span className="text-lg"> Features</span>
                             </NavigationMenuLink>
                         </Link>
                     </NavigationMenuItem>
                     <NavigationMenuItem>
-                        <Link href="/docs" legacyBehavior passHref>
+                        <Link href="#pricing" legacyBehavior passHref className="text-lg">
                             <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                                Documentation
+                                <span className="text-lg">Pricing</span>
                             </NavigationMenuLink>
                         </Link>
                     </NavigationMenuItem>
                     <NavigationMenuItem>
-                        <Link href="/docs" legacyBehavior passHref>
+                        <Link href="#setup" legacyBehavior passHref className="text-lg">
                             <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                                Documentation
+                                <span className="text-lg">Easy Setup</span>
                             </NavigationMenuLink>
                         </Link>
                     </NavigationMenuItem>
                 </div>
             </NavigationMenuList>
             <div className="flex gap-2">
-                <Button>
+                {/* <Button>
                     Login
                 </Button>
                 <Button className="w-full" >
                     Sign Up
-                </Button>
+                </Button> */}
+                <Button className="w-[150px] text-lg">Contact</Button>
             </div>
         </NavigationMenu>
     )

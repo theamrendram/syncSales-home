@@ -3,7 +3,7 @@ import { HoverEffect } from "./ui/card-hover-effect";
 import { Tally1, Tally2, Tally3 } from "lucide-react";
 const Setup = () => {
   return (
-    <section className="min-h-[50vh]">
+    <section id="setup" className="min-h-[50vh]">
       <p className="text-4xl sm:text-7xl font-bold relative z-20 bg-clip-text text-transparent bg-gradient-to-b from-neutral-200 to-neutral-500 py-8 text-center">
         3 Step Setup
       </p>

@@ -36,7 +36,7 @@ export const HoverEffect = ({
           <AnimatePresence>
             {hoveredIndex === idx && (
               <motion.span
-                className="absolute inset-0 h-full w-full bg-slate-800/[0.8] block  rounded-3xl"
+                className="absolute inset-0 h-full w-full bg-gray-300/[0.8] block  rounded-3xl"
                 layoutId="hoverBackground"
                 initial={{ opacity: 0 }}
                 animate={{
@@ -50,10 +50,10 @@ export const HoverEffect = ({
               />
             )}
           </AnimatePresence>
-          <Card className="bg-gradient-to-tr from-neutral-700 to-neutral-00 text-white">
+          <Card className="bg-gradient-to-tr from-neutral-700 to-neutral-300 text-white">
             {item.icon}
             <CardTitle>{item.title}</CardTitle>
-            <CardDescription className="text-white/60">{item.description}</CardDescription>
+            <CardDescription className="text-white/60 text-md">{item.description}</CardDescription>
           </Card>
         </Link>
       ))}

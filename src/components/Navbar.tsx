@@ -19,28 +19,28 @@ import { Button } from "./ui/button"
 
 const Navbar = () => {
     return (
-        <NavigationMenu className="bg-white shadow-lg p-2 sm:m-4 lg:w-[80vw] lg:mx-auto rounded-2xl bg-opacity-40">
+        <NavigationMenu className="bg-white shadow-lg p-2 sm:m-4 lg:w-[80vw] lg:mx-auto rounded-lg bg-opacity-40">
             <Image src={logoWhite} alt="Logo" width={150} height={100} />
             <NavigationMenuList className="hidden md:flex">
                 <div className="flex gap-2">
                     <NavigationMenuItem>
                         <Link href="#features" legacyBehavior passHref className="">
                             <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                                <span className="text-lg"> Features</span>
+                                <span className="text-lg text-white"> Features</span>
                             </NavigationMenuLink>
                         </Link>
                     </NavigationMenuItem>
                     <NavigationMenuItem>
                         <Link href="#pricing" legacyBehavior passHref className="text-lg">
                             <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                                <span className="text-lg">Pricing</span>
+                                <span className="text-lg text-white">Pricing</span>
                             </NavigationMenuLink>
                         </Link>
                     </NavigationMenuItem>
                     <NavigationMenuItem>
                         <Link href="#setup" legacyBehavior passHref className="text-lg">
                             <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                                <span className="text-lg">Easy Setup</span>
+                                <span className="text-lg text-white">Easy Setup</span>
                             </NavigationMenuLink>
                         </Link>
                     </NavigationMenuItem>

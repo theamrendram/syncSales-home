@@ -22,8 +22,8 @@ export function HeroSection() {
                         ease: [0.4, 0.0, 0.2, 1],
                     }}
                     className="text-4xl md:text-6xl font-bold text-gray-200 max-w-4xl leading-10 sm:leading-snug">
-                    Streamline your sales with <br></br>
-                    <Highlight className="text-black rounded-xl">
+                    <span className="me-2">Streamline your lead generation with</span>
+                    <Highlight className="text-black rounded-xl mt-2">
                         SyncSales
                     </Highlight>
                 </motion.h1>
@@ -38,7 +38,7 @@ export function HeroSection() {
                         duration: 0.5,
                         ease: [0.4, 0.0, 0.2, 1],
                     }}
-                    className="text-lg px-4 font-medium text-gray-200 max-w-4xl md:leading-normal"> Get leads, manage campaigns, and boost your sales with our all-in-one CRM solution. Integrate easily and start selling smarter today.</motion.p>
+                    className="text-lg font-medium text-gray-200 max-w-4xl md:leading-normal"> Get leads, manage campaigns, and boost your sales with our all-in-one CRM solution. Integrate easily and start selling smarter today.</motion.p>
 
                 <div className="flex justify-center sm:justify-start sm:items-start gap-4 z-10">
                     <Button variant={"ghost"} className="h-14 text-xl font-medium rounded-xl bg-gradient-to-b from-neutral-100 to-neutral-400 text-black hover:scale-105 duration-300 ease-in-out">Start Free Trial</Button>

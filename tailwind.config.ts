@@ -27,11 +27,6 @@ const config: Config = {
   			secondary: 'var(--secondary)',
   			accent: 'var(--accent)'
   		},
-  		borderRadius: {
-  			lg: 'var(--radius)',
-  			md: 'calc(var(--radius) - 2px)',
-  			sm: 'calc(var(--radius) - 4px)'
-  		},
   		keyframes: {
   			'accordion-down': {
   				from: {

@@ -1,6 +1,7 @@
 import CallToAction from "@/components/CallToAction";
 import FAQ from "@/components/FAQ";
 import Features from "@/components/Features";
+import { TimelineDemo } from "@/components/FeaturesNew";
 import Footer from "@/components/Footer";
 import { HeroSection } from "@/components/HeroSection";
 import Navbar from "@/components/Navbar";
@@ -17,7 +18,8 @@ export default function Home() {
         <HeroSection />
       </div>
       <Features />
-      <Setup />
+      <TimelineDemo/>
+      {/* <Setup /> */}
       <Pricing />
       <CallToAction />
       <FAQ />

@@ -1,8 +1,8 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
-import { Navbar } from "@/components/navbar"
+import { Navbar } from "@/components/Navbar"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Switch } from "@/components/ui/switch"
@@ -20,7 +20,7 @@ const plans = {
     enterprise: { name: "Enterprise", price: 9900, trialDays: 14 } // Price in paise (99 INR)
 }
 
-export default function CheckoutPage() {
+function Checkout() {
     const searchParams = useSearchParams()
     const router = useRouter()
     const selectedPlan = searchParams.get('plan') || 'pro'
@@ -151,3 +151,10 @@ export default function CheckoutPage() {
     )
 }
 
+
+
+export default function CheckoutPage() {
+    <Suspense fallback={<div>Loading...</div>}>
+        <Checkout />
+    </Suspense>
+}

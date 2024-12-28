@@ -1,13 +1,13 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { Navbar } from "@/components/navbar"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import Link from 'next/link'
 
-export default function SuccessPage() {
+function Success() {
     const searchParams = useSearchParams()
     const orderId = searchParams.get('order_id')
     const [orderDetails, setOrderDetails] = useState<any>(null)
@@ -56,3 +56,10 @@ export default function SuccessPage() {
     )
 }
 
+export default  function SuccessPage() {
+    return (
+        <Suspense fallback="Loading...">
+            <Success />
+        </Suspense>
+    )
+}

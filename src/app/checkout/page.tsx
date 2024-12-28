@@ -154,7 +154,9 @@ function Checkout() {
 
 
 export default function CheckoutPage() {
-    <Suspense fallback={<div>Loading...</div>}>
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
         <Checkout />
     </Suspense>
+    )
 }

@@ -1,65 +1,66 @@
-import React from 'react'
-import { HoverEffect } from "./ui/card-hover-effect";
-import { ChartColumnIncreasing, ChartPie, Webhook } from "lucide-react";
-const Features = () => {
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { BarChart3, Users, Zap, MessageSquare, BarChart, Calendar } from 'lucide-react'
+
+const features = [
+    {
+        title: "AI-Powered Lead Scoring",
+        description: "Automatically qualify and prioritize leads based on behavior patterns and engagement metrics.",
+        icon: BarChart3,
+    },
+    {
+        title: "Smart Automation",
+        description: "Set up intelligent workflows that nurture leads and follow up at the perfect moment.",
+        icon: Zap,
+    },
+    {
+        title: "Team Collaboration",
+        description: "Share insights, delegate tasks, and close deals faster with built-in team features.",
+        icon: Users,
+    },
+    {
+        title: "Multi-Channel Engagement",
+        description: "Reach prospects through email, social, and messaging - all from one unified inbox.",
+        icon: MessageSquare,
+    },
+    {
+        title: "Advanced Analytics",
+        description: "Get real-time insights into your sales pipeline and team performance.",
+        icon: BarChart,
+    },
+    {
+        title: "Smart Scheduling",
+        description: "Let prospects book meetings instantly based on your team's real availability.",
+        icon: Calendar,
+    },
+]
+
+export function Features() {
     return (
-        <section id='features' className="min-h-screen w-full bg-black bg-grid-white/[0.2] relative">
-            {/* Radial gradient for the container to give a faded look */}
-            <div className="absolute pointer-events-none inset-0 flex items-center justify-center bg-black [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]"></div>
-            <p className="text-4xl sm:text-7xl font-bold relative z-20 bg-clip-text text-transparent bg-gradient-to-b from-neutral-200 to-neutral-500 py-8 text-center">
-                Key Features
-            </p>
-            <div className="px-20 mx-4 sm:mx-auto">
-                <HoverEffect items={projects} />
+        <section id="features" className="container py-24 sm:py-32">
+            <div className="space-y-16">
+                <div className="text-center">
+                    <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
+                        Everything you need to <span className="gradient-text">accelerate sales</span>
+                    </h2>
+                    <p className="mx-auto mt-4 max-w-[600px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
+                        Powerful features that help you convert more leads into customers.
+                    </p>
+                </div>
+                <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+                    {features.map((feature) => (
+                        <Card key={feature.title} className="flex flex-col group transition-all duration-300 hover:shadow-lg">
+                            <CardHeader>
+                                <div className="gradient-primary w-12 h-12 rounded-lg flex items-center justify-center">
+                                    <feature.icon className="h-6 w-6 text-white" />
+                                </div>
+                                <CardTitle className="mt-4">{feature.title}</CardTitle>
+                                <CardDescription>{feature.description}</CardDescription>
+                            </CardHeader>
+                        </Card>
+                    ))}
+                </div>
             </div>
         </section>
-
     )
 }
 
-export default Features
-
-const projects = [
-    {
-        title: "Lead Generation",
-        description:
-            "Capture leads effortlessly from your landing pages and forms, ensuring a steady flow of potential customers.",
-        link: "https://stripe.com",
-        icon: <ChartColumnIncreasing size={40} />
-    },  
-    {
-        title: "Insightful Charts",
-        description:
-            "Visualize your sales data with interactive charts, helping you make data-driven decisions quickly.",
-        link: "https://netflix.com",
-        icon: <ChartPie size={40} />
-    },
-    {
-        title: "Webhook Integration",
-        description:
-            "Easily connect with third-party tools using our powerful webhook system, enhancing your workflow.",
-        link: "https://google.com",
-        icon: <Webhook size={40} />
-    },
-    {
-        title: "Meta",
-        description:
-            "A technology company that focuses on building products that advance Facebook's mission of bringing the world closer together.",
-        link: "https://meta.com",
-        icon: <Webhook size={40} />
-    },
-    {
-        title: "Amazon",
-        description:
-            "A multinational technology company focusing on e-commerce, cloud computing, digital streaming, and artificial intelligence.",
-        link: "https://amazon.com",
-        icon: <Webhook size={40} />
-    },
-    {
-        title: "Microsoft",
-        description:
-            "A multinational technology company that develops, manufactures, licenses, supports, and sells computer software, consumer electronics, personal computers, and related services.",
-        link: "https://microsoft.com",
-        icon: <Webhook size={40} />
-    },
-];

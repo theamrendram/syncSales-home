@@ -65,7 +65,7 @@ function Checkout() {
       <Navbar />
       <main className="mx-auto px-4 py-20">
         <h1 className="text-3xl font-bold text-center mb-8">
-          Get Your 1 Week of Free Trial
+          Get Your 14 Days of Free Trial
         </h1>
         <Card className="max-w-md mx-auto">
           <CardHeader>

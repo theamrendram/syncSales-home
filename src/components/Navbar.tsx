@@ -25,7 +25,7 @@ export function Navbar() {
                     <Button variant="ghost" size="sm">
                         Log in
                     </Button>
-                    <Button size="sm"><Link href={"/checkout"}> Start Free Trial</Link> </Button>
+                    <Button size="sm"><Link href={"/checkout/free-trial"}> Start Free Trial</Link> </Button>
                 </div>
             </div>
         </header>

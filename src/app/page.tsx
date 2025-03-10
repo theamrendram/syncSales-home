@@ -5,6 +5,7 @@ import { Features } from "@/components/Features"
 import { Pricing } from "@/components/Pricing"
 import { FAQ } from "@/components/FAQ"
 import { CTA } from "@/components/cta"
+import { TimelineDemo } from "@/components/FeaturesNew"
 
 export default function Home() {
   return (
@@ -13,6 +14,7 @@ export default function Home() {
       <main>
         <Hero />
         <Features />
+        {/* <TimelineDemo/> */}
         {/* <Testimonials /> */}
         <Pricing />
         <FAQ />

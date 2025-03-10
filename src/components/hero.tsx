@@ -9,11 +9,11 @@ export function Hero() {
             <div className="container flex flex-col items-center justify-center space-y-10 py-32 md:py-40 lg:py-48">
                 <div className="space-y-6 text-center">
                     <Badge variant="secondary" className="w-fit mx-auto">
-                        Trusted by 10,000+ sales teams worldwide
+                        Trusted by leading media buyers
                     </Badge>
                     <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
                         Transform Your Lead Generation <br className="hidden sm:inline" />
-                        <span className="gradient-text">with AI-Powered Sales</span>
+                        <span className="gradient-text">Sales Pipeline</span>
                     </h1>
                     <p className="mx-auto max-w-[600px] text-gray-500 md:text-xl dark:text-gray-400">
                         Automate your outreach, qualify leads instantly, and close more deals with our all-in-one sales automation platform.
@@ -34,7 +34,7 @@ export function Hero() {
                     </div>
                     <div className="flex items-center gap-2">
                         <CheckCircle className="h-5 w-5 text-green-500" />
-                        <span className="text-sm">14-day free trial</span>
+                        <span className="text-sm">7-day free trial</span>
                     </div>
                     <div className="flex items-center gap-2">
                         <CheckCircle className="h-5 w-5 text-green-500" />

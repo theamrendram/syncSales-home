@@ -11,13 +11,14 @@ import { Check } from "lucide-react";
 
 const plans = [
   {
-    name: "Free Trial",
-    price: "$0",
+    name: "Basic",
+    price: "$20",
     description: "Perfect for trying out SyncSales",
     features: [
-      "Up to 100 leads",
+      "Up to 100 leads/day",
       "2 Webhook endpoints",
       "2 Campaigns",
+      "API access",
       "Email Support",
     ],
   },
@@ -29,7 +30,8 @@ const plans = [
       "Unlimited Leads",
       "Unlimited Webhook endpoints",
       "Custom workflows",
-      "API access",
+      "Webmaster Access",
+      "API Access",
       "Priority support",
     ],
     popular: true,
@@ -78,7 +80,7 @@ export function Pricing() {
                 <ul className="space-y-4">
                   {plan.features.map((feature) => (
                     <li key={feature} className="flex items-center gap-2">
-                      <Check className="h-4 w-4 text-primary" />
+                      <Check className="h-4 w-4 text-green-500" />
                       <span className="text-sm">{feature}</span>
                     </li>
                   ))}

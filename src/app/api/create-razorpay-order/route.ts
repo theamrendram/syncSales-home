@@ -1,37 +1,54 @@
 import { NextResponse } from "next/server";
-import Razorpay from "razorpay";
-
-const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID as string,
-  key_secret: process.env.RAZORPAY_KEY_SECRET as string,
-});
+import axios from "axios";
 
 const plans = {
-  free: { name: "Free", price: 0, trialDays: 0 },
-  pro: { name: "Pro", price: 4900, trialDays: 14 }, // Price in paise (49 INR)
-  enterprise: { name: "Enterprise", price: 9900, trialDays: 14 }, // Price in paise (99 INR)
+  basic: { name: "Basic", price: 175000, trialDays: 0 },
+  pro: { name: "Pro", price: 430000, trialDays: 0 },
 };
 
 export async function POST(request: Request) {
-  const { plan, isAnnual, isTrial } = await request.json();
-
-  const selectedPlan = plans[plan as keyof typeof plans];
-  const price = isAnnual ? selectedPlan.price * 12 * 0.9 : selectedPlan.price; // 10% discount for annual
-
   try {
-    const order = await razorpay.orders.create({
-      amount: Math.round(price), // Razorpay expects amount in paise
-      currency: "INR",
-      receipt: `receipt_${Date.now()}`,
-      notes: {
-        planName: selectedPlan.name,
-        billingType: isAnnual ? "annual" : "monthly",
-        isTrial: isTrial.toString(),
-      },
-    });
+    const {
+      plan,
+      billingCycle,
+      isTrial,
+      customer,
+    }: {
+      plan: string;
+      billingCycle: string;
+      isTrial: boolean;
+      customer: {
+        firstName: string;
+        lastName: string;
+        phone: string;
+        email: string;
+        company: string;
+        address: string;
+      };
+    } = await request.json();
 
-    return NextResponse.json(order);
+    try {
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/payment/subscribe`,
+        {
+          plan,
+          billingCycle,
+          isTrial,
+          customer,
+        }
+      );
+    } catch (err: any) {
+      console.error("Razorpay order creation failed:", err);
+      return NextResponse.json(
+        { error: err.message || "Failed to create order" },
+        { status: 500 }
+      );
+    }
   } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    console.error("Razorpay order creation failed:", err);
+    return NextResponse.json(
+      { error: err.message || "Failed to create order" },
+      { status: 500 }
+    );
   }
 }

@@ -8,18 +8,25 @@ const razorpay = new Razorpay({
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const orderId = searchParams.get("order_id");
+  const subscriptionId = searchParams.get("subscription_id");
 
-  if (!orderId) {
+  if (!subscriptionId) {
     return NextResponse.json(
-      { error: "Order ID is required" },
+      { error: "Subscription ID is required" },
       { status: 400 }
     );
   }
 
   try {
-    const order = await razorpay.orders.fetch(orderId);
-    return NextResponse.json(order);
+    const subscription = await razorpay.subscriptions.fetch(subscriptionId);
+    const plan = await razorpay.plans.fetch(subscription.plan_id);
+    console.log(subscription, plan);
+    return NextResponse.json({
+      id: subscription.id,
+      amount: plan.item.amount,
+      plan: plan.item.name,
+      endAt: subscription.end_at,
+    });
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 });
   }

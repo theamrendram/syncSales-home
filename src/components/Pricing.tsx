@@ -88,12 +88,12 @@ export function Pricing() {
                 <Button
                   className="mt-8 w-full"
                   onClick={() =>     {
-                    if (plan.name === "Free Trial") {
+                    if (plan.name === "Basic") {
                       window.location.href =
-                        "/checkout/free-trial";
+                        "/checkout?plan=basic";
                     } else if (plan.name === "Pro") {
                       window.location.href =
-                        "/checkout/pro";
+                        "/checkout?plan=pro";
                     } else {
                       window.location.href = "/contact";
                     }

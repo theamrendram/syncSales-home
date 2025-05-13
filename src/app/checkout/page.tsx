@@ -16,7 +16,15 @@ import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { Eye, EyeClosed } from "lucide-react";
+import {
+  Eye,
+  EyeClosed,
+  ArrowRight,
+  Check,
+  Shield,
+  CreditCard,
+  Loader2
+} from "lucide-react";
 import axios from "axios";
 
 declare global {
@@ -26,10 +34,30 @@ declare global {
 }
 
 const plans = {
-  free: { name: "Free Trail", price: 0, trialDays: 7 },
-  basic: { name: "Basic", price: 175000, trialDays: 0 },
-  pro: { name: "Pro", price: 430000, trialDays: 0 },
-  enterprise: { name: "Enterprise", price: 9900, trialDays: 7 }, // Price in paise (99 INR)
+  basic: {
+    name: "Basic",
+    price: 180000,
+    trialDays: 0,
+    features: [
+      "5 Team Members",
+      "Basic Analytics",
+      "24/7 Support",
+      "10 Projects",
+    ],
+  },
+  pro: {
+    name: "Pro",
+    price: 430000,
+    trialDays: 0,
+    features: [
+      "Unlimited Team Members",
+      "Advanced Analytics",
+      "Priority Support",
+      "Unlimited Projects",
+      "API Access",
+      "Custom Integrations",
+    ],
+  },
 };
 
 function Checkout() {
@@ -57,6 +85,7 @@ function Checkout() {
 
   const [termsAndConditions, setTermsAndConditions] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [currentStep, setCurrentStep] = useState(1);
 
   const { toast } = useToast();
 
@@ -66,7 +95,7 @@ function Checkout() {
     plan.price === 0
       ? 0
       : billingCycle === "sixMonths"
-      ? plan.price * 6 * 0.9 // 5% discount for 6 months
+      ? plan.price * 6 * 0.9 // 10% discount for 6 months
       : plan.price;
 
   useEffect(() => {
@@ -105,9 +134,19 @@ function Checkout() {
         setError("Password is required");
         return false;
       }
+      if (!termsAndConditions) {
+        setError("Please agree to the terms and conditions");
+        return false;
+      }
     }
     setError("");
     return true;
+  };
+
+  const handleContinue = () => {
+    if (validateForm()) {
+      setCurrentStep(2);
+    }
   };
 
   const handlePayment = async () => {
@@ -142,7 +181,7 @@ function Checkout() {
 
       const options = {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-        subscription_id: data.subscriptionId, // This shows Razorpay modal
+        subscription_id: data.subscriptionId,
         name: "SyncSales",
         description: `${plan.name} Plan - ${billingCycle}`,
         handler: async function (response: any) {
@@ -189,7 +228,7 @@ function Checkout() {
           setIsLoading(false);
         },
         prefill: {
-          name: formData.firstName,
+          name: `${formData.firstName} ${formData.lastName}`,
           email: formData.email,
           contact: formData.phone,
         },
@@ -217,214 +256,473 @@ function Checkout() {
   };
 
   return (
-    <div className="min-h-screen bg-blue-50">
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-slate-50">
       <Navbar />
-      <main className="mx-auto px-4 py-20">
-        <h1 className="text-3xl font-bold text-center mb-8 text-blue-700">
-          Complete Your Order
-        </h1>
-        <Card className="max-w-md mx-auto border-blue-500">
-          <CardHeader>
-            <CardTitle className="text-blue-700">Order Summary</CardTitle>
-            <CardDescription className="text-blue-500">
-              Review your plan details
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex justify-between">
-              <span>Plan:</span>
-              <span className="font-semibold text-blue-700">{plan.name}</span>
+      <main className="container mx-auto px-4 py-12">
+        <div className="max-w-4xl mx-auto">
+          <h1 className="text-3xl md:text-4xl font-bold text-center mb-4 text-slate-800">
+            Complete Your Subscription
+          </h1>
+          <p className="text-center text-slate-600 mb-10 max-w-2xl mx-auto">
+            You&apos;re just a few steps away from accessing all of our premium
+            features
+          </p>
+
+          {/* Progress steps */}
+          <div className="flex items-center justify-center mb-10">
+            <div className="flex items-center">
+              <div
+                className={`flex items-center justify-center w-8 h-8 rounded-full ${
+                  currentStep >= 1
+                    ? "bg-blue-600 text-white"
+                    : "bg-slate-200 text-slate-500"
+                }`}>
+                1
+              </div>
+              <div
+                className={`h-1 w-16 ${
+                  currentStep >= 2 ? "bg-blue-600" : "bg-slate-200"
+                }`}></div>
+              <div
+                className={`flex items-center justify-center w-8 h-8 rounded-full ${
+                  currentStep >= 2
+                    ? "bg-blue-600 text-white"
+                    : "bg-slate-200 text-slate-500"
+                }`}>
+                2
+              </div>
             </div>
-            {/* Only show billing toggle for paid plans */}
-            {plan.price > 0 && (
-              <div className="flex justify-between items-center">
-                <span>Billing:</span>
-                <div className="flex items-center space-x-2">
-                  <span>Monthly</span>
-                  <Switch
-                    checked={billingCycle === "sixMonths"}
-                    onCheckedChange={() =>
-                      setBillingCycle(
-                        billingCycle === "sixMonths" ? "monthly" : "sixMonths"
-                      )
-                    }
-                  />
-                  <span>6 Months (Save 10%)</span>
-                </div>
-              </div>
-            )}
-            <div className="flex justify-between">
-              <span>Price:</span>
-              <span className="font-semibold text-blue-700">
-                {plan.price === 0
-                  ? "Free"
-                  : `₹${(price / 100).toFixed(2)} / ${
-                      billingCycle === "sixMonths" ? "6 months" : "month"
-                    }`}
-              </span>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {/* Plan details sidebar */}
+            <div className="md:col-span-1">
+              <Card className="sticky top-20 bg-gradient-to-br from-slate-50 to-blue-50 border-blue-100 shadow-md overflow-hidden">
+                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-400 to-indigo-500"></div>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-blue-800">Plan Summary</CardTitle>
+                  <CardDescription className="text-blue-600">
+                    You selected the {plan.name} plan
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="bg-white p-4 rounded-lg shadow-sm border border-blue-100">
+                    <div className="flex justify-between mb-2">
+                      <span className="text-slate-700">Plan:</span>
+                      <span className="font-semibold text-blue-800">
+                        {plan.name}
+                      </span>
+                    </div>
+                    <div className="flex justify-between mb-2">
+                      <span className="text-slate-700">Billing:</span>
+                      <span className="font-semibold text-blue-800">
+                        {billingCycle === "sixMonths"
+                          ? "Every 6 months"
+                          : "Monthly"}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-slate-700">Price:</span>
+                      <span className="font-semibold text-blue-800">
+                        ₹{(price / 100).toFixed(2)} /{" "}
+                        {billingCycle === "sixMonths" ? "6 months" : "month"}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <h3 className="font-medium text-blue-800">
+                      Features included:
+                    </h3>
+                    <ul className="space-y-2">
+                      {plan.features.map((feature, index) => (
+                        <li
+                          key={index}
+                          className="flex items-center gap-2 text-slate-700">
+                          <Check
+                            size={16}
+                            className="text-green-500 flex-shrink-0"
+                          />
+                          <span>{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div className="flex items-center gap-2 text-slate-600 text-sm bg-blue-50 p-3 rounded-lg">
+                    <Shield size={16} className="text-blue-600" />
+                    <span>Secure payment processing</span>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
-            {/* Only show trial option for paid plans with trial days */}
-            {plan.price > 0 && plan.trialDays > 0 && (
-              <div className="flex justify-between items-center">
-                <span>Free Trial:</span>
-                <div className="flex items-center space-x-2">
-                  <Switch checked={isTrial} onCheckedChange={setIsTrial} />
-                  <span>{plan.trialDays} days</span>
-                </div>
-              </div>
-            )}
 
-            {/* Only show customer details for paid plans */}
-            {plan.price > 0 && (
-              <div className="space-y-4">
-                <div className="flex justify-between gap-2">
-                  <div className="w-1/2">
-                    <Label className="block text-sm font-medium text-blue-700">
-                      First Name
-                    </Label>
-                    <Input
-                      type="text"
-                      className="mt-1 block w-full border border-blue-300 rounded-md shadow-sm px-3 py-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                      value={formData.firstName}
-                      onChange={(e) =>
-                        setFormData({ ...formData, firstName: e.target.value })
-                      }
-                      required
-                    />
-                  </div>
-                  <div className="w-1/2">
-                    <Label className="block text-sm font-medium text-blue-700">
-                      Last Name
-                    </Label>
-                    <Input
-                      type="text"
-                      className="mt-1 block w-full border border-blue-300 rounded-md shadow-sm px-3 py-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                      value={formData.lastName}
-                      onChange={(e) =>
-                        setFormData({ ...formData, lastName: e.target.value })
-                      }
-                      required
-                    />
-                  </div>
-                </div>
-                <div>
-                  <Label className="block text-sm font-medium text-blue-700">
-                    Email
-                  </Label>
-                  <Input
-                    type="email"
-                    className="mt-1 block w-full border border-blue-300 rounded-md shadow-sm px-3 py-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                    value={formData.email}
-                    onChange={(e) =>
-                      setFormData({ ...formData, email: e.target.value })
-                    }
-                    required
-                  />
-                </div>
-                <div>
-                  <Label className="block text-sm font-medium text-blue-700">
-                    Contact Number
-                  </Label>
-                  <Input
-                    type="tel"
-                    className="mt-1 block w-full border border-blue-300 rounded-md shadow-sm px-3 py-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                    value={formData.phone}
-                    onChange={(e) =>
-                      setFormData({ ...formData, phone: e.target.value })
-                    }
-                    required
-                  />
-                </div>
-                <div>
-                  <Label className="block text-sm font-medium text-blue-700">
-                    Company
-                  </Label>
-                  <Input
-                    type="text"
-                    className="mt-1 block w-full border border-blue-300 rounded-md shadow-sm px-3 py-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                    value={formData.company}
-                    onChange={(e) =>
-                      setFormData({ ...formData, company: e.target.value })
-                    }
-                    required
-                  />
-                </div>
-                <div>
-                  <Label className="block text-sm font-medium text-blue-700">
-                    Billing Address
-                  </Label>
-                  <Input
-                    type="text"
-                    className="mt-1 block w-full border border-blue-300 rounded-md shadow-sm px-3 py-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                    value={formData.address}
-                    onChange={(e) =>
-                      setFormData({ ...formData, address: e.target.value })
-                    }
-                    required
-                  />
-                </div>
-                <div>
-                  <Label className="block text-sm font-medium text-blue-700">
-                    Password
-                  </Label>
-                  <div
-                    className="flex items-center mt-1 w-full border border-blue-300 rounded-md shadow-sm 
-        focus-within:ring-1 focus-within:ring-blue-500 focus-within:border-blue-500 sm:text-sm">
-                    <Input
-                      type={showPassword ? "text" : "password"}
-                      className="shadow-none border-none flex-1 px-2 py-1 focus-visible:ring-0"
-                      value={formData.password}
-                      onChange={(e) =>
-                        setFormData({ ...formData, password: e.target.value })
-                      }
-                      required
-                    />
-                    <Button
-                      onClick={() => setShowPassword(!showPassword)}
-                      variant="ghost"
-                      className="p-2">
-                      {showPassword ? <Eye /> : <EyeClosed />}
-                    </Button>
-                  </div>
-                </div>
+            {/* Main checkout form */}
+            <div className="md:col-span-2">
+              <Card className="shadow-lg border-slate-200">
+                {currentStep === 1 ? (
+                  <>
+                    <CardHeader className="border-b border-slate-100">
+                      <CardTitle className="text-slate-800">
+                        Account Information
+                      </CardTitle>
+                      <CardDescription className="text-slate-500">
+                        Please provide your account details
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-5 pt-6">
+                      {/* Billing toggle for paid plans */}
+                      {plan.price > 0 && (
+                        <div className="bg-slate-50 p-4 rounded-lg border border-slate-100 mb-4">
+                          <div className="text-slate-700 font-medium mb-2">
+                            Select Billing Cycle
+                          </div>
+                          <div className="flex justify-between items-center gap-4">
+                            <div
+                              className={`p-3 rounded-lg flex-1 text-center cursor-pointer ${
+                                billingCycle === "monthly"
+                                  ? "bg-white border-2 border-blue-400 shadow-sm text-blue-600 font-medium"
+                                  : "bg-slate-100 border border-slate-200 text-slate-600"
+                              }`}
+                              onClick={() => setBillingCycle("monthly")}>
+                              Monthly
+                              <div className="text-sm text-slate-500 mt-1">
+                                ₹{(plan.price / 100).toFixed(2)}/mo
+                              </div>
+                            </div>
+                            <div
+                              className={`p-3 rounded-lg flex-1 text-center cursor-pointer ${
+                                billingCycle === "sixMonths"
+                                  ? "bg-white border-2 border-blue-400 shadow-sm text-blue-600 font-medium"
+                                  : "bg-slate-100 border border-slate-200 text-slate-600"
+                              }`}
+                              onClick={() => setBillingCycle("sixMonths")}>
+                              6 Months
+                              <div className="text-sm text-slate-500 mt-1">
+                                ₹{((plan.price * 6 * 0.9) / 100).toFixed(2)}/6mo
+                                <span className="ml-1 text-green-500">
+                                  Save 10%
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
 
-                <div className="flex items-center">
-                  <Input
-                    type="checkbox"
-                    className="w-3 mr-2"
-                    checked={termsAndConditions}
-                    onChange={handleTnC}
-                    id="terms"
-                    required
-                    name="terms"
-                  />
-                  <Label
-                    className="block text-sm font-medium text-blue-700"
-                    htmlFor="terms">
-                    Create account and sign me up
-                  </Label>
-                </div>
-              </div>
-            )}
+                      {/* Trial option for paid plans with trial days */}
+                      {plan.price > 0 && plan.trialDays > 0 && (
+                        <div className="bg-blue-50 p-4 rounded-lg border border-blue-100 mb-4">
+                          <div className="flex justify-between items-center">
+                            <div>
+                              <h3 className="font-medium text-blue-800">
+                                Free Trial
+                              </h3>
+                              <p className="text-sm text-blue-600">
+                                Start with {plan.trialDays} days free trial
+                              </p>
+                            </div>
+                            <Switch
+                              checked={isTrial}
+                              onCheckedChange={setIsTrial}
+                            />
+                          </div>
+                        </div>
+                      )}
 
-            {/* Error message display */}
-            {error && <div className="text-red-500 text-sm mt-2">{error}</div>}
-          </CardContent>
-          <CardFooter>
-            <Button
-              className="w-full bg-blue-500 hover:bg-blue-700 text-white"
-              onClick={handlePayment}
-              disabled={isLoading}>
-              {isLoading
-                ? "Processing..."
-                : plan.price === 0
-                ? "Sign Up for Free"
-                : isTrial && plan.trialDays > 0
-                ? `Start ${plan.trialDays}-Day Free Trial`
-                : `Pay ₹${(price / 100).toFixed(2)}`}
-            </Button>
-          </CardFooter>
-        </Card>
+                      {/* Form fields */}
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="col-span-1">
+                          <Label className="text-slate-700 mb-1 block">
+                            First Name
+                          </Label>
+                          <Input
+                            type="text"
+                            className="w-full border-slate-300 focus:border-blue-400 focus:ring-blue-400"
+                            value={formData.firstName}
+                            onChange={(e) =>
+                              setFormData({
+                                ...formData,
+                                firstName: e.target.value,
+                              })
+                            }
+                            required
+                          />
+                        </div>
+                        <div className="col-span-1">
+                          <Label className="text-slate-700 mb-1 block">
+                            Last Name
+                          </Label>
+                          <Input
+                            type="text"
+                            className="w-full border-slate-300 focus:border-blue-400 focus:ring-blue-400"
+                            value={formData.lastName}
+                            onChange={(e) =>
+                              setFormData({
+                                ...formData,
+                                lastName: e.target.value,
+                              })
+                            }
+                            required
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <Label className="text-slate-700 mb-1 block">
+                          Email Address
+                        </Label>
+                        <Input
+                          type="email"
+                          className="w-full border-slate-300 focus:border-blue-400 focus:ring-blue-400"
+                          value={formData.email}
+                          onChange={(e) =>
+                            setFormData({ ...formData, email: e.target.value })
+                          }
+                          required
+                        />
+                      </div>
+
+                      <div>
+                        <Label className="text-slate-700 mb-1 block">
+                          Phone Number
+                        </Label>
+                        <Input
+                          type="tel"
+                          className="w-full border-slate-300 focus:border-blue-400 focus:ring-blue-400"
+                          value={formData.phone}
+                          onChange={(e) =>
+                            setFormData({ ...formData, phone: e.target.value })
+                          }
+                          required
+                        />
+                      </div>
+
+                      <div>
+                        <Label className="text-slate-700 mb-1 block">
+                          Company Name
+                        </Label>
+                        <Input
+                          type="text"
+                          className="w-full border-slate-300 focus:border-blue-400 focus:ring-blue-400"
+                          value={formData.company}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              company: e.target.value,
+                            })
+                          }
+                        />
+                        <p className="text-xs text-slate-500 mt-1">Optional</p>
+                      </div>
+
+                      <div>
+                        <Label className="text-slate-700 mb-1 block">
+                          Billing Address
+                        </Label>
+                        <Input
+                          type="text"
+                          className="w-full border-slate-300 focus:border-blue-400 focus:ring-blue-400"
+                          value={formData.address}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              address: e.target.value,
+                            })
+                          }
+                          required
+                        />
+                      </div>
+
+                      <div>
+                        <Label className="text-slate-700 mb-1 block">
+                          Create Password
+                        </Label>
+                        <div className="flex w-full border border-slate-300 rounded-md overflow-hidden focus-within:border-blue-400 focus-within:ring-1 focus-within:ring-blue-400">
+                          <Input
+                            type={showPassword ? "text" : "password"}
+                            className="border-none shadow-none flex-1 focus-visible:ring-0"
+                            value={formData.password}
+                            onChange={(e) =>
+                              setFormData({
+                                ...formData,
+                                password: e.target.value,
+                              })
+                            }
+                            required
+                          />
+                          <Button
+                            type="button"
+                            onClick={() => setShowPassword(!showPassword)}
+                            variant="ghost"
+                            className="px-3">
+                            {showPassword ? (
+                              <EyeClosed size={18} />
+                            ) : (
+                              <Eye size={18} />
+                            )}
+                          </Button>
+                        </div>
+                      </div>
+
+                      <div className="flex items-start space-x-2 py-2">
+                        <div className="flex h-5 items-center">
+                          <input
+                            type="checkbox"
+                            className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                            id="terms"
+                            checked={termsAndConditions}
+                            onChange={handleTnC}
+                            required
+                          />
+                        </div>
+                        <div className="ml-2 text-sm">
+                          <Label className="text-slate-700" htmlFor="terms">
+                            I agree to the{" "}
+                            <a
+                              href="#"
+                              className="text-blue-600 hover:underline">
+                              Terms of Service
+                            </a>{" "}
+                            and{" "}
+                            <a
+                              href="#"
+                              className="text-blue-600 hover:underline">
+                              Privacy Policy
+                            </a>
+                          </Label>
+                        </div>
+                      </div>
+
+                      {/* Error message display */}
+                      {error && (
+                        <div className="bg-red-50 text-red-700 p-3 rounded-md text-sm">
+                          {error}
+                        </div>
+                      )}
+                    </CardContent>
+                    <CardFooter className="border-t border-slate-100 flex justify-end pt-6">
+                      <Button
+                        onClick={handleContinue}
+                        className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white">
+                        Continue to Payment
+                        <ArrowRight size={16} className="ml-2" />
+                      </Button>
+                    </CardFooter>
+                  </>
+                ) : (
+                  <>
+                    <CardHeader className="border-b border-slate-100">
+                      <CardTitle className="text-slate-800">
+                        Payment Details
+                      </CardTitle>
+                      <CardDescription className="text-slate-500">
+                        Complete your subscription
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-5 pt-6">
+                      <div className="bg-green-50 border border-green-100 rounded-lg p-4 mb-4">
+                        <div className="flex items-start gap-3">
+                          <div className="bg-green-100 p-2 rounded-full">
+                            <CreditCard size={20} className="text-green-600" />
+                          </div>
+                          <div>
+                            <h3 className="font-medium text-green-800">
+                              Ready to finalize
+                            </h3>
+                            <p className="text-sm text-green-700 mt-1">
+                              Your account details have been saved. Click below
+                              to complete payment with Razorpay.
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="bg-blue-50 rounded-lg p-4 border border-blue-100">
+                        <h3 className="font-medium text-blue-800 mb-2">
+                          Order Summary
+                        </h3>
+                        <div className="space-y-2 text-sm">
+                          <div className="flex justify-between">
+                            <span className="text-slate-600">Plan:</span>
+                            <span className="font-medium text-slate-800">
+                              {plan.name}
+                            </span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-slate-600">
+                              Billing Cycle:
+                            </span>
+                            <span className="font-medium text-slate-800">
+                              {billingCycle === "sixMonths"
+                                ? "Every 6 months"
+                                : "Monthly"}
+                            </span>
+                          </div>
+                          {isTrial && plan.trialDays > 0 && (
+                            <div className="flex justify-between">
+                              <span className="text-slate-600">
+                                Free Trial:
+                              </span>
+                              <span className="font-medium text-slate-800">
+                                {plan.trialDays} days
+                              </span>
+                            </div>
+                          )}
+                          <div className="border-t border-blue-200 my-2 pt-2"></div>
+                          <div className="flex justify-between">
+                            <span className="text-slate-700 font-medium">
+                              Total:
+                            </span>
+                            <span className="font-bold text-blue-800">
+                              ₹{(price / 100).toFixed(2)} /{" "}
+                              {billingCycle === "sixMonths"
+                                ? "6 months"
+                                : "month"}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Error message display */}
+                      {error && (
+                        <div className="bg-red-50 text-red-700 p-3 rounded-md text-sm">
+                          {error}
+                        </div>
+                      )}
+                    </CardContent>
+                    <CardFooter className="border-t border-slate-100 flex flex-col sm:flex-row sm:justify-between gap-4 pt-6">
+                      <Button
+                        onClick={() => setCurrentStep(1)}
+                        variant="outline"
+                        className="w-full sm:w-auto border-slate-300 text-slate-700 hover:bg-slate-50">
+                        Back to Details
+                      </Button>
+                      <Button
+                        onClick={handlePayment}
+                        disabled={isLoading}
+                        className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white">
+                        {isLoading ? (
+                          <span className="flex items-center">
+                            <Loader2 size={16} className="animate-spin mr-2" />
+                            Processing...
+                          </span>
+                        ) : (
+                          <>
+                            {plan.price === 0
+                              ? "Sign Up for Free"
+                              : isTrial && plan.trialDays > 0
+                              ? `Start ${plan.trialDays}-Day Free Trial`
+                              : `Complete Payment`}
+                          </>
+                        )}
+                      </Button>
+                    </CardFooter>
+                  </>
+                )}
+              </Card>
+            </div>
+          </div>
+        </div>
       </main>
     </div>
   );
@@ -432,7 +730,15 @@ function Checkout() {
 
 export default function CheckoutPage() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="text-center">
+            <Loader2 className="h-8 w-8 animate-spin text-blue-600 mx-auto" />
+            <p className="mt-4 text-slate-600">Loading checkout...</p>
+          </div>
+        </div>
+      }>
       <Checkout />
     </Suspense>
   );

@@ -15,10 +15,10 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Loader2, CheckCircle, Shield } from "lucide-react";
-
+import { useToast } from "@/hooks/use-toast";
+import axios from "axios";
 function Checkout() {
   const { isLoaded, signUp, setActive } = useSignUp();
-
   const [isLoading, setIsLoading] = useState(false);
   const [otp, setOtp] = useState("");
   const [emailSent, setEmailSent] = useState(false);
@@ -31,6 +31,7 @@ function Checkout() {
     password: "",
   });
 
+  const { toast } = useToast();
   const plan = { name: "Pro Plan", price: 0, trialDays: 7 };
 
   const validateForm = () => {
@@ -67,11 +68,11 @@ function Checkout() {
 
     try {
       const signUpAttempt = await signUp.create({
-        emailAddress: formData.email,
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        username: formData.email.split("@")[0],
-        password: formData.password,
+        emailAddress: formData.email.trim(),
+        firstName: formData.firstName.trim(),
+        lastName: formData.lastName.trim(),
+        username: formData.email.split("@")[0].trim(),
+        password: formData.password.trim(),
       });
 
       await signUpAttempt.prepareEmailAddressVerification({
@@ -79,9 +80,17 @@ function Checkout() {
       });
 
       setEmailSent(true);
+      toast({
+        title: "OTP sent to email",
+        description: "Please check your email for the OTP",
+      });
     } catch (err: any) {
       console.error("OTP send failed", err);
       setErrors({ global: err.errors?.[0]?.message || "Failed to send OTP" });
+      toast({
+        title: "OTP send failed",
+        description: err.errors?.[0]?.message || "Failed to send OTP",
+      });
     } finally {
       setIsLoading(false);
     }
@@ -102,13 +111,35 @@ function Checkout() {
         code: otp,
       });
 
-      console.log("verification", verification);
-
+      toast({
+        title: "OTP verified",
+        description: "Please wait while we create your account",
+      });
       if (verification.status === "complete") {
         await setActive({ session: verification.createdSessionId });
 
-        alert("Email verified! Trial started 🎉");
-        window.location.href = "https://dashboard.syncsales.tech";
+        // create user in backend
+        const response = await axios.post("/api/user", {
+          email: formData.email.trim(),
+          firstName: formData.firstName.trim(),
+          lastName: formData.lastName.trim(),
+          phone: formData.phone.trim(),
+          username: formData.email.split("@")[0].trim(),
+        });
+
+        console.log("response", response);
+        if (response.status === 200) {
+          toast({
+            title: "Account created",
+            description: "Please wait while we redirect you to the dashboard",
+          });
+          window.location.href = "https://dashboard.syncsales.tech";
+        } else {
+          toast({
+            title: "Something went wrong",
+            description: "Please try again",
+          });
+        }
       }
     } catch (err: any) {
       console.error("OTP verification failed", err);

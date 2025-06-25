@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, Suspense } from "react";
-import { useSignUp } from "@clerk/nextjs";
+import { useAuth0 } from "@/hooks/useAuth0";
 import { Navbar } from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,133 +12,23 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Loader2, CheckCircle, Shield } from "lucide-react";
+import { CheckCircle, Shield, ArrowRight } from "lucide-react";
 import { toast } from "sonner";
-import axios from "axios";
+
 function Checkout() {
-  const { isLoaded, signUp, setActive } = useSignUp();
-  const [isLoading, setIsLoading] = useState(false);
-  const [otp, setOtp] = useState("");
-  const [emailSent, setEmailSent] = useState(false);
-  const [errors, setErrors] = useState<{ [key: string]: string }>({});
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    password: "",
-  });
+  const { login, isLoading } = useAuth0();
+
+  const handleStartTrial = async () => {
+    try {
+      await login();
+      toast.success("Redirecting to Auth0 for signup...");
+    } catch (error) {
+      console.error("Login failed:", error);
+      toast.error("Failed to start trial. Please try again.");
+    }
+  };
 
   const plan = { name: "Pro Plan", price: 0, trialDays: 7 };
-
-  const validateForm = () => {
-    const newErrors: { [key: string]: string } = {};
-    if (!formData.firstName) newErrors.firstName = "First name is required.";
-    if (!formData.lastName) newErrors.lastName = "Last name is required.";
-    if (!formData.email) newErrors.email = "Email is required.";
-    if (!formData.phone) newErrors.phone = "Phone number is required.";
-    if (!formData.password) newErrors.password = "Password is required.";
-    if (formData.phone && !/^\d{10}$/.test(formData.phone)) {
-      newErrors.phone = "Phone number must be 10 digits.";
-    }
-    if (formData.password && formData.password.length < 8) {
-      newErrors.password = "Password must be at least 8 characters.";
-    }
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
-    setErrors({}); // Clear previous errors
-
-    if (!validateForm()) return; // Stop submission if validation fails
-
-    if (!isLoaded) {
-      setErrors({
-        global: "Sign-up service is not loaded. Please try again later.",
-      });
-      return;
-    }
-
-    setIsLoading(true);
-
-    try {
-      const signUpAttempt = await signUp.create({
-        emailAddress: formData.email.trim(),
-        firstName: formData.firstName.trim(),
-        lastName: formData.lastName.trim(),
-        username: formData.email.split("@")[0].trim(),
-        password: formData.password.trim(),
-      });
-
-      await signUpAttempt.prepareEmailAddressVerification({
-        strategy: "email_code",
-      });
-
-      setEmailSent(true);
-      toast.success("OTP sent to email");
-    } catch (err: any) {
-      console.error("OTP send failed", err);
-      setErrors({ global: err.errors?.[0]?.message || "Failed to send OTP" });
-      toast.error(err.errors?.[0]?.message || "Failed to send OTP");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleOtpVerification = async (e: any) => {
-    e.preventDefault();
-    setIsLoading(true);
-    console.log("OTP", otp);
-
-    try {
-      if (!signUp) {
-        console.error("SignUp object is undefined");
-        alert("An unexpected error occurred. Please try again later.");
-        return;
-      }
-      const verification = await signUp.attemptEmailAddressVerification({
-        code: otp,
-      });
-
-      toast.success("OTP verified");
-      if (verification.status === "complete") {
-        await setActive({ session: verification.createdSessionId });
-
-        // create user in backend
-        const response = await axios.post("/api/user", {
-          email: formData.email.trim(),
-          firstName: formData.firstName.trim(),
-          lastName: formData.lastName.trim(),
-          phone: formData.phone.trim(),
-          username: formData.email.split("@")[0].trim(),
-        });
-
-        console.log("response", response);
-        if (response.status === 200) {
-          toast.success("Account created");
-          window.location.href = "https://dashboard.syncsales.tech";
-        } else {
-          toast.error("Something went wrong");
-        }
-      }
-    } catch (err: any) {
-      console.error("OTP verification failed", err);
-      alert("Incorrect or expired code");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleChange = (e: any) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
@@ -198,162 +88,42 @@ function Checkout() {
             {/* Checkout Form */}
             <div className="md:col-span-3">
               <Card className="shadow-lg border-gray-200">
-                <CardHeader className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-t-lg">
-                  <CardTitle>Complete Your Registration</CardTitle>
-                  <CardDescription className="text-blue-100">
-                    Access your free trial in minutes
+                <CardHeader className="text-center">
+                  <CardTitle className="text-2xl font-bold text-gray-800">
+                    {plan.name}
+                  </CardTitle>
+                  <CardDescription className="text-lg">
+                    <span className="text-3xl font-bold text-green-600">
+                      ${plan.price}
+                    </span>
+                    /month after {plan.trialDays}-day free trial
                   </CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-6 pt-6">
-                  <div className="bg-blue-50 rounded-lg p-4 flex items-center gap-3 border border-blue-100">
-                    <div className="bg-blue-100 p-2 rounded-full">
-                      <CheckCircle className="h-5 w-5 text-blue-600" />
-                    </div>
-                    <div>
-                      <p className="font-medium text-blue-700">{plan.name}</p>
-                      <p className="text-sm text-blue-600">
-                        {plan.trialDays} days free, then $
-                        {plan.price === 0 ? "49" : `${plan.price}/month`}
-                      </p>
-                    </div>
+                <CardContent className="space-y-6">
+                  <div className="text-center">
+                    <p className="text-gray-600 mb-6">
+                      Create your account to start your free trial. You can
+                      cancel anytime.
+                    </p>
+
+                    <Button
+                      onClick={handleStartTrial}
+                      disabled={isLoading}
+                      className="w-full h-12 bg-gradient-to-r from-blue-800 via-indigo-800 to-blue-900 hover:from-blue-700 hover:via-indigo-700 hover:to-purple-700 text-white font-semibold rounded-xl transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg disabled:transform-none disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden group">
+                      <div className="absolute inset-0 bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
+                      <div className="flex items-center gap-3">
+                        <span>Start Free Trial with Auth0</span>
+                        <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                      </div>
+                    </Button>
                   </div>
 
-                  {!emailSent ? (
-                    <form className="space-y-4" onSubmit={handleSubmit}>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <Label htmlFor="firstName">First Name</Label>
-                          <Input
-                            id="firstName"
-                            name="firstName"
-                            placeholder="John"
-                            onChange={handleChange}
-                            value={formData.firstName}
-                            required
-                          />
-                          {errors.firstName && (
-                            <p className="text-red-500 text-sm">
-                              {errors.firstName}
-                            </p>
-                          )}
-                        </div>
-                        <div>
-                          <Label htmlFor="lastName">Last Name</Label>
-                          <Input
-                            id="lastName"
-                            name="lastName"
-                            placeholder="Doe"
-                            onChange={handleChange}
-                            value={formData.lastName}
-                            required
-                          />
-                          {errors.lastName && (
-                            <p className="text-red-500 text-sm">
-                              {errors.lastName}
-                            </p>
-                          )}
-                        </div>
-                      </div>
-
-                      <div>
-                        <Label htmlFor="email">Email Address</Label>
-                        <Input
-                          id="email"
-                          name="email"
-                          type="email"
-                          placeholder="john@example.com"
-                          onChange={handleChange}
-                          value={formData.email}
-                          required
-                        />
-                        {errors.email && (
-                          <p className="text-red-500 text-sm">{errors.email}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <Label htmlFor="phone">Phone Number</Label>
-                        <Input
-                          id="phone"
-                          name="phone"
-                          placeholder="1234567890"
-                          onChange={handleChange}
-                          value={formData.phone}
-                          required
-                        />
-                        {errors.phone && (
-                          <p className="text-red-500 text-sm">{errors.phone}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <Label htmlFor="password">Password</Label>
-                        <Input
-                          id="password"
-                          name="password"
-                          placeholder="********"
-                          onChange={handleChange}
-                          value={formData.password}
-                          type="password"
-                          required
-                        />
-                        {errors.password && (
-                          <p className="text-red-500 text-sm">
-                            {errors.password}
-                          </p>
-                        )}
-                      </div>
-
-                      {errors.global && (
-                        <p className="text-red-500 text-sm">{errors.global}</p>
-                      )}
-
-                      <Button
-                        type="submit"
-                        disabled={isLoading}
-                        className="w-full bg-blue-600 text-white">
-                        {isLoading ? (
-                          <span className="flex items-center">
-                            <Loader2 className="animate-spin mr-2 h-5 w-5" />
-                            Sending OTP...
-                          </span>
-                        ) : (
-                          "Send OTP to Email"
-                        )}
-                      </Button>
-                    </form>
-                  ) : (
-                    <form
-                      onSubmit={handleOtpVerification}
-                      className="space-y-4">
-                      <div>
-                        <Label htmlFor="otp">
-                          Enter OTP sent to your email
-                        </Label>
-                        <Input
-                          id="otp"
-                          name="otp"
-                          placeholder="123456"
-                          value={otp}
-                          onChange={(e) => setOtp(e.target.value)}
-                          required
-                        />
-                      </div>
-                      <Button
-                        type="submit"
-                        disabled={isLoading}
-                        className="w-full bg-indigo-600 text-white">
-                        {isLoading ? (
-                          <span className="flex items-center">
-                            <Loader2 className="animate-spin mr-2 h-5 w-5" />
-                            Verifying...
-                          </span>
-                        ) : (
-                          "Verify & Start Trial"
-                        )}
-                      </Button>
-                    </form>
-                  )}
+                  <div className="text-center text-sm text-gray-500">
+                    <p>
+                      By starting your trial, you agree to our Terms of Service
+                      and Privacy Policy.
+                    </p>
+                  </div>
                 </CardContent>
               </Card>
             </div>
@@ -369,7 +139,7 @@ export default function CheckoutPage() {
     <Suspense
       fallback={
         <div className="min-h-screen flex items-center justify-center">
-          <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
         </div>
       }>
       <Checkout />

@@ -8,7 +8,7 @@ export default function SSOCallback() {
   const router = useRouter();
 
   useEffect(() => {
-    // Clerk will automatically handle the OAuth callback
+    // Auth0 will automatically handle the OAuth callback
     // Just redirect to home after a brief delay
     const timer = setTimeout(() => {
       router.push("/");

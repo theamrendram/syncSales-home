@@ -2,14 +2,8 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import {
-  ClerkProvider,
-  SignInButton,
-  SignUpButton,
-  SignedIn,
-  SignedOut,
-  UserButton,
-} from "@clerk/nextjs";
+import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import { SignInModal } from "@/components/SignInModal";
 
 export function Navbar() {
   return (
@@ -37,11 +31,11 @@ export function Navbar() {
         </nav>
         <div className="flex items-center gap-4">
           <SignedOut>
-            <SignInButton mode="modal">
+            <SignInModal>
               <Button variant="outline" size="sm">
                 Sign In
               </Button>
-            </SignInButton>
+            </SignInModal>
           </SignedOut>
           <SignedIn>
             <UserButton

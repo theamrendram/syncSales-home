@@ -8,8 +8,8 @@ export function Hero() {
             <div className="absolute inset-0 -z-10 gradient-secondary" />
             <div className="container flex flex-col items-center justify-center space-y-10 py-32 md:py-40 lg:py-48">
                 <div className="space-y-6 text-center">
-                    <Badge variant="secondary" className="w-fit mx-auto">
-                        Trusted by leading media buyers
+                    <Badge variant="secondary" className="w-fit mx-auto bg-neutral-300 text-neutral-900">
+ Trusted by leading media buyers
                     </Badge>
                     <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
                         Transform Your Lead Generation <br className="hidden sm:inline" />

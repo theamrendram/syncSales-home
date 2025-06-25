@@ -15,7 +15,7 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 import {
   Eye,
   EyeClosed,
@@ -86,8 +86,6 @@ function Checkout() {
   const [termsAndConditions, setTermsAndConditions] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
-
-  const { toast } = useToast();
 
   const plan = plans[selectedPlan as keyof typeof plans];
   // Calculate price safely (handle free plan case)
@@ -206,10 +204,7 @@ function Checkout() {
             );
 
             if (verifyRes.status === 200) {
-              toast({
-                title: "Success",
-                description: "Subscription activated!",
-              });
+              toast.success("Subscription activated!");
               router.push(
                 `/success?subscription_id=${response.razorpay_subscription_id}&plan=${plan.name}`
               );
@@ -219,11 +214,7 @@ function Checkout() {
             console.error("Subscription verification error:", error);
           }
 
-          toast({
-            title: "Error",
-            description: "Payment failed",
-            variant: "destructive",
-          });
+            toast.error("Payment failed");
 
           setIsLoading(false);
         },

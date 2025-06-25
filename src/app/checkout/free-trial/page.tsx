@@ -15,7 +15,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Loader2, CheckCircle, Shield } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 import axios from "axios";
 function Checkout() {
   const { isLoaded, signUp, setActive } = useSignUp();
@@ -31,7 +31,6 @@ function Checkout() {
     password: "",
   });
 
-  const { toast } = useToast();
   const plan = { name: "Pro Plan", price: 0, trialDays: 7 };
 
   const validateForm = () => {
@@ -80,17 +79,11 @@ function Checkout() {
       });
 
       setEmailSent(true);
-      toast({
-        title: "OTP sent to email",
-        description: "Please check your email for the OTP",
-      });
+      toast.success("OTP sent to email");
     } catch (err: any) {
       console.error("OTP send failed", err);
       setErrors({ global: err.errors?.[0]?.message || "Failed to send OTP" });
-      toast({
-        title: "OTP send failed",
-        description: err.errors?.[0]?.message || "Failed to send OTP",
-      });
+      toast.error(err.errors?.[0]?.message || "Failed to send OTP");
     } finally {
       setIsLoading(false);
     }
@@ -111,10 +104,7 @@ function Checkout() {
         code: otp,
       });
 
-      toast({
-        title: "OTP verified",
-        description: "Please wait while we create your account",
-      });
+      toast.success("OTP verified");
       if (verification.status === "complete") {
         await setActive({ session: verification.createdSessionId });
 
@@ -129,16 +119,10 @@ function Checkout() {
 
         console.log("response", response);
         if (response.status === 200) {
-          toast({
-            title: "Account created",
-            description: "Please wait while we redirect you to the dashboard",
-          });
+          toast.success("Account created");
           window.location.href = "https://dashboard.syncsales.tech";
         } else {
-          toast({
-            title: "Something went wrong",
-            description: "Please try again",
-          });
+          toast.error("Something went wrong");
         }
       }
     } catch (err: any) {

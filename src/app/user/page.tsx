@@ -1,13 +1,22 @@
 "use client";
-import { useUser} from "@auth0/nextjs-auth0";
+import { useUser, useClerk } from "@clerk/nextjs";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { SignInModal } from "@/components/SignInModal";
 
 export default function Profile() {
-  const { user, isLoading } = useUser();
+  const { user, isLoaded } = useUser();
+  const { signOut } = useClerk();
   const [showDetails, setShowDetails] = useState(false);
+  const router = useRouter();
 
-  const handleLogout = () => {
-    window.location.href = "/auth/logout";
+  const handleLogout = async () => {
+    try {
+      await signOut();
+      router.push("/");
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
   };
 
   const handleEditProfile = () => {
@@ -15,12 +24,12 @@ export default function Profile() {
     console.log("Edit profile clicked");
   };
 
-  const copyToClipboard = (text:string) => {
+  const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
     // You could add a toast notification here
   };
 
-  if (isLoading) {
+  if (!isLoaded) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-50">
         <div className="flex flex-col items-center space-y-4">
@@ -38,11 +47,11 @@ export default function Profile() {
           <h2 className="text-2xl font-bold text-gray-900 mb-4">
             Not signed in
           </h2>
-          <a
-            href="/auth/login"
-            className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors">
-            Sign In
-          </a>
+          <SignInModal>
+            <button className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors">
+              Sign In
+            </button>
+          </SignInModal>
         </div>
       </div>
     );
@@ -64,7 +73,7 @@ export default function Profile() {
               {/* Profile Picture */}
               <div className="relative inline-block mb-6">
                 <img
-                  src={user.picture}
+                  src={user.imageUrl}
                   alt="Profile"
                   className="w-32 h-32 rounded-full border-4 border-blue-100 shadow-lg object-cover"
                 />
@@ -73,10 +82,13 @@ export default function Profile() {
 
               {/* User Info */}
               <h2 className="text-2xl font-bold text-gray-900 mb-2">
-                {user.name}
+                {user.fullName || user.firstName}
               </h2>
-              <p className="text-gray-600 mb-1">{user.email}</p>
-              {user.email_verified && (
+              <p className="text-gray-600 mb-1">
+                {user.primaryEmailAddress?.emailAddress}
+              </p>
+              {user.primaryEmailAddress?.verification?.status ===
+                "verified" && (
                 <div className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 mb-6">
                   <svg
                     className="w-3 h-3 mr-1"
@@ -186,21 +198,23 @@ export default function Profile() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
             <div className="bg-white rounded-xl p-4 shadow-md text-center">
               <div className="text-2xl font-bold text-blue-600">
-                {user.updated_at
-                  ? new Date(user.updated_at).toLocaleDateString()
+                {user.updatedAt
+                  ? new Date(user.updatedAt).toLocaleDateString()
                   : "N/A"}
               </div>
               <div className="text-sm text-gray-600">Last Updated</div>
             </div>
             <div className="bg-white rounded-xl p-4 shadow-md text-center">
               <div className="text-2xl font-bold text-green-600">
-                {user.email_verified ? "Yes" : "No"}
+                {user.primaryEmailAddress?.verification?.status === "verified"
+                  ? "Yes"
+                  : "No"}
               </div>
               <div className="text-sm text-gray-600">Email Verified</div>
             </div>
             <div className="bg-white rounded-xl p-4 shadow-md text-center">
               <div className="text-2xl font-bold text-purple-600">
-                {user.sub ? user.sub.split("|")[0] : "N/A"}
+                {user.externalAccounts?.[0]?.provider || "N/A"}
               </div>
               <div className="text-sm text-gray-600">Provider</div>
             </div>

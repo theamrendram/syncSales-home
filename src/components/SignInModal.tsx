@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useAuth0 } from "@/hooks/useAuth0";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -11,7 +10,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { User, Shield, ArrowRight, Sparkles, CheckCircle } from "lucide-react";
+import { User, Shield, Sparkles, Mail, Lock, Eye, EyeOff } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useSignIn, useSignUp } from "@clerk/nextjs";
 import { toast } from "sonner";
 
 interface SignInModalProps {
@@ -19,29 +22,109 @@ interface SignInModalProps {
 }
 
 export function SignInModal({ children }: SignInModalProps) {
-  const { login, isLoading } = useAuth0();
   const [isOpen, setIsOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState("sign-in");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleGoogleSignIn = async () => {
-    try {
-      await login();
-      toast.success("Redirecting to Auth0...", {
-        icon: <CheckCircle className="h-4 w-4" />,
-      });
-    } catch (error) {
-      console.error("Login failed:", error);
-      toast.error("Login failed. Please try again.");
-    }
-  };
+  const { signIn, isLoaded: signInLoaded } = useSignIn();
+  const { signUp, isLoaded: signUpLoaded } = useSignUp();
+
+  // Sign In Form State
+  const [signInEmail, setSignInEmail] = useState("");
+  const [signInPassword, setSignInPassword] = useState("");
+
+  // Sign Up Form State
+  const [signUpEmail, setSignUpEmail] = useState("");
+  const [signUpPassword, setSignUpPassword] = useState("");
+  const [signUpConfirmPassword, setSignUpConfirmPassword] = useState("");
+  const [signUpFirstName, setSignUpFirstName] = useState("");
+  const [signUpLastName, setSignUpLastName] = useState("");
 
   const handleModalClose = (open: boolean) => {
     setIsOpen(open);
+    if (!open) {
+      // Reset form states when modal closes
+      setSignInEmail("");
+      setSignInPassword("");
+      setSignUpEmail("");
+      setSignUpPassword("");
+      setSignUpConfirmPassword("");
+      setSignUpFirstName("");
+      setSignUpLastName("");
+      setShowPassword(false);
+      setShowConfirmPassword(false);
+    }
+  };
+
+  const handleSignIn = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!signInLoaded) return;
+
+    setIsLoading(true);
+    try {
+      const result = await signIn.create({
+        identifier: signInEmail,
+        password: signInPassword,
+        redirectUrl: "/user",
+      });
+
+      if (result.status === "complete") {
+        toast.success("Signed in successfully!");
+        setIsOpen(false);
+      } else {
+        toast.error("Sign in failed. Please try again.");
+      }
+    } catch (error: any) {
+      console.error("Sign in error:", error);
+      toast.error(
+        error.errors?.[0]?.message || "Sign in failed. Please try again."
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleSignUp = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!signUpLoaded) return;
+
+    if (signUpPassword !== signUpConfirmPassword) {
+      toast.error("Passwords do not match");
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const result = await signUp.create({
+        emailAddress: signUpEmail,
+        password: signUpPassword,
+        firstName: signUpFirstName,
+        lastName: signUpLastName,
+        redirectUrl: "/user",
+      });
+
+      if (result.status === "complete") {
+        toast.success("Account created successfully!");
+        setIsOpen(false);
+      } else {
+        toast.error("Sign up failed. Please try again.");
+      }
+    } catch (error: any) {
+      console.error("Sign up error:", error);
+      toast.error(
+        error.errors?.[0]?.message || "Sign up failed. Please try again."
+      );
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={handleModalClose}>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="sm:max-w-[480px] p-0 overflow-hidden bg-white border-0 shadow-2xl">
+      <DialogContent className="sm:max-w-[520px] p-0 overflow-hidden bg-white border-0 shadow-2xl">
         {/* Animated Background */}
         <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
           <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-indigo-500/5 to-purple-500/5" />
@@ -76,18 +159,178 @@ export function SignInModal({ children }: SignInModalProps) {
 
           {/* Form Section */}
           <div className="px-8 pb-8">
-            {/* Auth0 Sign In Button */}
-            <Button
-              type="button"
-              onClick={handleGoogleSignIn}
-              disabled={isLoading}
-              className="w-full h-12 bg-gradient-to-r from-blue-800 via-indigo-800 to-blue-900 hover:from-blue-700 hover:via-indigo-700 hover:to-purple-700 text-white font-semibold rounded-xl transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg disabled:transform-none disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden group">
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
-              <div className="flex items-center gap-3">
-                <span>Sign In with Auth0</span>
-                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </div>
-            </Button>
+            <Tabs
+              value={activeTab}
+              onValueChange={setActiveTab}
+              className="w-full">
+              <TabsList className="grid grid-cols-2 w-full">
+                <TabsTrigger value="sign-in">Sign In</TabsTrigger>
+                <TabsTrigger value="sign-up">Create Account</TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="sign-in" className="mt-4">
+                <form onSubmit={handleSignIn} className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="signin-email">Email</Label>
+                    <div className="relative">
+                      <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                      <Input
+                        id="signin-email"
+                        type="email"
+                        placeholder="Enter your email"
+                        value={signInEmail}
+                        onChange={(e) => setSignInEmail(e.target.value)}
+                        className="pl-10"
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="signin-password">Password</Label>
+                    <div className="relative">
+                      <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                      <Input
+                        id="signin-password"
+                        type={showPassword ? "text" : "password"}
+                        placeholder="Enter your password"
+                        value={signInPassword}
+                        onChange={(e) => setSignInPassword(e.target.value)}
+                        className="pl-10 pr-10"
+                        required
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-3 top-3 text-gray-400 hover:text-gray-600">
+                        {showPassword ? (
+                          <EyeOff className="h-4 w-4" />
+                        ) : (
+                          <Eye className="h-4 w-4" />
+                        )}
+                      </button>
+                    </div>
+                  </div>
+
+                  <Button
+                    type="submit"
+                    disabled={isLoading || !signInLoaded}
+                    className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold rounded-xl transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg disabled:transform-none disabled:opacity-50 disabled:cursor-not-allowed">
+                    {isLoading ? "Signing In..." : "Sign In"}
+                  </Button>
+                </form>
+              </TabsContent>
+
+              <TabsContent value="sign-up" className="mt-4">
+                <form onSubmit={handleSignUp} className="space-y-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="signup-firstname">First Name</Label>
+                      <Input
+                        id="signup-firstname"
+                        type="text"
+                        placeholder="First name"
+                        value={signUpFirstName}
+                        onChange={(e) => setSignUpFirstName(e.target.value)}
+                        required
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="signup-lastname">Last Name</Label>
+                      <Input
+                        id="signup-lastname"
+                        type="text"
+                        placeholder="Last name"
+                        value={signUpLastName}
+                        onChange={(e) => setSignUpLastName(e.target.value)}
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="signup-email">Email</Label>
+                    <div className="relative">
+                      <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                      <Input
+                        id="signup-email"
+                        type="email"
+                        placeholder="Enter your email"
+                        value={signUpEmail}
+                        onChange={(e) => setSignUpEmail(e.target.value)}
+                        className="pl-10"
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="signup-password">Password</Label>
+                    <div className="relative">
+                      <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                      <Input
+                        id="signup-password"
+                        type={showPassword ? "text" : "password"}
+                        placeholder="Create a password"
+                        value={signUpPassword}
+                        onChange={(e) => setSignUpPassword(e.target.value)}
+                        className="pl-10 pr-10"
+                        required
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-3 top-3 text-gray-400 hover:text-gray-600">
+                        {showPassword ? (
+                          <EyeOff className="h-4 w-4" />
+                        ) : (
+                          <Eye className="h-4 w-4" />
+                        )}
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="signup-confirm-password">
+                      Confirm Password
+                    </Label>
+                    <div className="relative">
+                      <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                      <Input
+                        id="signup-confirm-password"
+                        type={showConfirmPassword ? "text" : "password"}
+                        placeholder="Confirm your password"
+                        value={signUpConfirmPassword}
+                        onChange={(e) =>
+                          setSignUpConfirmPassword(e.target.value)
+                        }
+                        className="pl-10 pr-10"
+                        required
+                      />
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setShowConfirmPassword(!showConfirmPassword)
+                        }
+                        className="absolute right-3 top-3 text-gray-400 hover:text-gray-600">
+                        {showConfirmPassword ? (
+                          <EyeOff className="h-4 w-4" />
+                        ) : (
+                          <Eye className="h-4 w-4" />
+                        )}
+                      </button>
+                    </div>
+                  </div>
+
+                  <Button
+                    type="submit"
+                    disabled={isLoading || !signUpLoaded}
+                    className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold rounded-xl transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg disabled:transform-none disabled:opacity-50 disabled:cursor-not-allowed">
+                    {isLoading ? "Creating Account..." : "Create Account"}
+                  </Button>
+                </form>
+              </TabsContent>
+            </Tabs>
 
             {/* Footer */}
             <div className="text-center pt-4 border-t border-gray-100 mt-6">

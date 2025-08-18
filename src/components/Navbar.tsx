@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { useAuth0 } from "@/hooks/useAuth0";
+import { useClerkAuth } from "@/hooks/useClerk";
 import { SignInModal } from "@/components/SignInModal";
 import { User, LogOut } from "lucide-react";
 import {
@@ -16,7 +16,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export function Navbar() {
-  const { user, isAuthenticated, isLoading, logout } = useAuth0();
+  const { user, isAuthenticated, isLoading, logout } = useClerkAuth();
 
   return (
     <header className="fixed top-0 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-50">
@@ -57,7 +57,7 @@ export function Navbar() {
                       variant="ghost"
                       className="relative h-8 w-8 rounded-full">
                       <Avatar className="h-8 w-8">
-                        <AvatarImage src={user?.picture} alt={user?.name} />
+                        <AvatarImage src={user?.imageUrl} alt={user?.fullName || user?.firstName} />
                         <AvatarFallback>
                           <User className="h-4 w-4" />
                         </AvatarFallback>
@@ -68,10 +68,10 @@ export function Navbar() {
                     <DropdownMenuLabel className="font-normal">
                       <div className="flex flex-col space-y-1">
                         <p className="text-sm font-medium leading-none">
-                          {user?.name}
+                          {user?.fullName || user?.firstName}
                         </p>
                         <p className="text-xs leading-none text-muted-foreground">
-                          {user?.email}
+                          {user?.primaryEmailAddress?.emailAddress}
                         </p>
                       </div>
                     </DropdownMenuLabel>

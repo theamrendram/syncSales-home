@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, Suspense } from "react";
-import { useAuth0 } from "@/hooks/useAuth0";
 import { Navbar } from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,21 +12,9 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { CheckCircle, Shield, ArrowRight } from "lucide-react";
-import { toast } from "sonner";
+import { SignInModal } from "@/components/SignInModal";
 
 function Checkout() {
-  const { login, isLoading } = useAuth0();
-
-  const handleStartTrial = async () => {
-    try {
-      await login();
-      toast.success("Redirecting to Auth0 for signup...");
-    } catch (error) {
-      console.error("Login failed:", error);
-      toast.error("Failed to start trial. Please try again.");
-    }
-  };
-
   const plan = { name: "Pro Plan", price: 0, trialDays: 7 };
 
   return (
@@ -106,16 +93,15 @@ function Checkout() {
                       cancel anytime.
                     </p>
 
-                    <Button
-                      onClick={handleStartTrial}
-                      disabled={isLoading}
-                      className="w-full h-12 bg-gradient-to-r from-blue-800 via-indigo-800 to-blue-900 hover:from-blue-700 hover:via-indigo-700 hover:to-purple-700 text-white font-semibold rounded-xl transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg disabled:transform-none disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden group">
-                      <div className="absolute inset-0 bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
-                      <div className="flex items-center gap-3">
-                        <span>Start Free Trial with Auth0</span>
-                        <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                      </div>
-                    </Button>
+                    <SignInModal>
+                      <Button className="w-full h-12 bg-gradient-to-r from-blue-800 via-indigo-800 to-blue-900 hover:from-blue-700 hover:via-indigo-700 hover:to-purple-700 text-white font-semibold rounded-xl transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg relative overflow-hidden group">
+                        <div className="absolute inset-0 bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
+                        <div className="flex items-center gap-3">
+                          <span>Start Free Trial</span>
+                          <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                        </div>
+                      </Button>
+                    </SignInModal>
                   </div>
 
                   <div className="text-center text-sm text-gray-500">

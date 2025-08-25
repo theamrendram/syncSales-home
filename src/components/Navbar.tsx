@@ -14,12 +14,28 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-
+import { motion, useScroll, useSpring } from "framer-motion";
 export function Navbar() {
   const { user, isAuthenticated, isLoading, logout } = useClerkAuth();
 
+  const { scrollYProgress, scrollY } = useScroll();
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001,
+  });
+
+  // Check if scroll position is greater than 100px
+  const isScrolled = scrollY.get() > 100;
+
   return (
-    <header className="fixed top-0 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-50">
+    <header
+      className={`fixed top-0 w-full bg-white backdrop-blur border-b z-50 transition-all duration-300 ${
+        isScrolled
+          ? "bg-transparent border-transparent"
+          : "bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
+      }`}>
+      <motion.div className="progress-bar" style={{ scaleX }} />
       <div className="container flex h-16 items-center justify-between">
         <Link href="/" className="flex items-center space-x-2">
           <span className="text-xl font-bold">SyncSales</span>
@@ -57,7 +73,10 @@ export function Navbar() {
                       variant="ghost"
                       className="relative h-8 w-8 rounded-full">
                       <Avatar className="h-8 w-8">
-                        <AvatarImage src={user?.imageUrl} alt={user?.fullName || user?.firstName} />
+                        <AvatarImage
+                          src={user?.imageUrl}
+                          alt={user?.fullName || user?.firstName}
+                        />
                         <AvatarFallback>
                           <User className="h-4 w-4" />
                         </AvatarFallback>

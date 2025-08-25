@@ -170,10 +170,12 @@ const features = [
 
 export function Features() {
   return (
-    <section id="features" className="container py-24 sm:py-32">
-      <div className="space-y-16">
+    <section
+      id="features"
+      className="py-24 sm:py-32 bg-gradient-to-br from-black to-neutral-800">
+      <div className="container space-y-16">
         <div className="text-center">
-          <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
+          <h2 className="text-3xl font-bold text-white tracking-tighter sm:text-4xl md:text-5xl">
             Everything you need to{" "}
             <span className="gradient-text">accelerate sales</span>
           </h2>
@@ -181,17 +183,19 @@ export function Features() {
             Powerful features that help you convert more leads into customers.
           </p>
         </div>
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 justify-center">
           {features.map((feature) => (
             <Card
               key={feature.title}
-              className="flex flex-col group transition-all duration-300 hover:shadow-lg">
-              <CardHeader>
-                <div className="gradient-primary w-12 h-12 rounded-lg flex items-center justify-center">
+              className="backdrop-blur-sm rounded-3xl p-6 flex flex-col h-full text-white transition-transform hover:scale-105">
+              <CardHeader className="flex flex-col items-start space-y-4">
+                <div className="gradient-secondary w-12 h-12 rounded-lg flex items-center justify-center">
                   <feature.icon className="h-6 w-6 text-white" />
                 </div>
-                <CardTitle className="mt-4">{feature.title}</CardTitle>
-                <CardDescription>{feature.description}</CardDescription>
+                <CardTitle>{feature.title}</CardTitle>
+                <CardDescription className="text-gray-300">
+                  {feature.description}
+                </CardDescription>
               </CardHeader>
             </Card>
           ))}

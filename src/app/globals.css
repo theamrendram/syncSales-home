@@ -51,20 +51,20 @@
 
 @layer utilities {
   .gradient-primary {
-    @apply bg-gradient-to-br from-blue-500 to-indigo-600;
+      @apply bg-gradient-to-br from-blue-500 to-amber-400;
   }
 
   .gradient-secondary {
     background-image: linear-gradient(
       to bottom right,
-      #171717 20%,
-      #465c88 50%,
+      /* #171717 20%, */
+      #607fbd 40%,
       #ff9b00 100%
     );
   }
 
   .gradient-text {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600;
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-amber-400;
   }
 
   .section-card {

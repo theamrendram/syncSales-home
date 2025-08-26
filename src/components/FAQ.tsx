@@ -60,8 +60,10 @@ const faqs = [
 
 export function FAQ() {
   return (
-    <section id="faq" className="container py-24 sm:py-32">
-      <div className="space-y-16">
+    <section
+      id="faq"
+      className="py-24 sm:py-32 text-white bg-[linear-gradient(to_top_right,#171717_0%,#171717_60%,#465C88_75%,#FF9B00_100%)]">
+      <div className="container space-y-16">
         <div className="text-center">
           <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
             Frequently Asked Questions

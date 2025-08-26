@@ -10,8 +10,11 @@ export function CTA() {
         <div className="container py-24 sm:py-32">
           <div className="flex flex-col items-center gap-8 text-center">
             <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
-              Ready to <span className="gradient-text">transform</span> your
-              sales process?
+              Ready to{" "}
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-neutral-600">
+                transform
+              </span>{" "}
+              your sales process?
             </h2>
             <p className="mx-auto max-w-[600px] text-gray-800 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
               Join thousands of sales teams using SyncSales to close more deals.

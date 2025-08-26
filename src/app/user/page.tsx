@@ -2,7 +2,8 @@
 import { useUser, useClerk } from "@clerk/nextjs";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { SignInModal } from "@/components/SignInModal";
+import Link from "next/link";
+
 
 export default function Profile() {
   const { user, isLoaded } = useUser();
@@ -47,11 +48,11 @@ export default function Profile() {
           <h2 className="text-2xl font-bold text-gray-900 mb-4">
             Not signed in
           </h2>
-          <SignInModal>
+          <Link href="/auth">
             <button className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors">
               Sign In
             </button>
-          </SignInModal>
+          </Link>
         </div>
       </div>
     );

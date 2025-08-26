@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useClerkAuth } from "@/hooks/useClerk";
-import { SignInModal } from "@/components/SignInModal";
+
 import { User, LogOut } from "lucide-react";
 import {
   DropdownMenu,
@@ -61,11 +61,11 @@ export function Navbar() {
           {!isLoading && (
             <>
               {!isAuthenticated ? (
-                <SignInModal>
+                <Link href="/auth">
                   <Button variant="outline" size="sm">
                     Sign In
                   </Button>
-                </SignInModal>
+                </Link>
               ) : (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>

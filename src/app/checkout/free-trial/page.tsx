@@ -12,8 +12,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { CheckCircle, Shield, ArrowRight } from "lucide-react";
-import { SignInModal } from "@/components/SignInModal";
-
+import Link from "next/link";
 function Checkout() {
   const plan = { name: "Pro Plan", price: 0, trialDays: 7 };
 
@@ -93,7 +92,7 @@ function Checkout() {
                       cancel anytime.
                     </p>
 
-                    <SignInModal>
+                    <Link href="/auth">
                       <Button className="w-full h-12 bg-gradient-to-r from-blue-800 via-indigo-800 to-blue-900 hover:from-blue-700 hover:via-indigo-700 hover:to-purple-700 text-white font-semibold rounded-xl transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg relative overflow-hidden group">
                         <div className="absolute inset-0 bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
                         <div className="flex items-center gap-3">
@@ -101,7 +100,7 @@ function Checkout() {
                           <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                         </div>
                       </Button>
-                    </SignInModal>
+                    </Link>
                   </div>
 
                   <div className="text-center text-sm text-gray-500">

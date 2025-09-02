@@ -30,7 +30,7 @@ export function Navbar() {
   const isScrolled = scrollY.get() > 100;
 
   return (
-    <header className="fixed top-0 w-full z-50">
+    <header className="fixed top-0 w-full md:h-20 z-50">
       {/* Liquid glass background with dynamic opacity and depth */}
       <motion.div
         className="absolute inset-0 backdrop-blur-2xl"
@@ -108,16 +108,13 @@ export function Navbar() {
             className="relative">
             <Link href="/" className="flex items-center space-x-3 group">
               <div className="relative">
-                {/* Logo background with glass effect */}
-                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-amber-400 rounded-2xl flex items-center justify-center shadow-2xl relative overflow-hidden">
-                  <span className="text-white font-bold text-xl relative z-10">
+                {/* <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-amber-400 rounded-2xl flex items-center justify-center shadow-2xl relative overflow-hidden">
+                  <span className="text-white font-bold text-lg relative z-10">
                     S
                   </span>
 
-                  {/* Liquid glass overlay */}
                   <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent opacity-60" />
 
-                  {/* Animated shine effect */}
                   <motion.div
                     className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
                     animate={{
@@ -129,7 +126,7 @@ export function Navbar() {
                       ease: "linear",
                     }}
                   />
-                </div>
+                </div> */}
 
                 {/* Glow effect */}
                 <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-amber-400 rounded-2xl blur-xl opacity-40 group-hover:opacity-60 transition-opacity duration-500" />
@@ -217,7 +214,7 @@ export function Navbar() {
               className="relative">
               <Button
                 size="default"
-                className="relative overflow-hidden backdrop-blur-xl bg-gradient-to-r from-blue-500 to-amber-400 text-white font-semibold px-8 py-3 rounded-2xl shadow-2xl hover:shadow-3xl transition-all duration-500 border-0 h-12">
+                className="relative overflow-hidden backdrop-blur-xl bg-gradient-to-r from-blue-500 to-amber-400 text-white font-semibold px-4 py-3 rounded-lg shadow-2xl hover:shadow-3xl transition-all duration-500 border-0 h-8">
                 {/* Liquid glass overlay with animation */}
                 <motion.div
                   className="absolute inset-0 bg-gradient-to-r from-white/20 via-transparent to-white/20"
@@ -248,10 +245,10 @@ export function Navbar() {
               </Button>
 
               {/* Enhanced glow effect */}
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-amber-400 rounded-2xl blur-2xl opacity-40 -z-10" />
+              {/* <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-amber-400 rounded-2xl blur-2xl opacity-40 -z-10" /> */}
 
               {/* Floating particles around button */}
-              <motion.div
+              {/* <motion.div
                 className="absolute -top-1 -right-1 w-2 h-2 bg-amber-400/60 rounded-full"
                 animate={{
                   scale: [1, 1.2, 1],
@@ -262,7 +259,7 @@ export function Navbar() {
                   repeat: Infinity,
                   ease: "easeInOut",
                 }}
-              />
+              /> */}
             </motion.div>
           </div>
         </div>

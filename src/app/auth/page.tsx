@@ -145,7 +145,7 @@ export default function AuthPage() {
 
   return (
     <GridBackgroundDemo>
-      <div className="relative text-white min-h-screen">
+      <div className="relative text-white min-h-screen w-full">
         <div className="absolute inset-0 -z-10 gradient-secondary" />
 
         {/* Back to home button */}
@@ -207,16 +207,16 @@ export default function AuthPage() {
                 <Tabs
                   value={activeTab}
                   onValueChange={setActiveTab}
-                  className="w-full">
-                  <TabsList className="grid grid-cols-2 w-full backdrop-blur-xl bg-white/20 border border-white/30 rounded-2xl p-1">
+                  className="w-[400px]">
+                  <TabsList className="grid grid-cols-2 w-full rounded-full">
                     <TabsTrigger
                       value="sign-in"
-                      className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-amber-400 data-[state=active]:text-white text-gray-300 rounded-xl transition-all duration-300 font-medium">
+                      className="flex items-center justify-center h-10 data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-amber-400 data-[state=active]:text-white text-gray-300 rounded-full transition-all duration-300 font-medium">
                       Sign In
                     </TabsTrigger>
                     <TabsTrigger
                       value="sign-up"
-                      className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-amber-400 data-[state=active]:text-white text-gray-300 rounded-xl transition-all duration-300 font-medium">
+                      className="flex items-center justify-center h-10 data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-amber-400 data-[state=active]:text-white text-gray-300 rounded-full transition-all duration-300 font-medium">
                       Create Account
                     </TabsTrigger>
                   </TabsList>
@@ -257,7 +257,7 @@ export default function AuthPage() {
 
                     {/* Divider */}
                     <div className="relative my-8">
-                      <div className="absolute inset-0 flex items-center">
+                      <div className="absolute inset-8 flex items-center">
                         <span className="w-full border-t border-white/20" />
                       </div>
                       <div className="relative flex justify-center text-sm">

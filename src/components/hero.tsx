@@ -22,7 +22,7 @@ export function Hero() {
             </h1>
             <p className="mx-auto max-w-[700px] text-gray-300 md:text-xl lg:text-2xl leading-relaxed">
               Stop wasting time on manual processes. SyncSales automates your
-              entire lead management so you can focus on what matters most:
+              entire lead management process so you can focus on what matters most:
               running your business and growing revenue.
             </p>
           </div>

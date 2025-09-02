@@ -15,156 +15,48 @@ import {
   MonitorSmartphone,
 } from "lucide-react";
 
-// const features = [
-//   {
-//     title: "Instantly share leads with advertisers",
-//     description:
-//       "Instantly share leads with advertisers and get real-time insights into your sales pipeline. Using our best of the class webhook",
-//     icon: BarChart3,
-//   },
-//   //   {
-//   //     title: "Smart Automation",
-//   //     description:
-//   //       "Set up intelligent workflows that nurture leads and follow up at the perfect moment.",
-//   //     icon: Zap,
-//   //   },
-//   {
-//     title: "Team Collaboration",
-//     description:
-//       "Share insights and collaborate with built-in webmaster feature.",
-//     icon: Users,
-//   },
-//   {
-//     title: "Multi-Channel Engagement",
-//     description:
-//       "Get leads from multiple channels or campaigns and funnel them to a single route.",
-//     icon: MessageSquare,
-//   },
-//   {
-//     title: "Advanced Analytics",
-//     description:
-//       "Get real-time insights into your sales pipeline and campaigns performances.",
-//     icon: BarChart,
-//   },
-// //   {
-// //     title: "Smart Scheduling",
-// //     description:
-// //       "Let prospects book meetings instantly based on your team's real availability.",
-// //     icon: Calendar,
-// //   },
-// ];
-
-// const features = [
-//   {
-//     title: "Centralized Lead Collection",
-//     description:
-//       "Collect leads from multiple landing pages into a single platform for seamless management.",
-//     icon: Layers,
-//   },
-//   {
-//     title: "Route-Based Lead Processing",
-//     description:
-//       "Define lead handling rules with Routes and optionally configure Webhooks for automated CRM integration.",
-//     icon: Network,
-//   },
-//   {
-//     title: "Campaign Management",
-//     description:
-//       "Create and organize campaigns to categorize leads efficiently and track their performance.",
-//     icon: Globe,
-//   },
-//   {
-//     title: "Webhooks for Third-Party CRM Integration",
-//     description:
-//       "Easily send leads to external CRMs using configurable webhooks, reducing manual work.",
-//     icon: Share2,
-//   },
-//   {
-//     title: "Advanced Analytics",
-//     description:
-//       "Get real-time insights into lead performance, conversion rates, and campaign effectiveness.",
-//     icon: BarChart,
-//   },
-//   {
-//     title: "Webmaster Access & Lead Sharing",
-//     description:
-//       "Create webmasters with restricted access to specific campaigns, allowing them to manage assigned leads.",
-//     icon: Users,
-//   },
-//   {
-//     title: "Secure Authentication & User Roles",
-//     description:
-//       "Ensure secure access with Clerk-powered authentication and role-based permissions.",
-//     icon: ShieldCheck,
-//   },
-//   {
-//     title: "User-Friendly Dashboard",
-//     description:
-//       "Navigate seamlessly between leads, routes, and campaigns with a clean and intuitive UI.",
-//     icon: MonitorSmartphone,
-//   },
-//   {
-//     title: "Lead Scoring & Qualification",
-//     description:
-//       "Prioritize high-quality leads with automated lead scoring and qualification mechanisms.",
-//     icon: TrendingUp,
-//   },
-//   {
-//     title: "Email & SMS Notifications",
-//     description:
-//       "Receive real-time notifications whenever new leads arrive or when important actions occur.",
-//     icon: Mail,
-//   },
-//   {
-//     title: "Custom Reporting & Exports",
-//     description:
-//       "Generate detailed reports and export lead data in CSV, Excel, or JSON formats.",
-//     icon: FileText,
-//   },
-// ];
-
 const features = [
   {
-    title: "Centralized Lead Management",
+    title: "Never Lose Another Lead",
     description:
-      "Collect and organize leads from multiple landing pages into a single platform. Manage routes, campaigns, and webmasters seamlessly.",
+      "Collect leads from all your landing pages in one place. No more spreadsheets, missed opportunities, or manual data entry.",
     icon: Layers,
+    benefit: "Save 10+ hours per week on lead management",
   },
   {
-    title: "Automated Lead Processing & Webhooks",
+    title: "Automate Your Sales Process",
     description:
-      "Define routes to automate lead handling and optionally forward leads to third-party CRMs using configurable webhooks.",
+      "Set up smart routes that automatically qualify leads and send them to the right team member. Your sales team focuses on closing, not organizing.",
     icon: Network,
+    benefit: "Qualify leads 5x faster with automation",
   },
   {
-    title: "Campaign & Webmaster Access Control",
+    title: "Scale Your Team Without Chaos",
     description:
-      "Create campaigns to categorize leads efficiently. Share campaign-specific access with webmasters to collaborate effectively.",
+      "Give webmasters access to specific campaigns while keeping your data secure. Collaborate effectively without losing control.",
     icon: Users,
+    benefit: "Onboard new team members in minutes",
   },
   {
-    title: "Advanced Analytics & Reporting",
+    title: "Make Data-Driven Decisions",
     description:
-      "Gain real-time insights into lead performance, conversion rates, and campaign effectiveness. Export reports in multiple formats.",
+      "See exactly which campaigns are working and which aren't. Track conversion rates, lead quality, and ROI in real-time.",
     icon: BarChart,
+    benefit: "Increase conversion rates by 35%",
   },
-  //   {
-  //     title: "Secure Authentication & Role Management",
-  //     description:
-  //       "Ensure secure access with Clerk-powered authentication, role-based permissions, and single sign-on (SSO) across subdomains.",
-  //     icon: ShieldCheck,
-  //   },
-   {
-     title: "User-Friendly Dashboard",
-     description:
-       "Navigate seamlessly between leads, routes, and campaigns with a clean and intuitive UI.",
-     icon: MonitorSmartphone,
-   },
   {
-    title: "Real-Time Notifications & Alerts",
+    title: "Integrate with Your Existing Tools",
     description:
-      "Receive instant email and SMS notifications for new leads and important actions, ensuring quick response times.",
+      "Connect to any CRM or tool with webhooks. No more manual data transfer or duplicate work across systems.",
     icon: Share2,
+    benefit: "Eliminate 90% of manual data entry",
+  },
+  {
+    title: "Get Instant Notifications",
+    description:
+      "Know immediately when high-value leads come in. Never miss a hot prospect or let leads go cold.",
+    icon: MonitorSmartphone,
+    benefit: "Respond to leads 10x faster",
   },
 ];
 
@@ -177,26 +69,34 @@ export function Features() {
         <div className="text-center">
           <h2 className="text-3xl font-bold text-white tracking-tighter sm:text-4xl md:text-5xl">
             Everything you need to{" "}
-            <span className="gradient-text">accelerate sales</span>
+            <span className="gradient-text">close more deals</span>
           </h2>
-          <p className="mx-auto mt-4 max-w-[600px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
-            Powerful features that help you convert more leads into customers.
+          <p className="mx-auto mt-6 max-w-[700px] text-gray-300 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+            Stop losing revenue to manual processes. These powerful features
+            transform your sales pipeline from chaotic to predictable.
           </p>
         </div>
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 justify-center">
           {features.map((feature) => (
             <Card
               key={feature.title}
-              className="backdrop-blur-sm rounded-3xl p-6 flex flex-col h-full text-white transition-transform hover:scale-105">
-              <CardHeader className="flex flex-col items-start space-y-4">
-                <div className="gradient-secondary w-12 h-12 rounded-lg flex items-center justify-center">
-                  <feature.icon className="h-6 w-6 text-white" />
+              className="backdrop-blur-sm rounded-3xl p-8 flex flex-col h-full text-white transition-transform hover:scale-105 border border-white/10 hover:border-white/20">
+              <CardHeader className="flex flex-col items-start space-y-4 pb-4">
+                <div className="gradient-secondary w-14 h-14 rounded-xl flex items-center justify-center">
+                  <feature.icon className="h-7 w-7 text-white" />
                 </div>
-                <CardTitle>{feature.title}</CardTitle>
-                <CardDescription className="text-gray-300">
+                <CardTitle className="text-xl">{feature.title}</CardTitle>
+              </CardHeader>
+              <CardContent className="flex-1 space-y-4">
+                <CardDescription className="text-gray-300 text-base leading-relaxed">
                   {feature.description}
                 </CardDescription>
-              </CardHeader>
+                <div className="pt-4 border-t border-white/10">
+                  <p className="text-amber-400 font-semibold text-sm">
+                    💰 {feature.benefit}
+                  </p>
+                </div>
+              </CardContent>
             </Card>
           ))}
         </div>

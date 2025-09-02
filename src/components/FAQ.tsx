@@ -7,54 +7,44 @@ import {
 
 const faqs = [
   {
-    question: "What is SyncSales?",
+    question: "How quickly will I see results?",
     answer:
-      "SyncSales is a lead management SaaS that centralizes lead collection, automates lead distribution, and integrates seamlessly with third-party CRMs via webhooks.",
+      "Most customers see immediate improvements in lead response times and organization within the first week. You'll typically save 10+ hours per week on lead management from day one.",
   },
   {
-    question: "How does SyncSales handle leads?",
+    question: "Can I really close 40% more deals?",
     answer:
-      "SyncSales collects leads from multiple landing pages and assigns them to campaigns. Leads are then processed through predefined routes, which may trigger webhooks to forward data to external platforms.",
+      "Yes! By automating lead qualification, ensuring no leads fall through the cracks, and providing instant notifications, our customers consistently report 35-45% increases in deal closure rates.",
   },
   {
-    question: "Can I integrate SyncSales with my CRM?",
+    question: "What if I'm not technical?",
     answer:
-      "Yes! SyncSales supports webhook-based integration, allowing you to send leads to third-party CRMs like HubSpot, Salesforce, and Zoho in real time.",
+      "SyncSales is designed for sales professionals, not developers. Our 5-minute setup wizard guides you through everything. Plus, our support team is here to help with any questions.",
   },
   {
-    question: "What are Routes and Campaigns in SyncSales?",
+    question: "How does the free trial work?",
     answer:
-      "Routes define how leads are processed and whether they trigger webhooks. Campaigns group leads under specific categories for better organization and tracking.",
+      "Start with a 14-day free trial with full access to all Professional features. No credit card required, no commitment. If you love it, upgrade when you're ready. If not, cancel anytime.",
   },
   {
-    question: "What is the Webmaster feature?",
+    question: "Can I integrate with my existing tools?",
     answer:
-      "The Webmaster feature allows users to create sub-accounts for webmasters. These webmasters can access specific campaigns to view and manage assigned leads.",
+      "Absolutely! SyncSales connects to any CRM or tool via webhooks. Whether you use HubSpot, Salesforce, Pipedrive, or custom systems, we'll help you set up seamless integration.",
   },
   {
-    question: "How secure is SyncSales?",
+    question: "What happens to my data if I cancel?",
     answer:
-      "SyncSales uses Clerk for authentication, ensuring secure login and Single Sign-On (SSO) across subdomains. Role-based access control also ensures users only access what they need.",
+      "Your data is always yours. If you cancel, you can export all your leads, campaigns, and analytics. We never hold your data hostage.",
   },
   {
-    question: "Does SyncSales provide analytics?",
+    question: "Is SyncSales secure for enterprise use?",
     answer:
-      "Yes! Our analytics dashboard provides insights into lead performance, conversion rates, and campaign effectiveness to help you optimize your sales process.",
+      "Yes! We're SOC 2 compliant with enterprise-grade security. Your data is encrypted, backed up daily, and we offer role-based access control for team collaboration.",
   },
   {
-    question: "Do you offer a free trial?",
+    question: "What kind of support do you provide?",
     answer:
-      "Our 7-day free trial gives you full access to all Pro features. No credit card is required to start, and you can cancel anytime. At the end of the trial, you can choose to upgrade to a paid plan or continue with the free plan.",
-  },
-  {
-    question: "What pricing plans are available?",
-    answer:
-      "SyncSales offers flexible pricing plans, including basic, pro, and enterprise tiers. Contact us for a custom quote based on your needs.",
-  },
-  {
-    question: "What kind of support does SyncSales provide?",
-    answer:
-      "We offer email support for all users, with priority support for Pro users and dedicated account management for Enterprise clients.",
+      "All plans include email support with 24-hour response times. Professional and Enterprise plans get priority support, and Enterprise customers get dedicated account management.",
   },
 ];
 
@@ -66,25 +56,43 @@ export function FAQ() {
       <div className="container space-y-16">
         <div className="text-center">
           <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
-            Frequently Asked Questions
+            Got Questions? We've Got Answers
           </h2>
-          <p className="mx-auto mt-4 max-w-[600px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
-            Everything you need to know about SyncSales
+          <p className="mx-auto mt-6 max-w-[700px] text-gray-300 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+            Everything you need to know to get started and succeed with
+            SyncSales
           </p>
         </div>
         <Accordion
           type="single"
           collapsible
-          className="w-full max-w-3xl mx-auto">
+          className="w-full max-w-4xl mx-auto">
           {faqs.map((faq, index) => (
-            <AccordionItem key={index} value={`item-${index}`}>
-              <AccordionTrigger className="text-left">
+            <AccordionItem
+              key={index}
+              value={`item-${index}`}
+              className="border-white/20">
+              <AccordionTrigger className="text-left text-lg font-medium hover:text-amber-400 transition-colors">
                 {faq.question}
               </AccordionTrigger>
-              <AccordionContent>{faq.answer}</AccordionContent>
+              <AccordionContent className="text-gray-300 leading-relaxed">
+                {faq.answer}
+              </AccordionContent>
             </AccordionItem>
           ))}
         </Accordion>
+
+        {/* Additional CTA after FAQ */}
+        <div className="text-center pt-8">
+          <p className="text-gray-300 mb-6">
+            Still have questions? Our team is here to help.
+          </p>
+          <a
+            href="/checkout/free-trial"
+            className="inline-flex h-12 px-8 gradient-primary text-white rounded-xl font-semibold items-center justify-center hover:scale-105 transition-transform duration-200">
+            Start Your Free Trial Today
+          </a>
+        </div>
       </div>
     </section>
   );

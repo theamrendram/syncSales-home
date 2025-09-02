@@ -7,44 +7,52 @@ import Link from "next/link";
 export function Hero() {
   return (
     <GridBackgroundDemo>
-      <div className="relative text-white" >
+      <div className="relative text-white">
         <div className="absolute inset-0 -z-10 gradient-secondary" />
-        <div className="container flex flex-col items-center justify-center space-y-10 py-32 md:py-40 lg:py-48">
-          <div className="space-y-6 text-center">
+        <div className="container flex flex-col items-center justify-center space-y-12 py-32 md:py-40 lg:py-48">
+          <div className="space-y-8 text-center">
             <Badge
               variant="secondary"
               className="w-fit mx-auto bg-neutral-300 text-neutral-900">
-              Trusted by leading media buyers
+              Trusted by Sales Teams
             </Badge>
             <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
-              Transform Your Lead Generation <br className="hidden sm:inline" />
-              <span className="gradient-text">Sales Pipeline</span>
+              Increase your revenue by 40% <br className="hidden sm:inline" />
+              <span className="gradient-text">in half the time</span>
             </h1>
-            <p className="mx-auto max-w-[600px] text-gray-500 md:text-xl dark:text-gray-400">
-              Automate your outreach, qualify leads instantly, and close more
-              deals with our all-in-one sales automation platform.
+            <p className="mx-auto max-w-[700px] text-gray-300 md:text-xl lg:text-2xl leading-relaxed">
+              Stop wasting time on manual processes. SyncSales automates your
+              entire lead management so you can focus on what matters most:
+              running your business and growing revenue.
             </p>
           </div>
-          <div className="flex flex-col sm:flex-row items-center gap-4">
-            <Link href="/signup" className="h-12 px-8 gradient-primary rounded-lg text-white flex items-center justify-center">
-              Start Free Trial <ArrowRight className="ml-2 h-4 w-4" />
+
+          {/* Single, Clear CTA */}
+          <div className="text-center">
+            <Link
+              href="/checkout/free-trial"
+              className="inline-flex h-14 px-10 gradient-primary rounded-xl text-white text-lg font-semibold items-center justify-center hover:scale-105 transition-transform duration-200 shadow-2xl">
+              Start Your 14-Day Free Trial{" "}
+              <ArrowRight className="ml-3 h-5 w-5" />
             </Link>
-            {/* <Link href="/demo" className="h-12 px-8 bg-white">
-              Watch Demo
-            </Link> */}
+            <p className="text-gray-400 text-sm mt-3">
+              No credit card required • Cancel anytime
+            </p>
           </div>
-          <div className="flex flex-col sm:flex-row items-center gap-8 pt-8">
+
+          {/* Trust Indicators */}
+          <div className="flex flex-col sm:flex-row items-center gap-6 pt-8">
             <div className="flex items-center gap-2">
-              <CheckCircle className="h-5 w-5 text-green-500" />
-              <span className="text-sm">No credit card required</span>
+              <CheckCircle className="h-5 w-5 text-green-400" />
+              <span className="text-sm text-gray-300">14-day free trial</span>
             </div>
             <div className="flex items-center gap-2">
-              <CheckCircle className="h-5 w-5 text-green-500" />
-              <span className="text-sm">14-day free trial</span>
+              <CheckCircle className="h-5 w-5 text-green-400" />
+              <span className="text-sm text-gray-300">Setup in 5 minutes</span>
             </div>
             <div className="flex items-center gap-2">
-              <CheckCircle className="h-5 w-5 text-green-500" />
-              <span className="text-sm">Cancel anytime</span>
+              <CheckCircle className="h-5 w-5 text-green-400" />
+              <span className="text-sm text-gray-300">Instant ROI</span>
             </div>
           </div>
         </div>

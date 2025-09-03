@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useState, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import { Navbar } from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,168 +12,121 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { toast } from "sonner";
-import { ArrowRight, Loader2, Check, Shield } from "lucide-react";
+import { CheckCircle, Shield, ArrowRight } from "lucide-react";
+import Link from "next/link";
 
-function CheckoutContent() {
+const plans = [
+  { name: "Pro Plan", price: 46 },
+  { name: "Basic Plan", price: 20 },
+];
+function Checkout() {
   const searchParams = useSearchParams();
-  const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
-
-  // Get product details from URL params
-  const productId = searchParams.get("productId");
-  const productName = searchParams.get("productName");
-  const customerEmail = searchParams.get("customerEmail");
-
-  const [formData, setFormData] = useState({
-    email: customerEmail || "",
-    name: "",
-  });
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+  const planParam = searchParams.get("plan") || "Pro Plan";
+  const plan = plans.find((plan) => plan.name === planParam) || {
+    name: "Pro Plan",
+    price: 0,
+    trialDays: 7,
   };
-
-  const handleCheckout = async () => {
-    if (!formData.email || !formData.name) {
-      setError("Please fill in all required fields");
-      return;
-    }
-
-    setIsLoading(true);
-    setError("");
-
-    try {
-      // Redirect to Polar checkout
-      const checkoutUrl = `/api/checkout?products[]=${productId}&customer_email=${encodeURIComponent(
-        formData.email
-      )}&customer_name=${encodeURIComponent(formData.name)}`;
-      window.location.href = checkoutUrl;
-    } catch (error) {
-      console.error("Checkout error:", error);
-      setError("Failed to initiate checkout. Please try again.");
-      setIsLoading(false);
-    }
-  };
-
-  if (!productId || !productName) {
-    return (
-      <div className="min-h-screen bg-gray-50">
-        <Navbar />
-        <div className="container mx-auto px-4 py-8">
-          <Card className="max-w-md mx-auto">
-            <CardHeader>
-              <CardTitle className="text-red-600">Invalid Product</CardTitle>
-              <CardDescription>
-                The product information is missing. Please return to the
-                products page.
-              </CardDescription>
-            </CardHeader>
-            <CardFooter>
-              <Button
-                onClick={() => router.push("/products")}
-                className="w-full">
-                Back to Products
-              </Button>
-            </CardFooter>
-          </Card>
-        </div>
-      </div>
-    );
-  }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Navbar />
-      <div className="container mx-auto px-4 py-8">
-        <div className="max-w-2xl mx-auto">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-2xl font-bold">
-                Complete Your Purchase
-              </CardTitle>
-              <CardDescription>
-                You&apos;re about to purchase: <strong>{productName}</strong>
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              {error && (
-                <div className="p-3 bg-red-50 border border-red-200 rounded-md text-red-600 text-sm">
-                  {error}
-                </div>
-              )}
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
+      <Navbar className="bg-zinc-700" />
+      <main className="container mx-auto px-4 py-12 md:py-24">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-10">
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-3">
+              Start your 7‑day free trial
+            </h1>
+            <p className="text-gray-600 max-w-xl mx-auto">
+              Unlock every premium feature—no credit card, no commitments.
+            </p>
+          </div>
 
-              <div className="space-y-4">
-                <div>
-                  <Label htmlFor="name">Full Name *</Label>
-                  <Input
-                    id="name"
-                    name="name"
-                    type="text"
-                    value={formData.name}
-                    onChange={handleInputChange}
-                    placeholder="Enter your full name"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <Label htmlFor="email">Email Address *</Label>
-                  <Input
-                    id="email"
-                    name="email"
-                    type="email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    placeholder="Enter your email address"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className="bg-blue-50 border border-blue-200 rounded-md p-4">
-                <div className="flex items-start space-x-3">
-                  <Shield className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
-                  <div>
-                    <h4 className="font-medium text-blue-900">
-                      Secure Checkout
-                    </h4>
-                    <p className="text-sm text-blue-700 mt-1">
-                      Your payment will be processed securely through Polar. We
-                      never store your payment information.
+          <div className="grid md:grid-cols-5 gap-8">
+            {/* Benefits Section */}
+            <div className="md:col-span-2 space-y-6">
+              <Card className="bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-100 ">
+                <CardHeader>
+                  <CardTitle className="text-blue-700">
+                    What’s included
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="flex items-start gap-3">
+                    <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
+                    <p className="text-gray-700">
+                      Unlimited access to all premium tools for 7 days
                     </p>
                   </div>
-                </div>
-              </div>
-            </CardContent>
-            <CardFooter>
-              <Button
-                onClick={handleCheckout}
-                disabled={isLoading}
-                className="w-full"
-                size="lg">
-                {isLoading ? (
-                  <>
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Processing...
-                  </>
-                ) : (
-                  <>
-                    Continue to Checkout
-                    <ArrowRight className="w-4 h-4 ml-2" />
-                  </>
-                )}
-              </Button>
-            </CardFooter>
-          </Card>
+                  <div className="flex items-start gap-3">
+                    <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
+                    <p className="text-gray-700">
+                      Priority support from our team
+                    </p>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
+                    <p className="text-gray-700">
+                      Create unlimited projects and invite collaborators
+                    </p>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
+                    <p className="text-gray-700">
+                      Cancel anytime—keep your work
+                    </p>
+                  </div>
+                </CardContent>
+                <CardFooter className="border-t border-blue-100 pt-4">
+                  <div className="flex items-center gap-2 text-gray-600 text-sm">
+                    <Shield className="h-4 w-4" />
+                    <span>Secure, hassle‑free signup</span>
+                  </div>
+                </CardFooter>
+              </Card>
+            </div>
+
+            {/* Checkout Form */}
+            <div className="md:col-span-3">
+              <Card className="shadow-lg border-gray-200">
+                <CardHeader className="text-center">
+                  <CardTitle className="text-2xl font-bold text-gray-800">
+                    Start a 7‑day free trial of {plan.name}
+                  </CardTitle>
+                  <CardDescription className="text-lg">
+                    Enjoy the full product experience for a week—risk‑free.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <div className="text-center">
+                    <p className="text-gray-600 mb-6">
+                      Create your account to begin your trial. It only takes a
+                      minute and you can cancel anytime.
+                    </p>
+
+                    <Link href="/auth">
+                      <Button className="w-full h-12 bg-gradient-to-r from-blue-800 via-indigo-800 to-blue-900 hover:from-blue-700 hover:via-indigo-700 hover:to-purple-700 text-white font-semibold rounded-xl transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg relative overflow-hidden group">
+                        <div className="absolute inset-0 bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
+                        <div className="flex items-center gap-3">
+                          <span>Start free trial</span>
+                          <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                        </div>
+                      </Button>
+                    </Link>
+                  </div>
+
+                  <div className="text-center text-sm text-gray-500">
+                    <p>
+                      By continuing, you agree to our Terms of Service and
+                      Privacy Policy.
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 }
@@ -182,21 +135,11 @@ export default function CheckoutPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-gray-50">
-          <Navbar />
-          <div className="container mx-auto px-4 py-8">
-            <div className="max-w-2xl mx-auto">
-              <Card>
-                <CardContent className="flex flex-col items-center justify-center py-12">
-                  <Loader2 className="w-8 h-8 animate-spin text-blue-600 mb-4" />
-                  <p className="text-gray-600">Loading checkout...</p>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
         </div>
       }>
-      <CheckoutContent />
+      <Checkout />
     </Suspense>
   );
 }

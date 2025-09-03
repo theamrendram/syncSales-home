@@ -32,7 +32,7 @@ export function Hero() {
             <Link
               href="/checkout/free-trial"
               className="inline-flex h-14 px-10 gradient-primary rounded-xl text-white text-lg font-semibold items-center justify-center hover:scale-105 transition-transform duration-200 shadow-2xl">
-              Start Your 14-Day Free Trial{" "}
+              Start Your 7-Day Free Trial{" "}
               <ArrowRight className="ml-3 h-5 w-5" />
             </Link>
             <p className="text-gray-400 text-sm mt-3">
@@ -44,7 +44,7 @@ export function Hero() {
           <div className="flex flex-col sm:flex-row items-center gap-6 pt-8">
             <div className="flex items-center gap-2">
               <CheckCircle className="h-5 w-5 text-green-400" />
-              <span className="text-sm text-gray-300">14-day free trial</span>
+              <span className="text-sm text-gray-300">7-day free trial</span>
             </div>
             <div className="flex items-center gap-2">
               <CheckCircle className="h-5 w-5 text-green-400" />

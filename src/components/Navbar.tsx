@@ -16,7 +16,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { motion, useScroll, useSpring } from "framer-motion";
 
-export function Navbar() {
+export function Navbar({className}: {className?: string}) {
   const { user, isAuthenticated, isLoading, logout } = useClerkAuth();
 
   const { scrollYProgress, scrollY } = useScroll();
@@ -30,7 +30,7 @@ export function Navbar() {
   const isScrolled = scrollY.get() > 100;
 
   return (
-    <header className="fixed top-0 w-full md:h-20 z-50">
+    <header className={`fixed top-0 w-full md:h-20 z-50 ${className}`}>
       {/* Liquid glass background with dynamic opacity and depth */}
       <motion.div
         className="absolute inset-0 backdrop-blur-2xl"

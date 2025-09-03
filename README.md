@@ -1,36 +1,71 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+🛠️ Landing Page Fix Instructions
 
-## Getting Started
+Objective: Transform the current landing page into a high-converting, client-generating page by applying proven conversion principles.
 
-First, run the development server:
+1. Audience Clarity
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Rewrite copy to speak directly to one target audience (no generic “we serve everyone” messaging).
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Highlight specific problems and desired outcomes of the ideal customer.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+2. Headline Update
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Replace current headline with one that is:
 
-## Learn More
+Clear and specific about the offer
 
-To learn more about Next.js, take a look at the following resources:
+States the end result the visitor wants
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Avoids being clever/vague
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Example: "Get a Spotless Home with Eco-Friendly Cleaning in Just One Visit"
 
-## Deploy on Vercel
+3. Copywriting: Features → Benefits
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Audit existing text.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+For every feature, answer “So what?” → rewrite into a customer-focused benefit.
+
+Example: “Eco-friendly products” → “Safe for kids and pets.”
+
+4. Call-to-Action (CTA)
+
+Remove all secondary buttons, navigation links, and social icons from the landing page.
+
+Keep ONE main CTA throughout the page (e.g., "Book Your Free Consultation").
+
+Repeat CTA in hero, mid-page, and bottom section.
+
+5. Trust Builders
+
+Add 3–5 testimonials with real names/photos.
+
+Insert client logos, credentials, or certifications (if available).
+
+Add trust badges near forms (e.g., “100% Secure,” “No Spam”).
+
+Optional: Include a guarantee statement (e.g., “Satisfaction Guaranteed or Your Money Back”).
+
+6. Design Cleanup
+
+Simplify layout:
+
+More white space
+
+Consistent font & color palette (max 2–3 colors)
+
+Remove clutter or unnecessary graphics
+
+Organize page flow:
+
+Headline → Benefits → Social Proof → CTA
+
+7. Speed & Mobile Optimization
+
+Optimize all images (compressed, WebP format).
+
+Test mobile responsiveness (adjust spacing/fonts for smaller screens).
+
+Minimize scripts and unnecessary animations.
+
+Ensure page loads < 2 seconds.

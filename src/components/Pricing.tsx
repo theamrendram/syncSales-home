@@ -18,7 +18,7 @@ const Pricing = () => {
         "2 Campaigns",
         "API Access",
         "Email Support",
-        "14-day free trial",
+        "7-day free trial",
       ],
       popular: false,
       cta: "Start Free Trial",
@@ -71,7 +71,7 @@ const Pricing = () => {
           Simple pricing that scales with your success
         </h2>
         <p className="mx-auto mt-6 max-w-[700px] text-gray-300 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-          Start free, grow when you're ready. No hidden fees, no surprises.
+          Start free, grow when you&apos;re ready. No hidden fees, no surprises.
         </p>
       </div>
       <div className="flex flex-wrap justify-center gap-8">
@@ -115,7 +115,7 @@ function PricingCard({ plan }: { plan: any }) {
 
       <div className="mb-8">
         <p className="text-sm text-gray-400 mb-4 font-medium">
-          What's included:
+          What&apos;s included:
         </p>
         <ul className="space-y-3">
           {plan.features.map((feature: string) => (
@@ -139,7 +139,7 @@ function PricingCard({ plan }: { plan: any }) {
         </Link>
         {plan.popular && (
           <p className="text-sm text-gray-400 mt-3">
-            Start with a 14-day free trial
+            Start with a 7-day free trial
           </p>
         )}
       </div>

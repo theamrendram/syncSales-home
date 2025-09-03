@@ -1,12 +1,31 @@
-import { clerkMiddleware } from "@clerk/nextjs/server";
+import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 
-export default clerkMiddleware();
+// Routes that require authentication
+const protectedRoutes = ["/checkout(.*)"];
+
+const isProtectedRoute = createRouteMatcher(protectedRoutes);
+
+export default clerkMiddleware(async (auth, req) => {
+  if (isProtectedRoute(req)) {
+    console.log("Protected route detected");
+
+    try {
+      await auth.protect({
+        unauthenticatedUrl: `${process.env.NEXT_PUBLIC_APP_URL}/auth?redirect_url=${encodeURIComponent(req.nextUrl.href)}`,
+      });
+      console.log("Protected route protected");
+    } catch (error) {
+      console.error("Protected route protection failed:", error);
+      throw error; // rethrow so Clerk can handle redirect
+    }
+  }
+});
 
 export const config = {
   matcher: [
-    // Skip Next.js internals and all static files, unless found in search params
-    "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
-    // Always run for API routes
+    // Exclude static files and Next.js internals
+    "/((?!.+\\.[\\w]+$|_next).*)",
+    // Include API routes
     "/(api|trpc)(.*)",
   ],
 };

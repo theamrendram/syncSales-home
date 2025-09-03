@@ -1,6 +1,6 @@
 "use client";
-
 import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
   User,
@@ -27,6 +27,8 @@ export default function AuthPage() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+  const searchParams = useSearchParams();
+  const redirectUrl = searchParams.get("redirect_url");
 
   const { signIn, isLoaded: signInLoaded } = useSignIn();
   const { signUp, isLoaded: signUpLoaded } = useSignUp();
@@ -49,8 +51,8 @@ export default function AuthPage() {
     try {
       await signIn.authenticateWithRedirect({
         strategy: "oauth_google",
-        redirectUrl: "/user",
-        redirectUrlComplete: "/user",
+        redirectUrl: redirectUrl || "/user",
+        redirectUrlComplete: redirectUrl || "/user",
       });
     } catch (error: any) {
       console.error("Google sign in error:", error);
@@ -69,8 +71,8 @@ export default function AuthPage() {
     try {
       await signUp.authenticateWithRedirect({
         strategy: "oauth_google",
-        redirectUrl: "/user",
-        redirectUrlComplete: "/user",
+        redirectUrl: redirectUrl || "/user",
+        redirectUrlComplete: redirectUrl || "/user",
       });
     } catch (error: any) {
       console.error("Google sign up error:", error);
@@ -91,7 +93,7 @@ export default function AuthPage() {
       const result = await signIn.create({
         identifier: signInEmail,
         password: signInPassword,
-        redirectUrl: "/user",
+        redirectUrl: redirectUrl || "/user",
       });
 
       if (result.status === "complete") {
@@ -125,7 +127,7 @@ export default function AuthPage() {
         password: signUpPassword,
         firstName: signUpFirstName,
         lastName: signUpLastName,
-        redirectUrl: "/user",
+        redirectUrl: redirectUrl || "/user",
       });
 
       if (result.status === "complete") {

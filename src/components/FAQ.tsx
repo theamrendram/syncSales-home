@@ -9,7 +9,7 @@ const faqs = [
   {
     question: "How quickly will I see results?",
     answer:
-      "Most customers see immediate improvements in lead response times and organization within the first week. You'll typically save 10+ hours per week on lead management from day one.",
+      "Most customers see immediate improvements in lead response times and organization within the first week. You&apos;ll typically save 10+ hours per week on lead management from day one.",
   },
   {
     question: "Can I really close 40% more deals?",
@@ -17,19 +17,19 @@ const faqs = [
       "Yes! By automating lead qualification, ensuring no leads fall through the cracks, and providing instant notifications, our customers consistently report 35-45% increases in deal closure rates.",
   },
   {
-    question: "What if I'm not technical?",
+    question: "What if I&apos;m not technical?",
     answer:
       "SyncSales is designed for sales professionals, not developers. Our 5-minute setup wizard guides you through everything. Plus, our support team is here to help with any questions.",
   },
   {
     question: "How does the free trial work?",
     answer:
-      "Start with a 14-day free trial with full access to all Professional features. No credit card required, no commitment. If you love it, upgrade when you're ready. If not, cancel anytime.",
+      "Start with a 14-day free trial with full access to all Professional features. No credit card required, no commitment. If you love it, upgrade when you&apos;re ready. If not, cancel anytime.",
   },
   {
     question: "Can I integrate with my existing tools?",
     answer:
-      "Absolutely! SyncSales connects to any CRM or tool via webhooks. Whether you use HubSpot, Salesforce, Pipedrive, or custom systems, we'll help you set up seamless integration.",
+      "Absolutely! SyncSales connects to any CRM or tool via webhooks. Whether you use HubSpot, Salesforce, Pipedrive, or custom systems, we&apos;ll help you set up seamless integration.",
   },
   {
     question: "What happens to my data if I cancel?",
@@ -39,7 +39,7 @@ const faqs = [
   {
     question: "Is SyncSales secure for enterprise use?",
     answer:
-      "Yes! We're SOC 2 compliant with enterprise-grade security. Your data is encrypted, backed up daily, and we offer role-based access control for team collaboration.",
+      "Yes! We&apos;re SOC 2 compliant with enterprise-grade security. Your data is encrypted, backed up daily, and we offer role-based access control for team collaboration.",
   },
   {
     question: "What kind of support do you provide?",
@@ -56,7 +56,7 @@ export function FAQ() {
       <div className="container space-y-16">
         <div className="text-center">
           <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
-            Got Questions? We've Got Answers
+            Got Questions? We&apos;ve Got Answers
           </h2>
           <p className="mx-auto mt-6 max-w-[700px] text-gray-300 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
             Everything you need to know to get started and succeed with

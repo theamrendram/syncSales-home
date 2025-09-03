@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
@@ -21,7 +21,7 @@ import { GridBackgroundDemo } from "@/components/GridBackground";
 import Link from "next/link";
 import { motion } from "framer-motion";
 
-export default function AuthPage() {
+function AuthPageContent() {
   const [activeTab, setActiveTab] = useState("sign-in");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -539,5 +539,18 @@ export default function AuthPage() {
         </div>
       </div>
     </GridBackgroundDemo>
+  );
+}
+
+export default function AuthPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white/70"></div>
+        </div>
+      }>
+      <AuthPageContent />
+    </Suspense>
   );
 }

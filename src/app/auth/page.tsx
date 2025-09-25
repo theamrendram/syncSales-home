@@ -37,12 +37,14 @@ export default function AuthPage() {
 
     setIsLoading(true);
     try {
-      await authMethod.authenticateWithRedirect({
+      const result = await authMethod.authenticateWithRedirect({
         strategy: "oauth_google",
-        redirectUrl: "/user",
-        redirectUrlComplete: "/user",
+        redirectUrl: "/checkout/create-org",
+        redirectUrlComplete: "/checkout/create-org",
       });
+      console.log(result);
     } catch (error) {
+      console.log(error);
       toast.error("Google authentication failed");
     } finally {
       setIsLoading(false);

@@ -20,13 +20,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <ClerkProvider>
+    <ClerkProvider>
+      <html lang="en" suppressHydrationWarning>
         <body className={`${montserrat.variable}`}>
           <Toaster richColors position="top-center" />
           <main className="min-h-screen">{children}</main>
         </body>
-      </ClerkProvider>
-    </html>
+      </html>
+    </ClerkProvider>
   );
 }

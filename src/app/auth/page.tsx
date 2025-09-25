@@ -82,11 +82,12 @@ export default function AuthPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-2 text-white bg-gray-700">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-gray-700 p-2 text-white">
       {/* Back button */}
       <Link
         href="/"
-        className="absolute top-4 left-4 flex items-center gap-2 text-gray-300 hover:text-white">
+        className="absolute left-4 top-4 flex items-center gap-2 text-gray-300 hover:text-white"
+      >
         <ArrowLeft className="h-4 w-4" />
         Back to Home
       </Link>
@@ -94,8 +95,8 @@ export default function AuthPage() {
       {/* Logo */}
       <Link href="/" className="mb-6">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-amber-400 rounded-2xl flex items-center justify-center">
-            <span className="text-white font-bold text-xl">S</span>
+          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500 to-amber-400">
+            <span className="text-xl font-bold text-white">S</span>
           </div>
           <span className="text-3xl font-bold">SyncSales</span>
         </div>
@@ -105,17 +106,20 @@ export default function AuthPage() {
       <Tabs
         defaultValue={isSignUp ? "sign-up" : "sign-in"}
         onValueChange={(v) => setIsSignUp(v === "sign-up")}
-        className="w-full max-w-sm bg-white/10 border border-white/20 rounded-2xl p-4">
+        className="w-full max-w-sm rounded-2xl border border-white/20 bg-white/10 p-4"
+      >
         {/* Toggle */}
-        <TabsList className="flex rounded-lg bg-white/10 mb-4 p-0">
+        <TabsList className="mb-4 flex rounded-lg bg-white/10 p-0">
           <TabsTrigger
             value="sign-in"
-            className="flex-1 data-[state=active]:shadow-none data-[state=active]:bg-white data-[state=active]:text-black">
+            className="flex-1 data-[state=active]:bg-white data-[state=active]:text-black data-[state=active]:shadow-none"
+          >
             Sign In
           </TabsTrigger>
           <TabsTrigger
             value="sign-up"
-            className="flex-1 data-[state=active]:shadow-none data-[state=active]:bg-white data-[state=active]:text-black p-0 m-0">
+            className="m-0 flex-1 p-0 data-[state=active]:bg-white data-[state=active]:text-black data-[state=active]:shadow-none"
+          >
             Sign Up
           </TabsTrigger>
         </TabsList>
@@ -125,8 +129,9 @@ export default function AuthPage() {
           onClick={handleGoogleAuth}
           disabled={isLoading}
           variant="outline"
-          className="w-full mb-4 bg-white text-black hover:bg-gray-100">
-          <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
+          className="mb-4 w-full bg-white text-black hover:bg-gray-100"
+        >
+          <svg className="mr-2 h-5 w-5" viewBox="0 0 24 24">
             <path
               fill="#4285F4"
               d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -152,7 +157,7 @@ export default function AuthPage() {
             <div className="w-full border-t border-white/20"></div>
           </div>
           <div className="relative flex justify-center">
-            <span className="px-2 text-sm text-gray-400 bg-transparent">
+            <span className="bg-transparent px-2 text-sm text-gray-400">
               Or continue with email
             </span>
           </div>
@@ -162,7 +167,7 @@ export default function AuthPage() {
         <TabsContent value="sign-in">
           <form onSubmit={handleSubmit} className="space-y-3">
             <div>
-              <Label className="text-white text-sm">Email</Label>
+              <Label className="text-sm text-white">Email</Label>
               <Input
                 type="email"
                 placeholder="Enter your email"
@@ -170,12 +175,12 @@ export default function AuthPage() {
                 onChange={(e: ChangeEvent<HTMLInputElement>) =>
                   updateForm("email", e.target.value)
                 }
-                className="bg-white/10 border-white/20 text-white placeholder:text-gray-400"
+                className="border-white/20 bg-white/10 text-white placeholder:text-gray-400"
                 required
               />
             </div>
             <div>
-              <Label className="text-white text-sm">Password</Label>
+              <Label className="text-sm text-white">Password</Label>
               <div className="relative">
                 <Input
                   type={showPassword ? "text" : "password"}
@@ -184,13 +189,14 @@ export default function AuthPage() {
                   onChange={(e: ChangeEvent<HTMLInputElement>) =>
                     updateForm("password", e.target.value)
                   }
-                  className="pr-10 bg-white/10 border-white/20 text-white placeholder:text-gray-400"
+                  className="border-white/20 bg-white/10 pr-10 text-white placeholder:text-gray-400"
                   required
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white">
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white"
+                >
                   {showPassword ? (
                     <EyeOff className="h-5 w-5" />
                   ) : (
@@ -203,7 +209,8 @@ export default function AuthPage() {
               type="submit"
               disabled={isLoading}
               variant="outline"
-              className="w-full bg-white text-black hover:bg-gray-100 font-medium">
+              className="w-full bg-white font-medium text-black hover:bg-gray-100"
+            >
               {isLoading ? "Please wait..." : "Sign In"}
             </Button>
           </form>
@@ -214,32 +221,32 @@ export default function AuthPage() {
           <form onSubmit={handleSubmit} className="space-y-3">
             <div className="grid grid-cols-2 gap-2">
               <div>
-                <Label className="text-white text-sm">First Name</Label>
+                <Label className="text-sm text-white">First Name</Label>
                 <Input
                   placeholder="First name"
                   value={formData.firstName}
                   onChange={(e: ChangeEvent<HTMLInputElement>) =>
                     updateForm("firstName", e.target.value)
                   }
-                  className="bg-white/10 border-white/20 text-white placeholder:text-gray-400"
+                  className="border-white/20 bg-white/10 text-white placeholder:text-gray-400"
                   required
                 />
               </div>
               <div>
-                <Label className="text-white text-sm">Last Name</Label>
+                <Label className="text-sm text-white">Last Name</Label>
                 <Input
                   placeholder="Last name"
                   value={formData.lastName}
                   onChange={(e: ChangeEvent<HTMLInputElement>) =>
                     updateForm("lastName", e.target.value)
                   }
-                  className="bg-white/10 border-white/20 text-white placeholder:text-gray-400"
+                  className="border-white/20 bg-white/10 text-white placeholder:text-gray-400"
                   required
                 />
               </div>
             </div>
             <div>
-              <Label className="text-white text-sm">Email</Label>
+              <Label className="text-sm text-white">Email</Label>
               <Input
                 type="email"
                 placeholder="Enter your email"
@@ -247,12 +254,12 @@ export default function AuthPage() {
                 onChange={(e: ChangeEvent<HTMLInputElement>) =>
                   updateForm("email", e.target.value)
                 }
-                className="bg-white/10 border-white/20 text-white placeholder:text-gray-400"
+                className="border-white/20 bg-white/10 text-white placeholder:text-gray-400"
                 required
               />
             </div>
             <div>
-              <Label className="text-white text-sm">Password</Label>
+              <Label className="text-sm text-white">Password</Label>
               <div className="relative">
                 <Input
                   type={showPassword ? "text" : "password"}
@@ -261,13 +268,14 @@ export default function AuthPage() {
                   onChange={(e: ChangeEvent<HTMLInputElement>) =>
                     updateForm("password", e.target.value)
                   }
-                  className="pr-10 bg-white/10 border-white/20 text-white placeholder:text-gray-400"
+                  className="border-white/20 bg-white/10 pr-10 text-white placeholder:text-gray-400"
                   required
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white">
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white"
+                >
                   {showPassword ? (
                     <EyeOff className="h-5 w-5" />
                   ) : (
@@ -280,7 +288,8 @@ export default function AuthPage() {
               type="submit"
               disabled={isLoading}
               variant="outline"
-              className="w-full bg-white text-black hover:bg-gray-100 font-medium">
+              className="w-full bg-white font-medium text-black hover:bg-gray-100"
+            >
               {isLoading ? "Please wait..." : "Create Account"}
             </Button>
           </form>

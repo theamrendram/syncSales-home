@@ -65,9 +65,9 @@ const Pricing = () => {
   ];
 
   return (
-    <div className="py-24 sm:py-32 bg-[linear-gradient(to_bottom_right,#171717_0%,#171717_60%,#465C88_75%,#FF9B00_100%)]">
-      <div className="text-center mb-16">
-        <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-white">
+    <div className="bg-[linear-gradient(to_bottom_right,#171717_0%,#171717_60%,#465C88_75%,#FF9B00_100%)] py-24 sm:py-32">
+      <div className="mb-16 text-center">
+        <h2 className="text-3xl font-bold tracking-tighter text-white sm:text-4xl md:text-5xl">
           Simple pricing that scales with your success
         </h2>
         <p className="mx-auto mt-6 max-w-[700px] text-gray-300 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
@@ -88,39 +88,40 @@ export { Pricing };
 function PricingCard({ plan }: { plan: any }) {
   return (
     <div
-      className={`backdrop-blur-sm rounded-3xl p-8 w-80 flex flex-col justify-between text-white transition-transform hover:scale-105 ${
+      className={`flex w-80 flex-col justify-between rounded-3xl p-8 text-white backdrop-blur-sm transition-transform hover:scale-105 ${
         plan.popular
-          ? "bg-neutral-700/50 border-2 border-amber-400 shadow-2xl"
-          : "bg-neutral-700/30 border border-white/10"
-      }`}>
+          ? "border-2 border-amber-400 bg-neutral-700/50 shadow-2xl"
+          : "border border-white/10 bg-neutral-700/30"
+      }`}
+    >
       {plan.popular && (
-        <span className="inline-block bg-amber-500 text-black px-4 py-2 rounded-full text-sm font-semibold mb-6 max-w-fit">
+        <span className="mb-6 inline-block max-w-fit rounded-full bg-amber-500 px-4 py-2 text-sm font-semibold text-black">
           Most Popular
         </span>
       )}
 
       <div className="mb-6">
-        <h3 className="text-xl font-semibold mb-2">{plan.name}</h3>
-        <div className="flex items-baseline mb-2">
+        <h3 className="mb-2 text-xl font-semibold">{plan.name}</h3>
+        <div className="mb-2 flex items-baseline">
           <span className="text-4xl font-bold">{plan.price}</span>
-          <span className="text-gray-400 ml-1">{plan.period}</span>
+          <span className="ml-1 text-gray-400">{plan.period}</span>
         </div>
-        <p className="text-gray-400 text-sm mb-4">{plan.description}</p>
-        <div className="bg-gradient-to-r from-blue-500/20 to-amber-400/20 rounded-lg p-3 border border-white/10">
-          <p className="text-amber-400 font-semibold text-sm">
+        <p className="mb-4 text-sm text-gray-400">{plan.description}</p>
+        <div className="rounded-lg border border-white/10 bg-gradient-to-r from-blue-500/20 to-amber-400/20 p-3">
+          <p className="text-sm font-semibold text-amber-400">
             🎯 {plan.highlight}
           </p>
         </div>
       </div>
 
       <div className="mb-8">
-        <p className="text-sm text-gray-400 mb-4 font-medium">
+        <p className="mb-4 text-sm font-medium text-gray-400">
           What&apos;s included:
         </p>
         <ul className="space-y-3">
           {plan.features.map((feature: string) => (
             <li key={feature} className="flex items-start gap-3 text-gray-300">
-              <Check className="w-5 h-5 text-amber-400 mt-0.5 flex-shrink-0" />
+              <Check className="mt-0.5 h-5 w-5 flex-shrink-0 text-amber-400" />
               <span className="text-sm">{feature}</span>
             </li>
           ))}
@@ -129,16 +130,17 @@ function PricingCard({ plan }: { plan: any }) {
 
       <div className="text-center">
         <Link
-          href={plan.id === "enterprise" ? "/contact" : "/checkout/free-trial"}
-          className={`w-full rounded-xl py-3 px-6 font-semibold transition-all duration-200 ${
+          href={plan.id === "enterprise" ? "/contact" : "/checkout"}
+          className={`w-full rounded-xl px-6 py-3 font-semibold transition-all duration-200 ${
             plan.popular
               ? "bg-gradient-to-r from-blue-500 to-amber-400 text-white hover:scale-105"
-              : "bg-white/10 text-white border border-white/20 hover:bg-white/20"
-          }`}>
+              : "border border-white/20 bg-white/10 text-white hover:bg-white/20"
+          }`}
+        >
           {plan.cta}
         </Link>
         {plan.popular && (
-          <p className="text-sm text-gray-400 mt-3">
+          <p className="mt-3 text-sm text-gray-400">
             Start with a 7-day free trial
           </p>
         )}

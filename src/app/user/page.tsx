@@ -199,7 +199,7 @@ export default function Profile() {
               Quick Actions
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              <Link href="/checkout/free-trial" className="block">
+              <Link href="/checkout" className="block">
                 <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-4 text-center hover:shadow-md transition-all duration-300 transform hover:scale-[1.02]">
                   <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-2">
                     <Globe className="w-4 h-4 text-blue-600" />

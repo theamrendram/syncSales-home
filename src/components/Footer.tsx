@@ -14,7 +14,7 @@ export function Footer() {
               Transform your sales pipeline today
             </p>
             <Link
-              href="/checkout/free-trial"
+              href="/checkout"
               className="inline-flex h-10 px-6 gradient-primary text-white rounded-lg font-medium items-center justify-center hover:scale-105 transition-transform duration-200">
               Start Free Trial
             </Link>

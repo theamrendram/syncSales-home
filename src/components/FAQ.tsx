@@ -52,7 +52,8 @@ export function FAQ() {
   return (
     <section
       id="faq"
-      className="py-24 sm:py-32 text-white bg-[linear-gradient(to_top_right,#171717_0%,#171717_60%,#465C88_75%,#FF9B00_100%)]">
+      className="bg-[linear-gradient(to_top_right,#171717_0%,#171717_60%,#465C88_75%,#FF9B00_100%)] py-24 text-white sm:py-32"
+    >
       <div className="container space-y-16">
         <div className="text-center">
           <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
@@ -66,16 +67,18 @@ export function FAQ() {
         <Accordion
           type="single"
           collapsible
-          className="w-full max-w-4xl mx-auto">
+          className="mx-auto w-full max-w-4xl"
+        >
           {faqs.map((faq, index) => (
             <AccordionItem
               key={index}
               value={`item-${index}`}
-              className="border-white/20">
-              <AccordionTrigger className="text-left text-lg font-medium hover:text-amber-400 transition-colors">
+              className="border-white/20"
+            >
+              <AccordionTrigger className="text-left text-lg font-medium transition-colors hover:text-amber-400">
                 {faq.question}
               </AccordionTrigger>
-              <AccordionContent className="text-gray-300 leading-relaxed">
+              <AccordionContent className="leading-relaxed text-gray-300">
                 {faq.answer}
               </AccordionContent>
             </AccordionItem>
@@ -83,13 +86,14 @@ export function FAQ() {
         </Accordion>
 
         {/* Additional CTA after FAQ */}
-        <div className="text-center pt-8">
-          <p className="text-gray-300 mb-6">
+        <div className="pt-8 text-center">
+          <p className="mb-6 text-gray-300">
             Still have questions? Our team is here to help.
           </p>
           <a
-            href="/checkout/free-trial"
-            className="inline-flex h-12 px-8 gradient-primary text-white rounded-xl font-semibold items-center justify-center hover:scale-105 transition-transform duration-200">
+            href="/checkout"
+            className="gradient-primary inline-flex h-12 items-center justify-center rounded-xl px-8 font-semibold text-white transition-transform duration-200 hover:scale-105"
+          >
             Start Your Free Trial Today
           </a>
         </div>

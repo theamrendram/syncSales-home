@@ -20,6 +20,7 @@ function Success() {
   const router = useRouter();
   const subscriptionId = searchParams.get("subscription_id");
   const planType = searchParams.get("plan");
+  const successType = searchParams.get("type");
   const [subscriptionDetails, setSubscriptionDetails] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -28,6 +29,12 @@ function Success() {
     const fetchsubscriptionDetails = async () => {
       setLoading(true);
       setError("");
+
+      // If this is organization creation success, skip subscription details
+      if (successType === "organization") {
+        setLoading(false);
+        return;
+      }
 
       // If this is a free plan, create mock order details
       if (!subscriptionId && planType === "free") {
@@ -54,7 +61,7 @@ function Success() {
       try {
         // Fetch order details from your server
         const response = await fetch(
-          `/api/subscription-details?subscription_id=${subscriptionId}`
+          `/api/subscription-details?subscription_id=${subscriptionId}`,
         );
 
         if (!response.ok) {
@@ -65,14 +72,16 @@ function Success() {
         setSubscriptionDetails(data);
       } catch (err) {
         console.error("Error fetching subscription details:", err);
-        setError("Unable to load your subscription details. Please contact support.");
+        setError(
+          "Unable to load your subscription details. Please contact support.",
+        );
       } finally {
         setLoading(false);
       }
     };
 
     fetchsubscriptionDetails();
-  }, [subscriptionId, planType, router]);
+  }, [subscriptionId, planType, successType, router]);
 
   // Helper to get trial days based on plan
   const getTrialDays = (planName: string) => {
@@ -89,93 +98,126 @@ function Success() {
     <div className="min-h-screen bg-gray-50">
       <Navbar />
       <main className="container mx-auto px-4 py-20">
-        <Card className="max-w-md mx-auto">
+        <Card className="mx-auto max-w-md">
           <CardHeader className="text-center">
-            <div className="flex justify-center mb-4">
+            <div className="mb-4 flex justify-center">
               <CheckCircle className="h-16 w-16 text-green-500" />
             </div>
             <CardTitle className="text-2xl">
-              Thank You for Your Order!
+              {successType === "organization"
+                ? "Welcome to SyncSales!"
+                : "Thank You for Your Order!"}
             </CardTitle>
             <CardDescription>
-              Your subscription has been confirmed.
+              {successType === "organization"
+                ? "Your account and organization have been created successfully."
+                : "Your subscription has been confirmed."}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             {error && (
-              <div className="p-3 bg-red-50 text-red-700 rounded-md">
+              <div className="rounded-md bg-red-50 p-3 text-red-700">
                 {error}
               </div>
             )}
             {loading && (
-              <div className="text-center py-4">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto"></div>
+              <div className="py-4 text-center">
+                <div className="mx-auto h-8 w-8 animate-spin rounded-full border-b-2 border-gray-900"></div>
                 <p className="mt-2 text-gray-600">Loading order details...</p>
               </div>
             )}
 
-            {!loading && !error && subscriptionDetails && (
+            {successType === "organization" && !loading && (
               <div className="divide-y">
-                <div className="py-3 flex justify-between">
-                  <span className="text-gray-600">Subscription ID:</span>
-                  <span className="font-medium">{subscriptionDetails.id}</span>
+                <div className="flex justify-between py-3">
+                  <span className="text-gray-600">Account Status:</span>
+                  <span className="font-medium text-green-600">Active</span>
                 </div>
-
-                <div className="py-3 flex justify-between">
-                  <span className="text-gray-600">Plan:</span>
-                  <span className="font-medium">
-                    {subscriptionDetails.notes?.plan || planType}
-                  </span>
+                <div className="flex justify-between py-3">
+                  <span className="text-gray-600">Organization:</span>
+                  <span className="font-medium">Created</span>
                 </div>
-
-                <div className="py-3 flex justify-between">
-                  <span className="text-gray-600">Amount:</span>
-                  <span className="font-medium">
-                    {subscriptionDetails.amount === 0
-                      ? "Free"
-                      : `₹${(subscriptionDetails.amount / 100).toFixed(2)}`}
-                  </span>
-                </div>
-
-                {subscriptionDetails.notes?.billingCycle && (
-                  <div className="py-3 flex justify-between">
-                    <span className="text-gray-600">Billing:</span>
-                    <span className="font-medium capitalize">
-                      {subscriptionDetails.notes.billingCycle}
-                    </span>
-                  </div>
-                )}
-
-                {(subscriptionDetails.notes?.isTrial === "yes" ||
-                  planType === "free") && (
-                  <div className="py-3 flex justify-between">
-                    <span className="text-gray-600">Trial Period:</span>
-                    <span className="font-medium">
-                      {subscriptionDetails.notes?.trialDays ||
-                        getTrialDays(
-                          subscriptionDetails.notes?.plan || planType
-                        )}{" "}
-                      days
-                    </span>
-                  </div>
-                )}
-
-                <div className="py-3 flex justify-between">
-                  <span className="text-gray-600">Start Date:</span>
+                <div className="flex justify-between py-3">
+                  <span className="text-gray-600">Created Date:</span>
                   <span className="font-medium">
                     {new Date().toLocaleDateString()}
                   </span>
                 </div>
               </div>
             )}
+
+            {!loading &&
+              !error &&
+              subscriptionDetails &&
+              successType !== "organization" && (
+                <div className="divide-y">
+                  <div className="flex justify-between py-3">
+                    <span className="text-gray-600">Subscription ID:</span>
+                    <span className="font-medium">
+                      {subscriptionDetails.id}
+                    </span>
+                  </div>
+
+                  <div className="flex justify-between py-3">
+                    <span className="text-gray-600">Plan:</span>
+                    <span className="font-medium">
+                      {subscriptionDetails.notes?.plan || planType}
+                    </span>
+                  </div>
+
+                  <div className="flex justify-between py-3">
+                    <span className="text-gray-600">Amount:</span>
+                    <span className="font-medium">
+                      {subscriptionDetails.amount === 0
+                        ? "Free"
+                        : `₹${(subscriptionDetails.amount / 100).toFixed(2)}`}
+                    </span>
+                  </div>
+
+                  {subscriptionDetails.notes?.billingCycle && (
+                    <div className="flex justify-between py-3">
+                      <span className="text-gray-600">Billing:</span>
+                      <span className="font-medium capitalize">
+                        {subscriptionDetails.notes.billingCycle}
+                      </span>
+                    </div>
+                  )}
+
+                  {(subscriptionDetails.notes?.isTrial === "yes" ||
+                    planType === "free") && (
+                    <div className="flex justify-between py-3">
+                      <span className="text-gray-600">Trial Period:</span>
+                      <span className="font-medium">
+                        {subscriptionDetails.notes?.trialDays ||
+                          getTrialDays(
+                            subscriptionDetails.notes?.plan || planType,
+                          )}{" "}
+                        days
+                      </span>
+                    </div>
+                  )}
+
+                  <div className="flex justify-between py-3">
+                    <span className="text-gray-600">Start Date:</span>
+                    <span className="font-medium">
+                      {new Date().toLocaleDateString()}
+                    </span>
+                  </div>
+                </div>
+              )}
           </CardContent>
           <CardFooter className="flex flex-col space-y-3">
-            <Link href="https://dashboard.syncsales.tech" target="_blank" className="w-full">
+            <Link
+              href="https://dashboard.syncsales.tech"
+              target="_blank"
+              className="w-full"
+            >
               <Button className="w-full">Go to Dashboard</Button>
             </Link>
             <Link
               href="/support"
-              className="text-sm text-gray-500 hover:text-gray-700 text-center w-full">
+              className="w-full text-center text-sm text-gray-500 hover:text-gray-700"
+            >
               Need help? Contact our support team
             </Link>
           </CardFooter>
@@ -189,10 +231,11 @@ export default function SuccessPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen flex items-center justify-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
+        <div className="flex min-h-screen items-center justify-center">
+          <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-gray-900"></div>
         </div>
-      }>
+      }
+    >
       <Success />
     </Suspense>
   );

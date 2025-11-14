@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Card,
@@ -18,7 +18,7 @@ import ForgotPassword from "./_components/forgot-password";
 import SignUpTab from "./_components/sign-up-tab";
 type TabsValue = "signin" | "signup" | "email-verification" | "forgot-password";
 
-const LoginPage = () => {
+function LoginPageContent() {
   const [email, setEmail] = useState<string | null>("");
   const [selectedTab, setSelectedTab] = useState<TabsValue>("signin");
   const router = useRouter();
@@ -133,6 +133,21 @@ const LoginPage = () => {
       </Tabs>
     </div>
   );
-};
+}
 
-export default LoginPage;
+export default function LoginPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex min-h-screen items-center justify-center bg-background">
+          <div className="text-center">
+            <div className="mx-auto h-8 w-8 animate-spin rounded-full border-b-2 border-primary"></div>
+            <p className="mt-4 text-muted-foreground">Loading...</p>
+          </div>
+        </div>
+      }
+    >
+      <LoginPageContent />
+    </Suspense>
+  );
+}

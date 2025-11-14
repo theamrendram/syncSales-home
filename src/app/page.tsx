@@ -12,22 +12,11 @@ export default function Home() {
     <div className="relative">
       <Navbar />
       <main>
-        {/* Headline */}
         <Hero />
-
-        {/* Benefits */}
         <Features />
-
-        {/* Social Proof */}
         <TrustSection />
-
-        {/* Pricing */}
         <Pricing />
-
-        {/* FAQ */}
         <FAQ />
-
-        {/* Single CTA */}
         <CTA />
       </main>
       <Footer />

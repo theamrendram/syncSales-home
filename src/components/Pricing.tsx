@@ -129,8 +129,21 @@ function PricingCard({ plan }: { plan: any }) {
       </div>
 
       <div className="text-center">
+        {/* OLD START FREE TRIAL BUTTON - COMMENTED OUT
         <Link
           href={plan.id === "enterprise" ? "/contact" : "/checkout"}
+          className={`w-full rounded-xl px-6 py-3 font-semibold transition-all duration-200 ${
+            plan.popular
+              ? "bg-gradient-to-r from-blue-500 to-amber-400 text-white hover:scale-105"
+              : "border border-white/20 bg-white/10 text-white hover:bg-white/20"
+          }`}
+        >
+          {plan.cta}
+        </Link>
+        */}
+        {/* NEW START FREE TRIAL BUTTON - REDIRECTS TO CONTACT PAGE */}
+        <Link
+          href="/contact?source=free-trial"
           className={`w-full rounded-xl px-6 py-3 font-semibold transition-all duration-200 ${
             plan.popular
               ? "bg-gradient-to-r from-blue-500 to-amber-400 text-white hover:scale-105"

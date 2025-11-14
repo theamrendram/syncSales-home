@@ -26,8 +26,18 @@ export function CTA() {
 
             {/* Single, Clear CTA */}
             <div className="space-y-4 text-center">
+              {/* OLD START FREE TRIAL BUTTON - COMMENTED OUT
               <Link
                 href="/checkout"
+                className="gradient-primary inline-flex h-14 items-center justify-center rounded-xl px-10 text-lg font-semibold text-white shadow-2xl transition-transform duration-200 hover:scale-105"
+              >
+                Start Your 7-Day Free Trial{" "}
+                <ArrowRight className="ml-3 h-5 w-5" />
+              </Link>
+              */}
+              {/* NEW START FREE TRIAL BUTTON - REDIRECTS TO CONTACT PAGE */}
+              <Link
+                href="/contact?source=free-trial"
                 className="gradient-primary inline-flex h-14 items-center justify-center rounded-xl px-10 text-lg font-semibold text-white shadow-2xl transition-transform duration-200 hover:scale-105"
               >
                 Start Your 7-Day Free Trial{" "}

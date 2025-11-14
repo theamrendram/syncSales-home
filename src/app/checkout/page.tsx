@@ -104,7 +104,19 @@ function Checkout() {
                       minute and you can cancel anytime.
                     </p>
 
+                    {/* OLD START FREE TRIAL BUTTON - COMMENTED OUT
                     <Link href="/auth">
+                      <Button className="w-full h-12 bg-gradient-to-r from-blue-800 via-indigo-800 to-blue-900 hover:from-blue-700 hover:via-indigo-700 hover:to-purple-700 text-white font-semibold rounded-xl transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg relative overflow-hidden group">
+                        <div className="absolute inset-0 bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
+                        <div className="flex items-center gap-3">
+                          <span>Start free trial</span>
+                          <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                        </div>
+                      </Button>
+                    </Link>
+                    */}
+                    {/* NEW START FREE TRIAL BUTTON - REDIRECTS TO CONTACT PAGE */}
+                    <Link href="/contact?source=free-trial">
                       <Button className="w-full h-12 bg-gradient-to-r from-blue-800 via-indigo-800 to-blue-900 hover:from-blue-700 hover:via-indigo-700 hover:to-purple-700 text-white font-semibold rounded-xl transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg relative overflow-hidden group">
                         <div className="absolute inset-0 bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
                         <div className="flex items-center gap-3">

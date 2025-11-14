@@ -8,30 +8,24 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import SignInTab from "./_components/sign-in-tab";
+import SignInTab from "./sign-in-tab";
 import { Separator } from "@/components/ui/separator";
-import SocialAuthButtons from "./_components/social-auth-buttons";
+import SocialAuthButtons from "./social-auth-buttons";
 import { authClient } from "@/lib/auth/auth-client";
-import { useRouter, useSearchParams } from "next/navigation";
-import { EmailVerification } from "./_components/email-verification";
-import ForgotPassword from "./_components/forgot-password";
-import SignUpTab from "./_components/sign-up-tab";
-type TabsValue = "signin" | "signup" | "email-verification" | "forgot-password";
+import { useRouter } from "next/navigation";
+import { EmailVerification } from "./email-verification";
+import ForgotPassword from "./forgot-password";
+type TabsValue = "signin" | "email-verification" | "forgot-password";
 
 const LoginPage = () => {
   const [email, setEmail] = useState<string | null>("");
   const [selectedTab, setSelectedTab] = useState<TabsValue>("signin");
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const type = searchParams.get("type");
-  const redirect_url = searchParams.get("redirect_url");
   useEffect(() => {
-    authClient
-      .getSession()
-      .then((session: Awaited<ReturnType<typeof authClient.getSession>>) => {
-        if (session.data != null) router.push(redirect_url || "/");
-      });
-  }, [router, redirect_url]);
+    authClient.getSession().then((session) => {
+      if (session.data != null) router.push("/");
+    });
+  }, [router]);
 
   function openEmailVerificationTab(email: string) {
     setEmail(email);
@@ -47,33 +41,22 @@ const LoginPage = () => {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
+    <div className="bg-background flex min-h-screen items-center justify-center">
       <Tabs
-        defaultValue={type || "signin"}
+        defaultValue="signin"
         value={selectedTab}
         onValueChange={(value) => setSelectedTab(value as TabsValue)}
         className="mx-auto my-6 w-full max-w-md px-4"
       >
-        {(selectedTab === "signin" || selectedTab === "signup") && (
+        {selectedTab === "signin" && (
           <TabsList>
-            <TabsTrigger
-              value="signin"
-              className="data-[state=active]:bg-black data-[state=active]:text-white"
-            >
-              Sign In
-            </TabsTrigger>
-            <TabsTrigger
-              value="signup"
-              className="data-[state=active]:bg-black data-[state=active]:text-white"
-            >
-              Sign Up
-            </TabsTrigger>
+            <TabsTrigger value="signin">Sign In</TabsTrigger>
           </TabsList>
         )}
         <TabsContent value="signin">
           <Card>
             <CardHeader className="text-2xl font-bold">
-              <CardTitle>Welcome back!</CardTitle>
+              <CardTitle>Sign in</CardTitle>
             </CardHeader>
             <CardContent>
               <SignInTab
@@ -87,26 +70,6 @@ const LoginPage = () => {
             </CardFooter>
           </Card>
         </TabsContent>
-        <TabsContent value="signup">
-          <Card>
-            <CardHeader className="text-2xl font-bold">
-              <CardTitle>Sign Up</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <SignUpTab openEmailVerificationTab={openEmailVerificationTab} />
-            </CardContent>
-          </Card>
-        </TabsContent>
-        {/* <TabsContent value="organization">
-          <Card>
-            <CardHeader className="text-2xl font-bold">
-              <CardTitle>Create Organization</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <OrganizationTab />
-            </CardContent>
-          </Card>
-        </TabsContent> */}
         <TabsContent value="email-verification">
           <Card>
             <CardHeader className="text-2xl font-bold">

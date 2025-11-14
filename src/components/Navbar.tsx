@@ -15,9 +15,36 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { motion, useScroll, useSpring } from "framer-motion";
-
+import { authClient } from "@/lib/auth/auth-client";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { Session } from "better-auth";
 export function Navbar({ className }: { className?: string }) {
-  const { user, isAuthenticated, isLoading, logout } = useClerkAuth();
+  const [user, setUser] = useState<Session["user"] | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const router = useRouter();
+
+  useEffect(() => {
+    async function getUser() {
+      console.log("calling getUser");
+      const session: Awaited<ReturnType<typeof authClient.getSession>> =
+        await authClient.getSession();
+      console.log("session", session);
+      if (session?.data != null) {
+        console.log("session?.data?.user", session?.data?.user);
+        setUser(session?.data?.user);
+        setIsAuthenticated(true);
+        setIsLoading(false);
+      } else {
+        setIsAuthenticated(false);
+        setIsLoading(false);
+      }
+    }
+    getUser();
+  }, []);
 
   const { scrollYProgress, scrollY } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
@@ -28,10 +55,16 @@ export function Navbar({ className }: { className?: string }) {
 
   // Check if scroll position is greater than 100px
   const isScrolled = scrollY.get() > 100;
+  function handleSignOut() {
+    authClient.signOut().then(() => {
+      setIsAuthenticated(false);
+      setUser(null);
+      router.push("/");
+    });
+  }
 
   return (
     <header className={`fixed top-0 z-50 w-full md:h-20 ${className}`}>
-      {/* Liquid glass background with dynamic opacity and depth */}
       <motion.div
         className="absolute inset-0 backdrop-blur-2xl"
         style={{
@@ -47,7 +80,6 @@ export function Navbar({ className }: { className?: string }) {
         transition={{ duration: 0.4, ease: "easeOut" }}
       />
 
-      {/* Subtle border with animated gradient */}
       <motion.div
         className="absolute inset-x-0 bottom-0 h-px"
         style={{
@@ -61,7 +93,6 @@ export function Navbar({ className }: { className?: string }) {
         transition={{ duration: 0.3 }}
       />
 
-      {/* Animated progress bar with glow */}
       <motion.div
         className="absolute bottom-0 left-0 right-0 h-0.5 origin-left"
         style={{ scaleX }}
@@ -70,7 +101,6 @@ export function Navbar({ className }: { className?: string }) {
         <div className="absolute inset-0 bg-gradient-to-r from-blue-500 via-amber-400 to-blue-500 opacity-50 blur-sm" />
       </motion.div>
 
-      {/* Floating glass particles effect */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <motion.div
           className="absolute left-1/4 top-4 h-2 w-2 rounded-full bg-white/20 blur-sm"
@@ -101,7 +131,6 @@ export function Navbar({ className }: { className?: string }) {
 
       <div className="container relative">
         <div className="flex h-20 items-center justify-between">
-          {/* Enhanced logo with liquid glass effect */}
           <motion.div
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.98 }}
@@ -110,8 +139,8 @@ export function Navbar({ className }: { className?: string }) {
           >
             <Link href="/" className="group flex items-center space-x-3">
               <div className="relative">
-                {/* <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-amber-400 rounded-2xl flex items-center justify-center shadow-2xl relative overflow-hidden">
-                  <span className="text-white font-bold text-lg relative z-10">
+                <div className="relative flex h-12 w-12 items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-blue-500 to-amber-400 shadow-2xl">
+                  <span className="relative z-10 text-lg font-bold text-white">
                     S
                   </span>
 
@@ -128,22 +157,26 @@ export function Navbar({ className }: { className?: string }) {
                       ease: "linear",
                     }}
                   />
-                </div> */}
+                </div>
 
-                {/* Glow effect */}
                 <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-blue-500 to-amber-400 opacity-40 blur-xl transition-opacity duration-500 group-hover:opacity-60" />
               </div>
 
-              {/* Logo text with enhanced gradient */}
               <span className="bg-gradient-to-r from-white via-gray-100 to-gray-300 bg-clip-text text-2xl font-bold text-transparent">
                 SyncSales
               </span>
             </Link>
           </motion.div>
 
-          {/* Removed navigation links to reduce distractions */}
-
           <div className="flex items-center gap-5">
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <Link
+                href="/contact"
+                className="text-sm font-medium text-white/80 transition-colors duration-200 hover:text-white"
+              >
+                Contact
+              </Link>
+            </motion.div>
             {!isLoading && (
               <>
                 {!isAuthenticated ? (
@@ -173,14 +206,19 @@ export function Navbar({ className }: { className?: string }) {
                           className="relative h-11 w-11 rounded-full border border-white/20 bg-white/10 shadow-lg backdrop-blur-xl transition-all duration-300 hover:bg-white/20"
                         >
                           <Avatar className="h-9 w-9">
-                            <AvatarImage
-                              src={user?.imageUrl}
-                              alt={user?.fullName || user?.firstName}
-                            />
+                            {/* <AvatarImage
+                              src={
+                                user?.image ||
+                                "https://avatar.iran.liara.run/username?username=" +
+                                  (user?.name
+                                    ?.split(" ")
+                                    .map((name) => name[0])
+                                    .join("") || "U")
+                              }
+                              alt={user?.name || ""}
+                            /> */}
                             <AvatarFallback className="bg-gradient-to-br from-blue-500 to-amber-400 font-semibold text-white">
-                              {user?.firstName?.[0] || user?.fullName?.[0] || (
-                                <User className="h-4 w-4" />
-                              )}
+                              {user?.name?.[0] || <User className="h-4 w-4" />}
                             </AvatarFallback>
                           </Avatar>
                         </Button>
@@ -194,16 +232,16 @@ export function Navbar({ className }: { className?: string }) {
                       <DropdownMenuLabel className="font-normal">
                         <div className="flex flex-col space-y-1">
                           <p className="text-sm font-medium leading-none text-white">
-                            {user?.fullName || user?.firstName}
+                            {user?.name || ""}
                           </p>
                           <p className="text-xs leading-none text-gray-400">
-                            {user?.primaryEmailAddress?.emailAddress}
+                            {user?.email || ""}
                           </p>
                         </div>
                       </DropdownMenuLabel>
                       <DropdownMenuSeparator className="bg-white/20" />
                       <DropdownMenuItem
-                        onClick={logout}
+                        onClick={handleSignOut}
                         className="cursor-pointer text-white transition-colors duration-200 hover:bg-white/10 focus:bg-white/10"
                       >
                         <LogOut className="mr-2 h-4 w-4" />
@@ -216,6 +254,47 @@ export function Navbar({ className }: { className?: string }) {
             )}
 
             {/* Enhanced CTA button with premium liquid glass effect */}
+            {/* OLD START FREE TRIAL BUTTON - COMMENTED OUT
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="relative"
+            >
+              <Button
+                size="default"
+                className="hover:shadow-3xl relative h-8 overflow-hidden rounded-lg border-0 bg-gradient-to-r from-blue-500 to-amber-400 px-4 py-3 font-semibold text-white shadow-2xl backdrop-blur-xl transition-all duration-500"
+              >
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-r from-white/20 via-transparent to-white/20"
+                  animate={{
+                    x: [-100, 100],
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "linear",
+                  }}
+                />
+
+                <div className="bg-size-200 animate-gradient absolute inset-0 bg-gradient-to-r from-blue-500 via-amber-400 to-blue-500" />
+
+                <Link
+                  href={"/checkout"}
+                  className="relative z-10 flex items-center gap-2"
+                >
+                  <span>Start Free Trial</span>
+                  <motion.div
+                    animate={{ x: [0, 3, 0] }}
+                    transition={{ duration: 1.5, repeat: Infinity }}
+                  >
+                    →
+                  </motion.div>
+                </Link>
+              </Button>
+            </motion.div>
+            */}
+
+            {/* NEW START FREE TRIAL BUTTON - REDIRECTS TO CONTACT PAGE */}
             <motion.div
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -243,7 +322,7 @@ export function Navbar({ className }: { className?: string }) {
 
                 {/* Button content */}
                 <Link
-                  href={"/checkout"}
+                  href={"/contact?source=free-trial"}
                   className="relative z-10 flex items-center gap-2"
                 >
                   <span>Start Free Trial</span>

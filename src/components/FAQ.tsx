@@ -90,8 +90,17 @@ export function FAQ() {
           <p className="mb-6 text-gray-300">
             Still have questions? Our team is here to help.
           </p>
+          {/* OLD START FREE TRIAL BUTTON - COMMENTED OUT
           <a
             href="/checkout"
+            className="gradient-primary inline-flex h-12 items-center justify-center rounded-xl px-8 font-semibold text-white transition-transform duration-200 hover:scale-105"
+          >
+            Start Your Free Trial Today
+          </a>
+          */}
+          {/* NEW START FREE TRIAL BUTTON - REDIRECTS TO CONTACT PAGE */}
+          <a
+            href="/contact?source=free-trial"
             className="gradient-primary inline-flex h-12 items-center justify-center rounded-xl px-8 font-semibold text-white transition-transform duration-200 hover:scale-105"
           >
             Start Your Free Trial Today

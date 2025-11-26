@@ -13,9 +13,17 @@ import {
   Users,
   ShieldCheck,
   MonitorSmartphone,
+  Filter,
 } from "lucide-react";
 
 const features = [
+  {
+    title: "AI Lead Filtering",
+    description:
+      "Our AI-powered lead filtering system automatically filters lead, ensuring only the highest-quality leads are passed to your sales team.",
+    icon: Filter,
+    benefit: "Increase conversion rates by 35%",
+  },
   {
     title: "Never Lose Another Lead",
     description:
@@ -50,13 +58,6 @@ const features = [
       "Connect to any CRM or tool with webhooks. No more manual data transfer or duplicate work across systems.",
     icon: Share2,
     benefit: "Eliminate 90% of manual data entry",
-  },
-  {
-    title: "Get Instant Notifications",
-    description:
-      "Know immediately when high-value leads come in. Never miss a hot prospect or let leads go cold.",
-    icon: MonitorSmartphone,
-    benefit: "Respond to leads 10x faster",
   },
 ];
 

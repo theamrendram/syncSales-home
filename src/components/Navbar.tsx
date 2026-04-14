@@ -2,8 +2,6 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { useClerkAuth } from "@/hooks/useClerk";
-
 import { User, LogOut } from "lucide-react";
 import {
   DropdownMenu,
@@ -15,36 +13,12 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { motion, useScroll, useSpring } from "framer-motion";
-import { authClient } from "@/lib/auth/auth-client";
-import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { Session } from "better-auth";
+import { useClerk, useUser } from "@clerk/nextjs";
 export function Navbar({ className }: { className?: string }) {
-  const [user, setUser] = useState<Session["user"] | null>(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-
+  const { user, isLoaded, isSignedIn } = useUser();
+  const { signOut } = useClerk();
   const router = useRouter();
-
-  useEffect(() => {
-    async function getUser() {
-      console.log("calling getUser");
-      const session: Awaited<ReturnType<typeof authClient.getSession>> =
-        await authClient.getSession();
-      console.log("session", session);
-      if (session?.data != null) {
-        console.log("session?.data?.user", session?.data?.user);
-        setUser(session?.data?.user);
-        setIsAuthenticated(true);
-        setIsLoading(false);
-      } else {
-        setIsAuthenticated(false);
-        setIsLoading(false);
-      }
-    }
-    getUser();
-  }, []);
 
   const { scrollYProgress, scrollY } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
@@ -55,12 +29,9 @@ export function Navbar({ className }: { className?: string }) {
 
   // Check if scroll position is greater than 100px
   const isScrolled = scrollY.get() > 100;
-  function handleSignOut() {
-    authClient.signOut().then(() => {
-      setIsAuthenticated(false);
-      setUser(null);
-      router.push("/");
-    });
+  async function handleSignOut() {
+    await signOut();
+    router.push("/");
   }
 
   return (
@@ -177,9 +148,9 @@ export function Navbar({ className }: { className?: string }) {
                 Contact
               </Link>
             </motion.div>
-            {!isLoading && (
+            {isLoaded && (
               <>
-                {!isAuthenticated ? (
+                {!isSignedIn ? (
                   <motion.div
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
@@ -218,7 +189,7 @@ export function Navbar({ className }: { className?: string }) {
                               alt={user?.name || ""}
                             /> */}
                             <AvatarFallback className="bg-gradient-to-br from-blue-500 to-amber-400 font-semibold text-white">
-                              {user?.name?.[0] || <User className="h-4 w-4" />}
+                              {user?.firstName?.[0] || <User className="h-4 w-4" />}
                             </AvatarFallback>
                           </Avatar>
                         </Button>
@@ -232,10 +203,10 @@ export function Navbar({ className }: { className?: string }) {
                       <DropdownMenuLabel className="font-normal">
                         <div className="flex flex-col space-y-1">
                           <p className="text-sm font-medium leading-none text-white">
-                            {user?.name || ""}
+                            {[user?.firstName, user?.lastName].filter(Boolean).join(" ") || ""}
                           </p>
                           <p className="text-xs leading-none text-gray-400">
-                            {user?.email || ""}
+                            {user?.primaryEmailAddress?.emailAddress || ""}
                           </p>
                         </div>
                       </DropdownMenuLabel>
@@ -294,7 +265,6 @@ export function Navbar({ className }: { className?: string }) {
             </motion.div>
             */}
 
-            {/* NEW START FREE TRIAL BUTTON - REDIRECTS TO CONTACT PAGE */}
             <motion.div
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -322,7 +292,7 @@ export function Navbar({ className }: { className?: string }) {
 
                 {/* Button content */}
                 <Link
-                  href={"/contact?source=free-trial"}
+                  href={"/checkout?plan=pro"}
                   className="relative z-10 flex items-center gap-2"
                 >
                   <span>Start Free Trial</span>

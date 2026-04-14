@@ -1,34 +1,27 @@
 "use client";
 import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { authClient } from "@/lib/auth/auth-client";
+import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
+import { useAuth } from "@clerk/nextjs";
 
 export default function AuthCallback() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const { isLoaded, isSignedIn } = useAuth();
+  const redirectUrl = searchParams.get("redirect_url") || "/";
 
   useEffect(() => {
-    const handleCallback = async () => {
-      try {
-        // Get the session after OAuth callback
-        const session = await authClient.getSession();
+    if (!isLoaded) return;
 
-        if (session.data) {
-          toast.success("Signed in successfully");
-          router.push("/");
-        } else {
-          toast.error("Authentication failed");
-          router.push("/");
-        }
-      } catch (error) {
-        console.error("OAuth callback error:", error);
-        toast.error("Authentication failed");
-        router.push("/");
-      }
-    };
+    if (isSignedIn) {
+      toast.success("Signed in successfully");
+      router.push(redirectUrl);
+      return;
+    }
 
-    handleCallback();
-  }, [router]);
+    toast.error("Authentication failed");
+    router.push("/auth");
+  }, [isLoaded, isSignedIn, router, redirectUrl]);
 
   return (
     <div className="flex">

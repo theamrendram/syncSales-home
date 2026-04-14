@@ -25,7 +25,7 @@ const SuccessPage = () => {
         </CardContent>
         <CardFooter>
           <Button asChild className="w-full">
-            <Link href="https://dashboard.syncsales.tech" target="_blank">
+            <Link href="https://crm.syncsales.in" target="_blank">
               <ExternalLink className="h-4 w-4" />
               Go to Dashboard{" "}
             </Link>

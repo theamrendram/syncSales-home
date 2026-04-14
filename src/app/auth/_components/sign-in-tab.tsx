@@ -14,10 +14,9 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { PasswordInput } from "@/components/ui/password-input";
 import { LoadingSwap } from "@/components/ui/loading-swap";
-import { authClient } from "@/lib/auth/auth-client";
 import { toast } from "sonner";
 import { useRouter, useSearchParams } from "next/navigation";
-import { use } from "react";
+import { useSignIn } from "@clerk/nextjs";
 
 const signInSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -26,16 +25,11 @@ const signInSchema = z.object({
 
 type signInForm = z.infer<typeof signInSchema>;
 
-export default function SignInTab({
-  openEmailVerificationTab,
-  openForgotPassword,
-}: {
-  openEmailVerificationTab: (email: string) => void;
-  openForgotPassword: () => void;
-}) {
+export default function SignInTab() {
   const searchParams = useSearchParams();
   const redirect_url = searchParams.get("redirect_url");
   const router = useRouter();
+  const { signIn, isLoaded, setActive } = useSignIn();
   const form = useForm<signInForm>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
@@ -46,42 +40,49 @@ export default function SignInTab({
 
   const { isSubmitting } = form.formState;
   async function handleSignIn(data: signInForm) {
-    const response = await authClient.signIn.email(
-      {
-        ...data,
-      },
-      {
-        onError: (response) => {
-          console.log(response);
-          if (response.error.code === "EMAIL_NOT_VERIFIED") {
-            openEmailVerificationTab(data.email);
-          } else {
-            toast.error(
-              response.error.message ||
-                response.error.statusText ||
-                "Something went wrong",
-            );
-          }
-        },
-        onSuccess: async (response) => {
-          console.log("Sign-in response:", response?.data);
+    if (!isLoaded || !signIn) {
+      toast.error("Authentication is still loading. Please try again.");
+      return;
+    }
 
-          // Get the session with customized user data
-          const session = await authClient.getSession();
-          console.log("Session with customized user:", session?.data);
+    try {
+      const result = await signIn.create({
+        identifier: data.email,
+        password: data.password,
+      });
 
-          if (session?.data) {
-            console.log("redirecting to", redirect_url || "/");
-            router.push(redirect_url || "/");
-          } else {
-            console.log("redirecting to", "/auth");
-            router.push("/auth");
-          }
-        },
-      },
-    );
+      if (result.status === "complete") {
+        await setActive({ session: result.createdSessionId });
+        router.push(redirect_url || "/");
+        return;
+      }
 
-    console.log(response?.data);
+      // Keep the existing UX for unfinished auth states.
+      if (result.status === "needs_first_factor" || result.status === "needs_second_factor") {
+        toast.error("Authentication incomplete. Please complete verification.");
+        return;
+      }
+
+      toast.error("Please verify your email before signing in.");
+    } catch (error: unknown) {
+      const clerkError = error as {
+        errors?: Array<{ code?: string; longMessage?: string; message?: string }>;
+      };
+      const firstError = clerkError.errors?.[0];
+      const errorCode = firstError?.code;
+
+      if (errorCode === "form_identifier_not_found" || errorCode === "form_password_incorrect") {
+        toast.error("Invalid email or password.");
+        return;
+      }
+
+      if (errorCode === "form_identifier_exists_but_not_verified") {
+        toast.error("Please verify your email before signing in.");
+        return;
+      }
+
+      toast.error(firstError?.longMessage || firstError?.message || "Authentication failed.");
+    }
   }
 
   return (
@@ -105,15 +106,7 @@ export default function SignInTab({
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="flex justify-between">
-                <p>Password</p>
-                <p
-                  className="text-muted-foreground cursor-pointer text-xs underline"
-                  onClick={openForgotPassword}
-                >
-                  Forgot password?
-                </p>
-              </FormLabel>
+              <FormLabel>Password</FormLabel>
               <FormControl>
                 <PasswordInput {...field} />
               </FormControl>
@@ -123,7 +116,7 @@ export default function SignInTab({
         />
         <Button
           type="submit"
-          disabled={isSubmitting}
+          disabled={isSubmitting || !isLoaded}
           className="w-full cursor-pointer"
         >
           <LoadingSwap isLoading={isSubmitting}>Sign In</LoadingSwap>

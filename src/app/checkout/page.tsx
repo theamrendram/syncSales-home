@@ -13,19 +13,78 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { CheckCircle, Shield, ArrowRight } from "lucide-react";
-import Link from "next/link";
 
-const plans = [
-  { name: "Pro Plan", price: 46 },
-  { name: "Basic Plan", price: 20 },
-];
+const plans = {
+  basic: {
+    key: "basic",
+    name: "Starter",
+    price: 20,
+    trialDays: 7,
+    productId: process.env.NEXT_PUBLIC_DODO_PRODUCT_ID_BASIC || "",
+  },
+  pro: {
+    key: "pro",
+    name: "Professional",
+    price: 46,
+    trialDays: 7,
+    productId: process.env.NEXT_PUBLIC_DODO_PRODUCT_ID_PRO || "",
+  },
+};
+
 function Checkout() {
   const searchParams = useSearchParams();
-  const planParam = searchParams.get("plan") || "Pro Plan";
-  const plan = plans.find((plan) => plan.name === planParam) || {
-    name: "Pro Plan",
-    price: 0,
-    trialDays: 7,
+  const planParam = (searchParams.get("plan") || "pro").toLowerCase();
+  const plan = plans[planParam as keyof typeof plans] || plans.pro;
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const startCheckout = async () => {
+    setError("");
+    if (!email.trim()) {
+      setError("Email is required.");
+      return;
+    }
+    if (!plan.productId) {
+      setError("Plan is not configured. Missing Dodo product ID.");
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const response = await fetch("/api/checkout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          productId: plan.productId,
+          email: email.trim(),
+          name: name.trim() || undefined,
+          trialPeriodDays: plan.trialDays,
+          metadata: {
+            source: "home_checkout",
+            plan: plan.key,
+          },
+        }),
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data?.error || "Unable to start checkout");
+      }
+
+      if (!data?.checkoutUrl) {
+        throw new Error("Checkout URL not returned");
+      }
+
+      window.location.href = data.checkoutUrl;
+    } catch (err: any) {
+      setError(err?.message || "Unable to start checkout");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -91,10 +150,10 @@ function Checkout() {
               <Card className="shadow-lg border-gray-200">
                 <CardHeader className="text-center">
                   <CardTitle className="text-2xl font-bold text-gray-800">
-                    Start a 7‑day free trial of {plan.name}
+                    Start a 7-day free trial of {plan.name}
                   </CardTitle>
                   <CardDescription className="text-lg">
-                    Enjoy the full product experience for a week—risk‑free.
+                    Enjoy the full product experience for a week-risk-free.
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
@@ -103,28 +162,50 @@ function Checkout() {
                       Create your account to begin your trial. It only takes a
                       minute and you can cancel anytime.
                     </p>
+                    <div className="mb-4 space-y-3 text-left">
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          Work email
+                        </label>
+                        <input
+                          type="email"
+                          className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+                          placeholder="you@company.com"
+                          value={email}
+                          onChange={(event) => setEmail(event.target.value)}
+                        />
+                      </div>
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          Full name (optional)
+                        </label>
+                        <input
+                          type="text"
+                          className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+                          placeholder="John Doe"
+                          value={name}
+                          onChange={(event) => setName(event.target.value)}
+                        />
+                      </div>
+                    </div>
 
-                    {/* OLD START FREE TRIAL BUTTON - COMMENTED OUT
-                    <Link href="/auth">
-                      <Button className="w-full h-12 bg-gradient-to-r from-blue-800 via-indigo-800 to-blue-900 hover:from-blue-700 hover:via-indigo-700 hover:to-purple-700 text-white font-semibold rounded-xl transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg relative overflow-hidden group">
-                        <div className="absolute inset-0 bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
-                        <div className="flex items-center gap-3">
-                          <span>Start free trial</span>
-                          <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                        </div>
-                      </Button>
-                    </Link>
-                    */}
-                    {/* NEW START FREE TRIAL BUTTON - REDIRECTS TO CONTACT PAGE */}
-                    <Link href="/contact?source=free-trial">
-                      <Button className="w-full h-12 bg-gradient-to-r from-blue-800 via-indigo-800 to-blue-900 hover:from-blue-700 hover:via-indigo-700 hover:to-purple-700 text-white font-semibold rounded-xl transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg relative overflow-hidden group">
-                        <div className="absolute inset-0 bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
-                        <div className="flex items-center gap-3">
-                          <span>Start free trial</span>
-                          <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                        </div>
-                      </Button>
-                    </Link>
+                    {error && (
+                      <div className="mb-3 rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">
+                        {error}
+                      </div>
+                    )}
+
+                    <Button
+                      onClick={startCheckout}
+                      disabled={isLoading}
+                      className="w-full h-12 bg-gradient-to-r from-blue-800 via-indigo-800 to-blue-900 hover:from-blue-700 hover:via-indigo-700 hover:to-purple-700 text-white font-semibold rounded-xl transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg relative overflow-hidden group"
+                    >
+                      <div className="absolute inset-0 bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
+                      <div className="flex items-center gap-3">
+                        <span>{isLoading ? "Redirecting..." : "Continue to secure checkout"}</span>
+                        <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                      </div>
+                    </Button>
                   </div>
 
                   <div className="text-center text-sm text-gray-500">

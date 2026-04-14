@@ -11,6 +11,7 @@ const Pricing = () => {
       fullName: "Starter",
       price: "$20",
       period: "/month",
+      checkoutPlan: "basic",
       description: "Perfect for small sales teams getting started",
       features: [
         "Up to 200 leads/day",
@@ -30,6 +31,7 @@ const Pricing = () => {
       fullName: "Professional",
       price: "$46",
       period: "/month",
+      checkoutPlan: "pro",
       description: "Best for growing sales teams",
       features: [
         "Everything in Starter",
@@ -49,6 +51,7 @@ const Pricing = () => {
       fullName: "Enterprise",
       price: "Custom",
       period: "",
+      checkoutPlan: null,
       description: "For large organizations with custom needs",
       features: [
         "Everything in Professional",
@@ -141,9 +144,12 @@ function PricingCard({ plan }: { plan: any }) {
           {plan.cta}
         </Link>
         */}
-        {/* NEW START FREE TRIAL BUTTON - REDIRECTS TO CONTACT PAGE */}
         <Link
-          href="/contact?source=free-trial"
+          href={
+            plan.checkoutPlan
+              ? `/checkout?plan=${plan.checkoutPlan}`
+              : "/contact?source=free-trial"
+          }
           className={`w-full rounded-xl px-6 py-3 font-semibold transition-all duration-200 ${
             plan.popular
               ? "bg-gradient-to-r from-blue-500 to-amber-400 text-white hover:scale-105"

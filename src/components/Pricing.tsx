@@ -143,7 +143,11 @@ function PricingCard({ plan }: { plan: any }) {
         */}
         {/* NEW START FREE TRIAL BUTTON - REDIRECTS TO CONTACT PAGE */}
         <Link
-          href="/contact?source=free-trial"
+          href={
+            plan.checkoutPlan
+              ? `/checkout?plan=${plan.checkoutPlan}&source=pricing`
+              : "/contact?source=free-trial"
+          }
           className={`w-full rounded-xl px-6 py-3 font-semibold transition-all duration-200 ${
             plan.popular
               ? "bg-gradient-to-r from-blue-500 to-amber-400 text-white hover:scale-105"

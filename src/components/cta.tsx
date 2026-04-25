@@ -37,7 +37,7 @@ export function CTA() {
               */}
               {/* NEW START FREE TRIAL BUTTON - REDIRECTS TO CONTACT PAGE */}
               <Link
-                href="/contact?source=free-trial"
+                href="/checkout?plan=pro&source=cta"
                 className="gradient-primary inline-flex h-14 items-center justify-center rounded-xl px-10 text-lg font-semibold text-white shadow-2xl transition-transform duration-200 hover:scale-105"
               >
                 Start Your 7-Day Free Trial{" "}

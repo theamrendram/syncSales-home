@@ -15,13 +15,12 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { motion, useScroll, useSpring } from "framer-motion";
-import { authClient } from "@/lib/auth/auth-client";
+import { authClient, AuthUser } from "@/lib/auth/auth-client";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { Session } from "better-auth";
 export function Navbar({ className }: { className?: string }) {
-  const [user, setUser] = useState<Session["user"] | null>(null);
+  const [user, setUser] = useState<AuthUser | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 

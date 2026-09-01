@@ -95,17 +95,17 @@ function Success() {
   }, [clerkUserId, email, shouldPoll]);
 
   return (
-    <div className="flex h-screen items-center justify-center bg-gradient-to-b from-gray-100 to-gray-400">
+    <div className="flex h-screen items-center justify-center bg-muted">
       <Card className="w-full max-w-md shadow-md">
         <CardHeader>
           <CardTitle className="text-2xl font-bold">Checkout complete</CardTitle>
-          <CardDescription className="text-md text-gray-500">
+          <CardDescription className="text-md text-muted-foreground">
             Trial plan: {plan}. We are activating your account now.
           </CardDescription>
         </CardHeader>
         <CardContent>
           <p>{message}</p>
-          <p className="mt-2 text-xs text-gray-500">Status: {status}</p>
+          <p className="mt-2 text-xs text-muted-foreground">Status: {status}</p>
         </CardContent>
         <CardFooter>
           <Button asChild className="w-full">
@@ -126,7 +126,7 @@ export default function SuccessPage() {
     <Suspense
       fallback={
         <div className="flex min-h-screen items-center justify-center">
-          <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-gray-900"></div>
+          <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-primary"></div>
         </div>
       }
     >

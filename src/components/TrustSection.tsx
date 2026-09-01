@@ -46,47 +46,54 @@ export function TrustSection() {
   ];
 
   return (
-    <section className="py-24 bg-gradient-to-br from-neutral-900 to-neutral-800">
+    <section className="border-y border-border bg-muted py-24">
       <div className="container mx-auto px-4">
         {/* Trust Badges */}
-        <div className="text-center mb-16">
-          <h2 className="text-3xl font-bold text-white mb-4">
+        <div className="mb-16 text-center">
+          <h2 className="mb-4 text-3xl font-bold text-foreground">
             Trusted by Sales Teams Worldwide
           </h2>
-          <div className="flex flex-wrap justify-center gap-8 mt-8">
+          <div className="mt-8 flex flex-wrap justify-center gap-8">
             {trustBadges.map((badge, index) => (
               <div key={index} className="text-center">
-                <div className="w-16 h-16 mx-auto mb-3 bg-gradient-to-br from-blue-500 to-amber-400 rounded-full flex items-center justify-center">
-                  <badge.icon className="w-8 h-8 text-white" />
+                <div className="gradient-primary mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full">
+                  <badge.icon className="h-8 w-8 text-white" />
                 </div>
-                <h3 className="text-white font-semibold mb-1">{badge.text}</h3>
-                <p className="text-gray-400 text-sm">{badge.description}</p>
+                <h3 className="mb-1 font-semibold text-foreground">
+                  {badge.text}
+                </h3>
+                <p className="text-sm text-muted-foreground">
+                  {badge.description}
+                </p>
               </div>
             ))}
           </div>
         </div>
 
         {/* Testimonials */}
-        <div className="grid md:grid-cols-3 gap-8 mb-16">
+        <div className="grid gap-8 md:grid-cols-3">
           {testimonials.map((testimonial, index) => (
             <div
               key={index}
-              className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10">
-              <div className="flex items-center mb-4">
-                <div className="flex text-yellow-400">
+              className="rounded-lg border border-border bg-card p-6 shadow-sm"
+            >
+              <div className="mb-4 flex items-center">
+                <div className="flex text-amber-500">
                   {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-current" />
+                    <Star key={i} className="h-4 w-4 fill-current" />
                   ))}
                 </div>
               </div>
-              <p className="text-gray-300 mb-4 italic">
+              <p className="mb-4 italic text-muted-foreground">
                 &quot;{testimonial.content}&quot;
               </p>
               <div className="flex items-center">
-                <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-amber-400 rounded-full mr-3"></div>
+                <div className="gradient-primary mr-3 h-10 w-10 rounded-full"></div>
                 <div>
-                  <p className="text-white font-semibold">{testimonial.name}</p>
-                  <p className="text-gray-400 text-sm">
+                  <p className="font-semibold text-foreground">
+                    {testimonial.name}
+                  </p>
+                  <p className="text-sm text-muted-foreground">
                     {testimonial.role} at {testimonial.company}
                   </p>
                 </div>
@@ -94,29 +101,6 @@ export function TrustSection() {
             </div>
           ))}
         </div>
-
-        {/* Client Logos Section */}
-        {/* <div className="text-center">
-          <p className="text-gray-400 mb-8">Trusted by leading companies</p>
-          <div className="flex flex-wrap justify-center items-center gap-12 opacity-60">
-            <div className="w-24 h-12 bg-white/10 rounded flex items-center justify-center">
-              <span className="text-white font-semibold text-sm">TechFlow</span>
-            </div>
-            <div className="w-24 h-12 bg-white/10 rounded flex items-center justify-center">
-              <span className="text-white font-semibold text-sm">
-                GrowthCorp
-              </span>
-            </div>
-            <div className="w-24 h-12 bg-white/10 rounded flex items-center justify-center">
-              <span className="text-white font-semibold text-sm">ScaleUp</span>
-            </div>
-            <div className="w-24 h-12 bg-white/10 rounded flex items-center justify-center">
-              <span className="text-white font-semibold text-sm">
-                InnovateLab
-              </span>
-            </div>
-          </div>
-        </div> */}
       </div>
     </section>
   );

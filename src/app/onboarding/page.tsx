@@ -184,61 +184,61 @@ function OnboardingForm() {
 
   if (!isLoaded) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-white">
-        <div className="h-10 w-10 animate-spin rounded-full border-b-2 border-gray-900"></div>
+      <div className="flex min-h-screen items-center justify-center bg-card">
+        <div className="h-10 w-10 animate-spin rounded-full border-b-2 border-primary"></div>
       </div>
     );
   }
 
   return (
-    <div className="relative min-h-screen bg-white text-gray-900 font-sans overflow-hidden">
+    <div className="relative min-h-screen bg-card text-foreground font-sans overflow-hidden">
       {/* Background Decor */}
       <div className="absolute top-0 left-0 w-full h-full pointer-events-none overflow-hidden -z-10">
         <div className="absolute -top-24 -left-24 w-96 h-96 bg-blue-100/40 blur-[120px] rounded-full animate-pulse" />
-        <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-amber-50/30 blur-[150px] rounded-full" />
+        <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-brand-to/10 blur-[150px] rounded-full" />
       </div>
 
-      <div className="absolute bottom-10 left-10 flex gap-6 text-sm font-semibold text-gray-400">
-        <Link href="#" className="hover:text-gray-900 transition-all hover:scale-105">User settings</Link>
+      <div className="absolute bottom-10 left-10 flex gap-6 text-sm font-semibold text-muted-foreground">
+        <Link href="#" className="hover:text-foreground transition-all hover:scale-105">User settings</Link>
         <SignOutButton>
-          <button className="hover:text-gray-900 transition-all hover:scale-105">Log out</button>
+          <button className="hover:text-foreground transition-all hover:scale-105">Log out</button>
         </SignOutButton>
       </div>
 
       <div className="container mx-auto flex min-h-screen w-full max-w-xl flex-col items-center justify-center px-6 py-20">
         {/* Logo Section */}
         <div className="mb-10 relative group">
-          <div className="absolute -inset-4 bg-gradient-to-tr from-blue-500/20 to-amber-500/20 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+          <div className="absolute -inset-4 bg-gradient-to-tr from-brand-from/20 to-brand-to/20 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
           <Hexagon className="h-12 w-12 text-black relative z-10 float-medium" strokeWidth={1.2} />
         </div>
 
         {/* Improved Progress Indicator */}
         <div className="mb-14 flex w-full max-w-xs gap-3">
-          <div className="h-1.5 flex-1 rounded-full bg-black shadow-sm"></div>
-          <div className="h-1.5 flex-1 rounded-full bg-gray-100 overflow-hidden">
-             <div className={`h-full bg-black transition-all duration-1000 ${isLoading ? "w-1/2" : "w-0"}`} />
+          <div className="h-1.5 flex-1 rounded-full bg-primary shadow-sm"></div>
+          <div className="h-1.5 flex-1 rounded-full bg-muted overflow-hidden">
+             <div className={`h-full bg-primary transition-all duration-1000 ${isLoading ? "w-1/2" : "w-0"}`} />
           </div>
-          <div className="h-1.5 flex-1 rounded-full bg-gray-100"></div>
+          <div className="h-1.5 flex-1 rounded-full bg-muted"></div>
         </div>
 
         <div className="w-full relative">
           {/* Header */}
           <div className="mb-12 text-center sm:text-left">
-            <h1 className="text-4xl font-bold tracking-tight text-gray-900 bg-clip-text text-transparent bg-gradient-to-br from-gray-900 to-gray-600">
+            <h1 className="text-4xl font-bold tracking-tight text-foreground">
               Create your organization
             </h1>
-            <p className="mt-4 text-[16px] leading-relaxed text-gray-500 font-medium">
-              Signed in as <span className="text-gray-900 font-semibold underline decoration-blue-200 underline-offset-4">{email}</span>.
+            <p className="mt-4 text-[16px] leading-relaxed text-muted-foreground font-medium">
+              Signed in as <span className="text-foreground font-semibold underline decoration-blue-200 underline-offset-4">{email}</span>.
               <br />
               Let&apos;s build your workspace in seconds.
             </p>
           </div>
 
           {/* Glassmorphism Form Container */}
-          <div className="glass-morphism rounded-3xl p-8 border-gray-200/60 shadow-4xl backdrop-blur-3xl bg-white/40">
+          <div className="rounded-lg border border-border bg-card p-8 shadow-3xl">
             <form onSubmit={handleOrganizationSubmit} className="space-y-6">
               <div className="space-y-2">
-                <Label htmlFor="organizationName" className="text-sm font-bold text-gray-700 tracking-tight ml-1">
+                <Label htmlFor="organizationName" className="text-sm font-bold text-foreground tracking-tight ml-1">
                   Organization Name
                 </Label>
                 <Input
@@ -247,7 +247,7 @@ function OnboardingForm() {
                   value={formData.organizationName}
                   onChange={handleInputChange}
                   placeholder="Acme Corp"
-                  className="h-14 rounded-2xl border-gray-200 bg-white/60 px-5 text-base focus-visible:ring-2 focus-visible:ring-blue-100 focus-visible:border-blue-400 transition-all placeholder:text-gray-300"
+                  className="h-14 rounded-2xl border-border bg-background px-5 text-base focus-visible:ring-2 focus-visible:ring-blue-100 focus-visible:border-blue-400 transition-all placeholder:text-muted-foreground"
                   required
                 />
                 {error.organizationName && (
@@ -256,7 +256,7 @@ function OnboardingForm() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="description" className="text-sm font-bold text-gray-700 tracking-tight ml-1">
+                <Label htmlFor="description" className="text-sm font-bold text-foreground tracking-tight ml-1">
                   What does your company do?
                 </Label>
                 <Input
@@ -265,7 +265,7 @@ function OnboardingForm() {
                   value={formData.description}
                   onChange={handleInputChange}
                   placeholder="e.g. Real estate sales, SaaS marketing"
-                  className="h-14 rounded-2xl border-gray-200 bg-white/60 px-5 text-base focus-visible:ring-2 focus-visible:ring-blue-100 focus-visible:border-blue-400 transition-all placeholder:text-gray-300"
+                  className="h-14 rounded-2xl border-border bg-background px-5 text-base focus-visible:ring-2 focus-visible:ring-blue-100 focus-visible:border-blue-400 transition-all placeholder:text-muted-foreground"
                   required
                 />
                 {error.description && (
@@ -274,17 +274,17 @@ function OnboardingForm() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="organizationLogo" className="text-sm font-bold text-gray-700 tracking-tight ml-1">
-                  Brand Logo <span className="text-gray-400 font-normal">(Optional)</span>
+                <Label htmlFor="organizationLogo" className="text-sm font-bold text-foreground tracking-tight ml-1">
+                  Brand Logo <span className="text-muted-foreground font-normal">(Optional)</span>
                 </Label>
-                <div className="rounded-2xl border-2 border-dashed border-gray-100 bg-white/40 p-1 hover:border-blue-200 transition-colors">
+                <div className="rounded-2xl border-2 border-dashed border-border bg-card p-1 hover:border-blue-200 transition-colors">
                   <Input
                     id="organizationLogo"
                     type="file"
                     name="organizationLogo"
                     onChange={handleFileChange}
                     accept="image/jpeg,image/png,image/webp"
-                    className="h-12 cursor-pointer border-0 file:mr-4 file:rounded-xl file:border-0 file:bg-gray-900 file:px-4 file:py-2 file:text-xs file:font-bold file:text-white hover:file:bg-blue-600 shadow-none focus-visible:ring-0 bg-transparent"
+                    className="h-12 cursor-pointer border-0 file:mr-4 file:rounded-xl file:border-0 file:bg-primary file:px-4 file:py-2 file:text-xs file:font-bold file:text-white hover:file:bg-blue-600 shadow-none focus-visible:ring-0 bg-transparent"
                   />
                 </div>
                 {error.organizationLogo && (
@@ -297,13 +297,13 @@ function OnboardingForm() {
                   id="terms" 
                   checked={agreed}
                   onCheckedChange={(checked) => setAgreed(checked as boolean)}
-                  className="h-5 w-5 rounded-md border-gray-300 data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600 transition-colors" 
+                  className="h-5 w-5 rounded-md border-input transition-colors data-[state=checked]:border-primary data-[state=checked]:bg-primary" 
                 />
                 <label
                   htmlFor="terms"
-                  className="text-sm font-medium leading-relaxed text-gray-500 cursor-pointer"
+                  className="text-sm font-medium leading-relaxed text-muted-foreground cursor-pointer"
                 >
-                  I agree to SyncSales&apos;s <Link href="#" className="text-gray-900 font-bold hover:underline">Terms</Link> & <Link href="#" className="text-gray-900 font-bold hover:underline">Privacy Policy</Link>
+                  I agree to SyncSales&apos;s <Link href="#" className="text-foreground font-bold hover:underline">Terms</Link> & <Link href="#" className="text-foreground font-bold hover:underline">Privacy Policy</Link>
                 </label>
               </div>
 
@@ -311,7 +311,7 @@ function OnboardingForm() {
                 <Button
                   type="submit"
                   disabled={isLoading || isRedirecting}
-                  className="group relative h-14 w-full overflow-hidden rounded-full bg-black hover:bg-gray-900 text-lg font-bold text-white shadow-xl transition-all hover:scale-[1.02] active:scale-[0.98]"
+                  className="group relative h-14 w-full overflow-hidden rounded-full bg-primary hover:bg-primary/90 text-lg font-bold text-white shadow-xl transition-all hover:scale-[1.02] active:scale-[0.98]"
                 >
                   <span className="relative z-10 flex items-center justify-center gap-2">
                     {isLoading || isRedirecting ? (
@@ -330,7 +330,7 @@ function OnboardingForm() {
               </div>
 
               <div className="pt-4 text-center">
-                <Link href="/" className="text-sm font-bold text-gray-400 hover:text-gray-900 transition-colors">
+                <Link href="/" className="text-sm font-bold text-muted-foreground hover:text-foreground transition-colors">
                   ← Back to home
                 </Link>
               </div>
@@ -347,7 +347,7 @@ export default function OnboardingPage() {
     <Suspense
       fallback={
         <div className="flex min-h-screen items-center justify-center">
-          <div className="h-10 w-10 animate-spin rounded-full border-b-2 border-gray-900"></div>
+          <div className="h-10 w-10 animate-spin rounded-full border-b-2 border-primary"></div>
         </div>
       }
     >

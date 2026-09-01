@@ -52,14 +52,14 @@ export function FAQ() {
   return (
     <section
       id="faq"
-      className="bg-[linear-gradient(to_top_right,#171717_0%,#171717_60%,#465C88_75%,#FF9B00_100%)] py-24 text-white sm:py-32"
+      className="border-y border-border bg-muted py-24 sm:py-32"
     >
       <div className="container space-y-16">
         <div className="text-center">
-          <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
+          <h2 className="text-3xl font-bold tracking-tighter text-foreground sm:text-4xl md:text-5xl">
             Got Questions? We&apos;ve Got Answers
           </h2>
-          <p className="mx-auto mt-6 max-w-[700px] text-gray-300 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+          <p className="mx-auto mt-6 max-w-[700px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
             Everything you need to know to get started and succeed with
             SyncSales
           </p>
@@ -73,12 +73,12 @@ export function FAQ() {
             <AccordionItem
               key={index}
               value={`item-${index}`}
-              className="border-white/20"
+              className="border-border"
             >
-              <AccordionTrigger className="text-left text-lg font-medium transition-colors hover:text-amber-400">
+              <AccordionTrigger className="text-left text-lg font-medium text-foreground transition-colors hover:text-primary">
                 {faq.question}
               </AccordionTrigger>
-              <AccordionContent className="leading-relaxed text-gray-300">
+              <AccordionContent className="leading-relaxed text-muted-foreground">
                 {faq.answer}
               </AccordionContent>
             </AccordionItem>
@@ -87,21 +87,12 @@ export function FAQ() {
 
         {/* Additional CTA after FAQ */}
         <div className="pt-8 text-center">
-          <p className="mb-6 text-gray-300">
+          <p className="mb-6 text-muted-foreground">
             Still have questions? Our team is here to help.
           </p>
-          {/* OLD START FREE TRIAL BUTTON - COMMENTED OUT
-          <a
-            href="/checkout"
-            className="gradient-primary inline-flex h-12 items-center justify-center rounded-xl px-8 font-semibold text-white transition-transform duration-200 hover:scale-105"
-          >
-            Start Your Free Trial Today
-          </a>
-          */}
-          {/* NEW START FREE TRIAL BUTTON - REDIRECTS TO CONTACT PAGE */}
           <a
             href="/contact?source=free-trial"
-            className="gradient-primary inline-flex h-12 items-center justify-center rounded-xl px-8 font-semibold text-white transition-transform duration-200 hover:scale-105"
+            className="gradient-primary inline-flex h-12 items-center justify-center rounded-lg px-8 font-semibold text-white transition-transform duration-200 hover:scale-105"
           >
             Start Your Free Trial Today
           </a>

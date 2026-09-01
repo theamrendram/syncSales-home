@@ -5,29 +5,35 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
   {
     variants: {
       variant: {
         default:
-          "px-8 py-2 rounded-xl bg-gradient-to-b from-gray-800 to-black text-white focus:ring-2 focus:ring-blue-400 hover:shadow-xl transition duration-200",
+          "bg-primary text-primary-foreground shadow-sm hover:bg-primary/90",
+        // The brand gradient CTA. Previously this lived on `default` with a
+        // hardcoded gray-800 -> black gradient and its own padding, which
+        // fought whatever `size` the caller passed.
+        brand:
+          "gradient-primary text-white shadow-sm transition-transform duration-200 hover:scale-[1.02] hover:shadow-lg",
         destructive:
           "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
         outline:
           "border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground",
         secondary:
-          "bg-gradient-to-br from-secondary to-zinc-700 text-secondary-foreground shadow-sm rounded-xl hover:bg-secondary/80",
-        ghost: "",
+          "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
+        ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
-        accent: "bg-accent text-accent-foreground hover:bg-accent/90",
+        accent: "bg-accent text-accent-foreground hover:bg-accent/80",
         white:
-          "bg-white text-foreground hover:bg-accent hover:text-accent-foreground",
+          "border border-border bg-background text-foreground shadow-sm hover:bg-accent hover:text-accent-foreground",
       },
       size: {
-        default: "h-9 px-4 py-2",
-        sm: "h-8 rounded-md px-3 text-xs",
-        lg: "h-10 rounded-md px-8",
-        icon: "h-9 w-9",
+        default: "h-10 px-4 py-2",
+        sm: "h-9 rounded-md px-3 text-xs",
+        lg: "h-11 rounded-md px-8",
+        xl: "h-14 rounded-lg px-10 text-lg",
+        icon: "h-10 w-10",
       },
     },
     defaultVariants: {

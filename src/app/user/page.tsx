@@ -71,10 +71,10 @@ export default function Profile() {
 
   if (!isLoaded) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center">
+      <div className="min-h-screen bg-muted flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600 text-lg">Loading your profile...</p>
+          <p className="text-muted-foreground text-lg">Loading your profile...</p>
         </div>
       </div>
     );
@@ -82,16 +82,16 @@ export default function Profile() {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center">
+      <div className="min-h-screen bg-muted flex items-center justify-center">
         <div className="text-center">
-          <div className="bg-white rounded-2xl shadow-xl p-8 max-w-md mx-auto">
-            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <User className="w-8 h-8 text-gray-400" />
+          <div className="bg-card rounded-2xl shadow-xl p-8 max-w-md mx-auto">
+            <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
+              <User className="w-8 h-8 text-muted-foreground" />
             </div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">
+            <h2 className="text-2xl font-bold text-foreground mb-4">
               Not signed in
             </h2>
-            <p className="text-gray-600 mb-6">
+            <p className="text-muted-foreground mb-6">
               Please sign in to view your profile
             </p>
             <Link href="/auth">
@@ -106,19 +106,19 @@ export default function Profile() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+    <div className="min-h-screen bg-muted">
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">
           {/* Header */}
           <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold text-gray-900 mb-3">Profile</h1>
-            <p className="text-gray-600 text-lg">
+            <h1 className="text-4xl font-bold text-foreground mb-3">Profile</h1>
+            <p className="text-muted-foreground text-lg">
               Manage your account information
             </p>
           </div>
 
           {/* Main Profile Card */}
-          <div className="bg-white rounded-2xl shadow-xl p-8 mb-8">
+          <div className="bg-card rounded-2xl shadow-xl p-8 mb-8">
             <div className="flex flex-col lg:flex-row items-center lg:items-start gap-8">
               {/* Profile Picture Section */}
               <div className="text-center lg:text-left">
@@ -145,24 +145,24 @@ export default function Profile() {
 
               {/* User Info Section */}
               <div className="flex-1 text-center lg:text-left">
-                <h2 className="text-3xl font-bold text-gray-900 mb-2">
+                <h2 className="text-3xl font-bold text-foreground mb-2">
                   {user.fullName || `${user.firstName} ${user.lastName}`}
                 </h2>
 
                 <div className="space-y-3 mb-6">
-                  <div className="flex items-center justify-center lg:justify-start gap-2 text-gray-600">
+                  <div className="flex items-center justify-center lg:justify-start gap-2 text-muted-foreground">
                     <Mail className="w-4 h-4" />
                     <span>{user.primaryEmailAddress?.emailAddress}</span>
                   </div>
 
                   {user.username && (
-                    <div className="flex items-center justify-center lg:justify-start gap-2 text-gray-600">
+                    <div className="flex items-center justify-center lg:justify-start gap-2 text-muted-foreground">
                       <User className="w-4 h-4" />
                       <span>@{user.username}</span>
                     </div>
                   )}
 
-                  <div className="flex items-center justify-center lg:justify-start gap-2 text-gray-600">
+                  <div className="flex items-center justify-center lg:justify-start gap-2 text-muted-foreground">
                     <Calendar className="w-4 h-4" />
                     <span>
                       Member since{" "}
@@ -194,13 +194,13 @@ export default function Profile() {
 
 
           {/* Quick Actions */}
-          <div className="bg-white rounded-2xl shadow-xl p-6">
-            <h3 className="text-xl font-semibold text-gray-900 mb-4">
+          <div className="bg-card rounded-2xl shadow-xl p-6">
+            <h3 className="text-xl font-semibold text-foreground mb-4">
               Quick Actions
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               <Link href="/checkout" className="block">
-                <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-4 text-center hover:shadow-md transition-all duration-300 transform hover:scale-[1.02]">
+                <div className="rounded-xl border border-border bg-muted p-4 text-center hover:shadow-md transition-all duration-300 transform hover:scale-[1.02]">
                   <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-2">
                     <Globe className="w-4 h-4 text-blue-600" />
                   </div>

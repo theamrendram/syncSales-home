@@ -92,8 +92,8 @@ export function ContactForm({ isFreeTrial = false }: ContactFormProps) {
   }
 
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/5 p-8 shadow-2xl backdrop-blur-xl">
-      <h2 className="mb-6 text-2xl font-semibold text-white">
+    <div className="rounded-lg border border-border bg-card p-8 shadow-sm">
+      <h2 className="mb-6 text-2xl font-semibold text-foreground">
         {isFreeTrial ? "Request Your Free Trial" : "Send us a Message"}
       </h2>
       <Form {...form}>
@@ -103,11 +103,10 @@ export function ContactForm({ isFreeTrial = false }: ContactFormProps) {
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-white">Name</FormLabel>
+                <FormLabel>Name</FormLabel>
                 <FormControl>
                   <Input
                     {...field}
-                    className="border-white/20 bg-white/10 text-white placeholder:text-gray-500 focus:border-blue-400"
                     placeholder="Your name"
                   />
                 </FormControl>
@@ -121,12 +120,11 @@ export function ContactForm({ isFreeTrial = false }: ContactFormProps) {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-white">Email</FormLabel>
+                <FormLabel>Email</FormLabel>
                 <FormControl>
                   <Input
                     {...field}
                     type="email"
-                    className="border-white/20 bg-white/10 text-white placeholder:text-gray-500 focus:border-blue-400"
                     placeholder="your.email@example.com"
                   />
                 </FormControl>
@@ -140,11 +138,10 @@ export function ContactForm({ isFreeTrial = false }: ContactFormProps) {
             name="subject"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-white">Subject</FormLabel>
+                <FormLabel>Subject</FormLabel>
                 <FormControl>
                   <Input
                     {...field}
-                    className="border-white/20 bg-white/10 text-white placeholder:text-gray-500 focus:border-blue-400"
                     placeholder={
                       isFreeTrial
                         ? "Subject (e.g., Start Free Trial)"
@@ -162,12 +159,12 @@ export function ContactForm({ isFreeTrial = false }: ContactFormProps) {
             name="message"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-white">Message</FormLabel>
+                <FormLabel>Message</FormLabel>
                 <FormControl>
                   <Textarea
                     {...field}
                     rows={6}
-                    className="resize-none border-white/20 bg-white/10 text-white placeholder:text-gray-500 focus:border-blue-400"
+                    className="resize-none"
                     placeholder={
                       isFreeTrial
                         ? "Tell us about your business and how SyncSales can help you..."
@@ -183,7 +180,9 @@ export function ContactForm({ isFreeTrial = false }: ContactFormProps) {
           <Button
             type="submit"
             disabled={isSubmitting}
-            className="w-full rounded-xl bg-gradient-to-r from-blue-500 to-amber-400 py-6 font-semibold text-white hover:from-blue-600 hover:to-amber-500"
+            variant="brand"
+            size="xl"
+            className="w-full"
           >
             <LoadingSwap isLoading={isSubmitting}>
               {isFreeTrial ? "Request Free Trial" : "Send Message"}

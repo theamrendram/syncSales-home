@@ -63,38 +63,37 @@ const features = [
 
 export function Features() {
   return (
-    <section
-      id="features"
-      className="py-24 sm:py-32 bg-gradient-to-br from-black to-neutral-800">
+    <section id="features" className="bg-background py-24 sm:py-32">
       <div className="container space-y-16">
         <div className="text-center">
-          <h2 className="text-3xl font-bold text-white tracking-tighter sm:text-4xl md:text-5xl">
+          <h2 className="text-3xl font-bold tracking-tighter text-foreground sm:text-4xl md:text-5xl">
             Everything you need to{" "}
             <span className="gradient-text">close more deals</span>
           </h2>
-          <p className="mx-auto mt-6 max-w-[700px] text-gray-300 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+          <p className="mx-auto mt-6 max-w-[700px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
             Stop losing revenue to manual processes. These powerful features
             transform your sales pipeline from chaotic to predictable.
           </p>
         </div>
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 justify-center">
+        <div className="grid justify-center gap-8 md:grid-cols-2 lg:grid-cols-3">
           {features.map((feature) => (
             <Card
               key={feature.title}
-              className="backdrop-blur-sm rounded-3xl p-8 flex flex-col h-full text-white transition-transform hover:scale-105 border border-white/10 hover:border-white/20">
-              <CardHeader className="flex flex-col items-start space-y-4 pb-4">
-                <div className="gradient-secondary w-14 h-14 rounded-xl flex items-center justify-center">
+              className="flex h-full flex-col p-8 transition-all hover:-translate-y-1 hover:shadow-3xl"
+            >
+              <CardHeader className="flex flex-col items-start space-y-4 p-0 pb-4">
+                <div className="gradient-primary flex h-14 w-14 items-center justify-center rounded-xl">
                   <feature.icon className="h-7 w-7 text-white" />
                 </div>
                 <CardTitle className="text-xl">{feature.title}</CardTitle>
               </CardHeader>
-              <CardContent className="flex-1 space-y-4">
-                <CardDescription className="text-gray-300 text-base leading-relaxed">
+              <CardContent className="flex-1 space-y-4 p-0">
+                <CardDescription className="text-base leading-relaxed">
                   {feature.description}
                 </CardDescription>
-                <div className="pt-4 border-t border-white/10">
-                  <p className="text-amber-400 font-semibold text-sm">
-                    💰 {feature.benefit}
+                <div className="border-t border-border pt-4">
+                  <p className="text-sm font-semibold text-brand-ink">
+                    &#128176; {feature.benefit}
                   </p>
                 </div>
               </CardContent>

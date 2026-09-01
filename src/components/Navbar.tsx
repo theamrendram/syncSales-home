@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { useClerkAuth } from "@/hooks/useClerk";
 
 import { User, LogOut } from "lucide-react";
 import {
@@ -13,12 +12,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { motion, useScroll, useSpring } from "framer-motion";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { motion, useScroll, useSpring, useMotionValueEvent } from "framer-motion";
 import { authClient, AuthUser } from "@/lib/auth/auth-client";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+
 export function Navbar({ className }: { className?: string }) {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -28,12 +28,9 @@ export function Navbar({ className }: { className?: string }) {
 
   useEffect(() => {
     async function getUser() {
-      console.log("calling getUser");
       const session: Awaited<ReturnType<typeof authClient.getSession>> =
         await authClient.getSession();
-      console.log("session", session);
       if (session?.data != null) {
-        console.log("session?.data?.user", session?.data?.user);
         setUser(session?.data?.user);
         setIsAuthenticated(true);
         setIsLoading(false);
@@ -52,8 +49,15 @@ export function Navbar({ className }: { className?: string }) {
     restDelta: 0.001,
   });
 
-  // Check if scroll position is greater than 100px
-  const isScrolled = scrollY.get() > 100;
+  // Held in state and driven by a subscription. This used to be
+  // `const isScrolled = scrollY.get() > 100`, read during render off a
+  // MotionValue, which never triggered a re-render -- so the scrolled
+  // treatment effectively never applied.
+  const [isScrolled, setIsScrolled] = useState(false);
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    setIsScrolled(latest > 100);
+  });
+
   function handleSignOut() {
     authClient.signOut().then(() => {
       setIsAuthenticated(false);
@@ -64,69 +68,26 @@ export function Navbar({ className }: { className?: string }) {
 
   return (
     <header className={`fixed top-0 z-50 w-full md:h-20 ${className}`}>
+      {/* Surface fades in once the page scrolls under it. */}
       <motion.div
-        className="absolute inset-0 backdrop-blur-2xl"
-        style={{
-          backgroundColor: isScrolled
-            ? "rgba(0, 0, 0, 0.85)"
-            : "rgba(255, 255, 255, 0.08)",
-        }}
+        className="absolute inset-0 border-b backdrop-blur-xl"
+        initial={false}
         animate={{
           backgroundColor: isScrolled
-            ? "rgba(0, 0, 0, 0.85)"
-            : "rgba(255, 255, 255, 0.08)",
+            ? "hsl(var(--background) / 0.85)"
+            : "hsl(var(--background) / 0)",
+          borderColor: isScrolled
+            ? "hsl(var(--border))"
+            : "hsl(var(--border) / 0)",
         }}
         transition={{ duration: 0.4, ease: "easeOut" }}
       />
 
+      {/* Scroll progress bar */}
       <motion.div
-        className="absolute inset-x-0 bottom-0 h-px"
-        style={{
-          background:
-            "linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent)",
-          opacity: isScrolled ? 0.4 : 0.15,
-        }}
-        animate={{
-          opacity: isScrolled ? 0.4 : 0.15,
-        }}
-        transition={{ duration: 0.3 }}
-      />
-
-      <motion.div
-        className="absolute bottom-0 left-0 right-0 h-0.5 origin-left"
+        className="gradient-primary absolute bottom-0 left-0 right-0 h-0.5 origin-left"
         style={{ scaleX }}
-      >
-        <div className="h-full bg-gradient-to-r from-blue-500 via-amber-400 to-blue-500" />
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-500 via-amber-400 to-blue-500 opacity-50 blur-sm" />
-      </motion.div>
-
-      <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <motion.div
-          className="absolute left-1/4 top-4 h-2 w-2 rounded-full bg-white/20 blur-sm"
-          animate={{
-            y: [0, -10, 0],
-            opacity: [0.2, 0.5, 0.2],
-          }}
-          transition={{
-            duration: 3,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        />
-        <motion.div
-          className="absolute right-1/3 top-8 h-1 w-1 rounded-full bg-amber-400/30 blur-sm"
-          animate={{
-            y: [0, -8, 0],
-            opacity: [0.3, 0.6, 0.3],
-          }}
-          transition={{
-            duration: 2.5,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 0.5,
-          }}
-        />
-      </div>
+      />
 
       <div className="container relative">
         <div className="flex h-20 items-center justify-between">
@@ -137,31 +98,13 @@ export function Navbar({ className }: { className?: string }) {
             className="relative"
           >
             <Link href="/" className="group flex items-center space-x-3">
-              <div className="relative">
-                <div className="relative flex h-12 w-12 items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-blue-500 to-amber-400 shadow-2xl">
-                  <span className="relative z-10 text-lg font-bold text-white">
-                    S
-                  </span>
-
-                  <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent opacity-60" />
-
-                  <motion.div
-                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
-                    animate={{
-                      x: [-100, 100],
-                    }}
-                    transition={{
-                      duration: 2,
-                      repeat: Infinity,
-                      ease: "linear",
-                    }}
-                  />
-                </div>
-
-                <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-blue-500 to-amber-400 opacity-40 blur-xl transition-opacity duration-500 group-hover:opacity-60" />
+              <div className="gradient-primary relative flex h-11 w-11 items-center justify-center overflow-hidden rounded-xl shadow-sm">
+                <span className="relative z-10 text-lg font-bold text-white">
+                  S
+                </span>
               </div>
 
-              <span className="bg-gradient-to-r from-white via-gray-100 to-gray-300 bg-clip-text text-2xl font-bold text-transparent">
+              <span className="text-2xl font-bold text-foreground">
                 SyncSales
               </span>
             </Link>
@@ -171,11 +114,12 @@ export function Navbar({ className }: { className?: string }) {
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Link
                 href="/contact"
-                className="text-sm font-medium text-white/80 transition-colors duration-200 hover:text-white"
+                className="text-sm font-medium text-muted-foreground transition-colors duration-200 hover:text-foreground"
               >
                 Contact
               </Link>
             </motion.div>
+
             {!isLoading && (
               <>
                 {!isAuthenticated ? (
@@ -184,11 +128,7 @@ export function Navbar({ className }: { className?: string }) {
                     whileTap={{ scale: 0.95 }}
                   >
                     <Link href="/auth">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="border-white/20 bg-white/10 text-white shadow-lg backdrop-blur-xl transition-all duration-300 hover:border-white/30 hover:bg-white/20 hover:shadow-xl"
-                      >
+                      <Button variant="outline" size="sm">
                         Sign In
                       </Button>
                     </Link>
@@ -202,46 +142,31 @@ export function Navbar({ className }: { className?: string }) {
                       >
                         <Button
                           variant="ghost"
-                          className="relative h-11 w-11 rounded-full border border-white/20 bg-white/10 shadow-lg backdrop-blur-xl transition-all duration-300 hover:bg-white/20"
+                          className="relative h-11 w-11 rounded-full border border-border"
                         >
                           <Avatar className="h-9 w-9">
-                            {/* <AvatarImage
-                              src={
-                                user?.image ||
-                                "https://avatar.iran.liara.run/username?username=" +
-                                  (user?.name
-                                    ?.split(" ")
-                                    .map((name) => name[0])
-                                    .join("") || "U")
-                              }
-                              alt={user?.name || ""}
-                            /> */}
-                            <AvatarFallback className="bg-gradient-to-br from-blue-500 to-amber-400 font-semibold text-white">
+                            <AvatarFallback className="gradient-primary font-semibold text-white">
                               {user?.name?.[0] || <User className="h-4 w-4" />}
                             </AvatarFallback>
                           </Avatar>
                         </Button>
                       </motion.div>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent
-                      className="w-64 border border-white/20 bg-black/80 shadow-2xl backdrop-blur-2xl"
-                      align="end"
-                      forceMount
-                    >
+                    <DropdownMenuContent className="w-64" align="end" forceMount>
                       <DropdownMenuLabel className="font-normal">
                         <div className="flex flex-col space-y-1">
-                          <p className="text-sm font-medium leading-none text-white">
+                          <p className="text-sm font-medium leading-none">
                             {user?.name || ""}
                           </p>
-                          <p className="text-xs leading-none text-gray-400">
+                          <p className="text-xs leading-none text-muted-foreground">
                             {user?.email || ""}
                           </p>
                         </div>
                       </DropdownMenuLabel>
-                      <DropdownMenuSeparator className="bg-white/20" />
+                      <DropdownMenuSeparator />
                       <DropdownMenuItem
                         onClick={handleSignOut}
-                        className="cursor-pointer text-white transition-colors duration-200 hover:bg-white/10 focus:bg-white/10"
+                        className="cursor-pointer"
                       >
                         <LogOut className="mr-2 h-4 w-4" />
                         <span>Log out</span>
@@ -252,104 +177,22 @@ export function Navbar({ className }: { className?: string }) {
               </>
             )}
 
-            {/* Enhanced CTA button with premium liquid glass effect */}
-            {/* OLD START FREE TRIAL BUTTON - COMMENTED OUT
             <motion.div
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="relative"
             >
-              <Button
-                size="default"
-                className="hover:shadow-3xl relative h-8 overflow-hidden rounded-lg border-0 bg-gradient-to-r from-blue-500 to-amber-400 px-4 py-3 font-semibold text-white shadow-2xl backdrop-blur-xl transition-all duration-500"
-              >
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-white/20 via-transparent to-white/20"
-                  animate={{
-                    x: [-100, 100],
-                  }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                    ease: "linear",
-                  }}
-                />
-
-                <div className="bg-size-200 animate-gradient absolute inset-0 bg-gradient-to-r from-blue-500 via-amber-400 to-blue-500" />
-
-                <Link
-                  href={"/checkout"}
-                  className="relative z-10 flex items-center gap-2"
-                >
+              <Button variant="brand" size="sm" asChild>
+                <Link href="/contact?source=free-trial">
                   <span>Start Free Trial</span>
-                  <motion.div
+                  <motion.span
                     animate={{ x: [0, 3, 0] }}
                     transition={{ duration: 1.5, repeat: Infinity }}
                   >
                     →
-                  </motion.div>
+                  </motion.span>
                 </Link>
               </Button>
-            </motion.div>
-            */}
-
-            {/* NEW START FREE TRIAL BUTTON - REDIRECTS TO CONTACT PAGE */}
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="relative"
-            >
-              <Button
-                size="default"
-                className="hover:shadow-3xl relative h-8 overflow-hidden rounded-lg border-0 bg-gradient-to-r from-blue-500 to-amber-400 px-4 py-3 font-semibold text-white shadow-2xl backdrop-blur-xl transition-all duration-500"
-              >
-                {/* Liquid glass overlay with animation */}
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-white/20 via-transparent to-white/20"
-                  animate={{
-                    x: [-100, 100],
-                  }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                    ease: "linear",
-                  }}
-                />
-
-                {/* Animated gradient background */}
-                <div className="bg-size-200 animate-gradient absolute inset-0 bg-gradient-to-r from-blue-500 via-amber-400 to-blue-500" />
-
-                {/* Button content */}
-                <Link
-                  href={"/contact?source=free-trial"}
-                  className="relative z-10 flex items-center gap-2"
-                >
-                  <span>Start Free Trial</span>
-                  <motion.div
-                    animate={{ x: [0, 3, 0] }}
-                    transition={{ duration: 1.5, repeat: Infinity }}
-                  >
-                    →
-                  </motion.div>
-                </Link>
-              </Button>
-
-              {/* Enhanced glow effect */}
-              {/* <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-amber-400 rounded-2xl blur-2xl opacity-40 -z-10" /> */}
-
-              {/* Floating particles around button */}
-              {/* <motion.div
-                className="absolute -top-1 -right-1 w-2 h-2 bg-amber-400/60 rounded-full"
-                animate={{
-                  scale: [1, 1.2, 1],
-                  opacity: [0.6, 1, 0.6],
-                }}
-                transition={{
-                  duration: 2,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-              /> */}
             </motion.div>
           </div>
         </div>

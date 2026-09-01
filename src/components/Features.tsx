@@ -63,8 +63,8 @@ const features = [
 
 export function Features() {
   return (
-    <section id="features" className="bg-background py-24 sm:py-32">
-      <div className="container space-y-16">
+    <section id="features" className="bg-background py-20 sm:py-24 md:py-32">
+      <div className="container space-y-12 sm:space-y-16">
         <div className="text-center">
           <h2 className="text-3xl font-bold tracking-tighter text-foreground sm:text-4xl md:text-5xl">
             Everything you need to{" "}
@@ -79,7 +79,7 @@ export function Features() {
           {features.map((feature) => (
             <Card
               key={feature.title}
-              className="flex h-full flex-col p-8 transition-all hover:-translate-y-1 hover:shadow-3xl"
+              className="flex h-full flex-col p-6 transition-all sm:p-8 hover:-translate-y-1 hover:shadow-3xl"
             >
               <CardHeader className="flex flex-col items-start space-y-4 p-0 pb-4">
                 <div className="gradient-primary flex h-14 w-14 items-center justify-center rounded-xl">

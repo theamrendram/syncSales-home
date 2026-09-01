@@ -13,7 +13,7 @@ export function CTA() {
     // gradient, white type. Everything inside is fixed white/white-alpha
     // rather than tokenized, because the surface is deliberately inverted.
     <section className="gradient-primary">
-      <div className="container py-24 sm:py-32">
+      <div className="container py-20 sm:py-24 md:py-32">
         <div className="flex flex-col items-center gap-8 text-center">
           <h2 className="text-3xl font-bold tracking-tighter text-white sm:text-4xl md:text-5xl">
             Ready to close more deals this month?
@@ -24,13 +24,13 @@ export function CTA() {
             in your first week.
           </p>
 
-          <div className="space-y-6 text-center">
+          <div className="w-full max-w-sm space-y-6 text-center sm:max-w-none">
             <Link
               href="/checkout?plan=pro&source=cta"
-              className="inline-flex h-14 items-center justify-center rounded-lg bg-white px-10 text-lg font-semibold text-foreground shadow-3xl transition-transform duration-200 hover:scale-105"
+              className="inline-flex min-h-14 w-full items-center justify-center gap-3 rounded-lg bg-white px-6 py-4 text-base font-semibold text-foreground shadow-3xl transition-transform duration-200 hover:scale-105 sm:w-auto sm:px-10 sm:text-lg"
             >
-              Start Your 7-Day Free Trial{" "}
-              <ArrowRight className="ml-3 h-5 w-5" />
+              Start Your 7-Day Free Trial
+              <ArrowRight className="h-5 w-5 shrink-0" />
             </Link>
 
             {/* Trust indicators */}

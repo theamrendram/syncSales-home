@@ -56,7 +56,7 @@ const SocialAuthButtons = () => {
           }
         }}
         successMessage="Redirecting to sign in..."
-        className="w-full cursor-pointer"
+        className="min-h-11 w-full cursor-pointer sm:min-h-10"
       >
         <Icon />
         Sign in with {name}

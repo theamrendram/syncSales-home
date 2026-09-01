@@ -14,13 +14,13 @@ export function Hero() {
     <GridBackgroundDemo>
       <div className="relative">
         <div className="gradient-secondary absolute inset-0 -z-10" />
-        <div className="container flex flex-col items-center justify-center space-y-12 py-32 md:py-40 lg:py-48">
+        <div className="container flex flex-col items-center justify-center space-y-10 py-24 sm:space-y-12 sm:py-32 md:py-40 lg:py-48">
           <div className="space-y-8 text-center">
             <Badge variant="secondary" className="mx-auto w-fit">
               Trusted by Sales Teams
             </Badge>
-            <h1 className="text-4xl font-bold tracking-tighter text-foreground sm:text-5xl md:text-6xl lg:text-7xl">
-              Increase your revenue by 40% <br className="hidden sm:inline" />
+            <h1 className="text-[2rem] font-bold leading-[1.1] tracking-tighter text-foreground sm:text-5xl md:text-6xl lg:text-7xl">
+              Increase your revenue by 40% <br />
               <span className="gradient-text">in half the time</span>
             </h1>
             <p className="mx-auto max-w-[700px] leading-relaxed text-muted-foreground md:text-xl lg:text-2xl">
@@ -31,13 +31,13 @@ export function Hero() {
           </div>
 
           {/* Single, Clear CTA */}
-          <div className="text-center">
+          <div className="w-full max-w-sm text-center sm:max-w-none">
             <Link
               href="/contact?source=free-trial"
-              className="gradient-primary inline-flex h-14 items-center justify-center rounded-lg px-10 text-lg font-semibold text-white shadow-3xl transition-transform duration-200 hover:scale-105"
+              className="gradient-primary inline-flex min-h-14 w-full items-center justify-center gap-3 rounded-lg px-6 py-4 text-base font-semibold text-white shadow-3xl transition-transform duration-200 hover:scale-105 sm:w-auto sm:px-10 sm:text-lg"
             >
-              Start Your 7-Day Free Trial{" "}
-              <ArrowRight className="ml-3 h-5 w-5" />
+              Start Your 7-Day Free Trial
+              <ArrowRight className="h-5 w-5 shrink-0" />
             </Link>
             <p className="mt-3 text-sm text-muted-foreground">
               No credit card required • Cancel anytime

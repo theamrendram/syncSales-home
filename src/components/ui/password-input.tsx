@@ -66,6 +66,7 @@ export function PasswordInput({
             <InputGroupButton
               size="icon-xs"
               onClick={() => setShowPassword((p) => !p)}
+              className="relative before:absolute before:left-1/2 before:top-1/2 before:h-11 before:w-11 before:-translate-x-1/2 before:-translate-y-1/2 before:content-[''] sm:before:hidden"
             >
               <Icon className="size-4.5" />
               <span className="sr-only">

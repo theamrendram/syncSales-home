@@ -52,9 +52,9 @@ export function FAQ() {
   return (
     <section
       id="faq"
-      className="border-y border-border bg-muted py-24 sm:py-32"
+      className="border-y border-border bg-muted py-20 sm:py-24 md:py-32"
     >
-      <div className="container space-y-16">
+      <div className="container space-y-12 sm:space-y-16">
         <div className="text-center">
           <h2 className="text-3xl font-bold tracking-tighter text-foreground sm:text-4xl md:text-5xl">
             Got Questions? We&apos;ve Got Answers
@@ -92,7 +92,7 @@ export function FAQ() {
           </p>
           <a
             href="/contact?source=free-trial"
-            className="gradient-primary inline-flex h-12 items-center justify-center rounded-lg px-8 font-semibold text-white transition-transform duration-200 hover:scale-105"
+            className="gradient-primary inline-flex min-h-12 w-full max-w-sm items-center justify-center rounded-lg px-6 py-3 font-semibold text-white transition-transform duration-200 hover:scale-105 sm:w-auto sm:px-8"
           >
             Start Your Free Trial Today
           </a>

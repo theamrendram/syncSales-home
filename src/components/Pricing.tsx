@@ -64,8 +64,9 @@ const Pricing = () => {
   ];
 
   return (
-    <section id="pricing" className="bg-background py-24 sm:py-32">
-      <div className="mb-16 text-center">
+    <section id="pricing" className="bg-background py-20 sm:py-24 md:py-32">
+      <div className="container">
+      <div className="mb-12 text-center sm:mb-16">
         <h2 className="text-3xl font-bold tracking-tighter text-foreground sm:text-4xl md:text-5xl">
           Simple pricing that scales with your success
         </h2>
@@ -73,10 +74,11 @@ const Pricing = () => {
           Start free, grow when you&apos;re ready. No hidden fees, no surprises.
         </p>
       </div>
-      <div className="flex flex-wrap justify-center gap-8">
+      <div className="flex flex-wrap justify-center gap-6 sm:gap-8">
         {plans.map((plan) => (
           <PricingCard key={plan.id} plan={plan} />
         ))}
+      </div>
       </div>
     </section>
   );
@@ -87,7 +89,7 @@ export { Pricing };
 function PricingCard({ plan }: { plan: any }) {
   return (
     <div
-      className={`flex w-80 flex-col justify-between rounded-lg p-8 transition-all hover:-translate-y-1 ${
+      className={`flex w-full max-w-sm flex-col justify-between rounded-lg p-6 sm:p-8 transition-all hover:-translate-y-1 ${
         plan.popular
           ? "border-2 border-primary bg-card shadow-3xl"
           : "border border-border bg-card shadow-sm hover:shadow-3xl"

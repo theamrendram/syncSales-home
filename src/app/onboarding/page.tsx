@@ -199,9 +199,9 @@ function OnboardingForm() {
       </div>
 
       <div className="absolute bottom-10 left-10 flex gap-6 text-sm font-semibold text-muted-foreground">
-        <Link href="#" className="hover:text-foreground transition-all hover:scale-105">User settings</Link>
+        <Link href="#" className="inline-flex min-h-11 items-center px-2 transition-all hover:text-foreground">User settings</Link>
         <SignOutButton>
-          <button className="hover:text-foreground transition-all hover:scale-105">Log out</button>
+          <button className="inline-flex min-h-11 items-center px-2 transition-all hover:text-foreground">Log out</button>
         </SignOutButton>
       </div>
 
@@ -330,7 +330,7 @@ function OnboardingForm() {
               </div>
 
               <div className="pt-4 text-center">
-                <Link href="/" className="text-sm font-bold text-muted-foreground hover:text-foreground transition-colors">
+                <Link href="/" className="inline-flex min-h-11 items-center px-3 text-sm font-bold text-muted-foreground transition-colors hover:text-foreground">
                   ← Back to home
                 </Link>
               </div>

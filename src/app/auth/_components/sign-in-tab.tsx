@@ -124,7 +124,7 @@ export default function SignInTab({
         <Button
           type="submit"
           disabled={isSubmitting}
-          className="w-full cursor-pointer"
+          className="min-h-11 w-full cursor-pointer sm:min-h-10"
         >
           <LoadingSwap isLoading={isSubmitting}>Sign In</LoadingSwap>
         </Button>

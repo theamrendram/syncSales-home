@@ -46,14 +46,14 @@ export function TrustSection() {
   ];
 
   return (
-    <section className="border-y border-border bg-muted py-24">
+    <section className="border-y border-border bg-muted py-20 sm:py-24">
       <div className="container mx-auto px-4">
         {/* Trust Badges */}
-        <div className="mb-16 text-center">
+        <div className="mb-12 text-center sm:mb-16">
           <h2 className="mb-4 text-3xl font-bold text-foreground">
             Trusted by Sales Teams Worldwide
           </h2>
-          <div className="mt-8 flex flex-wrap justify-center gap-8">
+          <div className="mt-8 flex flex-wrap justify-center gap-x-8 gap-y-10">
             {trustBadges.map((badge, index) => (
               <div key={index} className="text-center">
                 <div className="gradient-primary mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full">

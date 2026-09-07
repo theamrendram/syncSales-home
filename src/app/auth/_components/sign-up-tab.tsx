@@ -22,7 +22,6 @@ const signUpSchema = z.object({
   name: z.string().min(3, "Name must be at least 3 characters"),
   email: z.string().email("Invalid email address"),
   password: z.string().min(6, "Password must be at least 6 characters"),
-  organization: z.string().min(3, "Organization must be at least 3 characters"),
 });
 
 type signUpForm = z.infer<typeof signUpSchema>;
@@ -39,7 +38,6 @@ export default function SignUpTab({
       name: "",
       email: "",
       password: "",
-      organization: "",
     },
   });
 
@@ -48,6 +46,10 @@ export default function SignUpTab({
     const response = await authClient.signUp.email(
       {
         ...data,
+        // Where the verification link lands. Verifying signs the user in, so
+        // they arrive at onboarding already authenticated — that page collects
+        // the organization details, and is the only place that asks for them.
+        callbackURL: "/onboarding",
       },
       {
         onError: (error) => {
@@ -104,20 +106,6 @@ export default function SignUpTab({
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="organization"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Your Organization Name</FormLabel>
-              <FormControl>
-                <Input {...field} placeholder="Eg. Syncsales Inc." />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
         <Button
           type="submit"
           disabled={isSubmitting}

@@ -5,9 +5,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import axios from "axios";
 import { toast } from "sonner";
-import { useUser, SignOutButton } from "@clerk/nextjs";
+import { authClient } from "@/lib/auth/auth-client";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Hexagon, ArrowRight } from "lucide-react";
 import Link from "next/link";
@@ -15,7 +14,8 @@ import Link from "next/link";
 function OnboardingForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [isRedirecting, setIsRedirecting] = useState(false);
-  const { user, isLoaded } = useUser();
+  const { data: session, isPending } = authClient.useSession();
+  const user = session?.user;
   const router = useRouter();
   const searchParams = useSearchParams();
   const planParam = searchParams.get("plan") || "pro";
@@ -36,7 +36,7 @@ function OnboardingForm() {
   });
 
   const email = useMemo(
-    () => user?.primaryEmailAddress?.emailAddress || user?.emailAddresses?.[0]?.emailAddress || "",
+    () => user?.email || "",
     [user],
   );
 
@@ -92,75 +92,41 @@ function OnboardingForm() {
 
     setIsLoading(true);
     try {
-      const organizationFormData = new FormData();
-      organizationFormData.append("organizationName", formData.organizationName);
-      organizationFormData.append("description", formData.description);
-      if (formData.organizationLogo) {
-        organizationFormData.append("organizationLogo", formData.organizationLogo);
-      }
+      // Created through Better Auth's organization plugin, which also writes
+      // the membership and puts the organization on the session. The API
+      // mirrors the legacy role/member rows in an afterCreateOrganization hook.
+      const slug = formData.organizationName
+        .toLowerCase()
+        .normalize("NFKD")
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "")
+        .slice(0, 48);
 
-      await axios.post("/api/org", organizationFormData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-        withCredentials: true,
+      const { error: orgError } = await authClient.organization.create({
+        name: formData.organizationName,
+        slug: `${slug}-${Date.now().toString(36)}`,
+        metadata: { description: formData.description },
       });
+
+      if (orgError) {
+        throw new Error(orgError.message || "Organization creation failed");
+      }
 
       toast.success("Organization created successfully!");
 
-      // Logic Fix: Handle plan redirect if specified (Option B: Auto-redirect)
+      // Billing is Razorpay now. The checkout page owns plan selection and
+      // the payment handoff; the Dodo Payments branch that used to live here
+      // called an /api/checkout route that does not exist.
       if (planParam) {
         setIsRedirecting(true);
-        toast.info("Proceeding to secure checkout...");
-        
-        try {
-          const plans = {
-            basic: process.env.NEXT_PUBLIC_DODO_PRODUCT_ID_BASIC,
-            pro: process.env.NEXT_PUBLIC_DODO_PRODUCT_ID_PRO,
-          };
-          
-          const productId = plans[planParam as keyof typeof plans] || plans.pro;
-          
-          const successUrl = new URL("/success", window.location.origin);
-          successUrl.searchParams.set("source", "onboarding-checkout");
-          successUrl.searchParams.set("plan", planParam);
-          successUrl.searchParams.set("email", email.trim());
-          if (user?.id) {
-            successUrl.searchParams.set("clerkUserId", user.id);
-          }
-
-          const checkoutResponse = await fetch("/api/checkout", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              productId,
-              email: email.trim(),
-              name: [user?.firstName, user?.lastName].filter(Boolean).join(" "),
-              trialPeriodDays: 7,
-              returnUrl: successUrl.toString(),
-              metadata: {
-                source: "onboarding_redirect",
-                plan: planParam,
-                clerkUserId: user?.id || null,
-                orgName: formData.organizationName
-              },
-            }),
-          });
-
-          const checkoutData = await checkoutResponse.json();
-          if (!checkoutResponse.ok) throw new Error(checkoutData?.error || "Checkout failed");
-          
-          window.location.href = checkoutData.checkoutUrl;
-          return; // Prevent dashboard redirect
-        } catch (checkoutErr: any) {
-          console.error("Auto-checkout failed:", checkoutErr);
-          toast.error("Organization created, but checkout failed. Manual checkout required.");
-        }
+        router.push(`/checkout?plan=${encodeURIComponent(planParam)}`);
+        return;
       }
 
       // Fallback transition to dashboard
       setTimeout(() => {
-        window.location.href = "https://crm.syncsales.in/";
+        window.location.href =
+          process.env.NEXT_PUBLIC_CRM_URL || "https://crm.syncsales.in/";
       }, 1500);
     } catch (error: any) {
       console.log("Organization creation error:", error);
@@ -182,7 +148,7 @@ function OnboardingForm() {
     }
   };
 
-  if (!isLoaded) {
+  if (isPending) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-card">
         <div className="h-10 w-10 animate-spin rounded-full border-b-2 border-primary"></div>
@@ -200,9 +166,16 @@ function OnboardingForm() {
 
       <div className="absolute bottom-10 left-10 flex gap-6 text-sm font-semibold text-muted-foreground">
         <Link href="#" className="inline-flex min-h-11 items-center px-2 transition-all hover:text-foreground">User settings</Link>
-        <SignOutButton>
-          <button className="inline-flex min-h-11 items-center px-2 transition-all hover:text-foreground">Log out</button>
-        </SignOutButton>
+        <button
+          type="button"
+          onClick={async () => {
+            await authClient.signOut();
+            router.push("/auth");
+          }}
+          className="inline-flex min-h-11 items-center px-2 transition-all hover:text-foreground"
+        >
+          Log out
+        </button>
       </div>
 
       <div className="container mx-auto flex min-h-screen w-full max-w-xl flex-col items-center justify-center px-6 py-20">

@@ -1,87 +1,68 @@
 import { NextRequest, NextResponse } from "next/server";
 
-// Routes that require authentication
-const protectedRoutes = ["/checkout(.*)"];
+/**
+ * Route guard for pages that require a signed-in user.
+ *
+ * The session cookie is set by the API, so this asks the API whether it is
+ * valid rather than trusting its presence. The previous version checked for a
+ * cookie nothing set and validated it against an endpoint that did not exist,
+ * so every protected route fell through to "allowed".
+ */
+const PROTECTED_PREFIXES = ["/checkout", "/onboarding"];
 
-function isProtectedRoute(pathname: string): boolean {
-  return protectedRoutes.some((route) => {
-    const regex = new RegExp(`^${route.replace(/\*/g, ".*")}$`);
-    return regex.test(pathname);
-  });
+function isProtected(pathname: string): boolean {
+  return PROTECTED_PREFIXES.some(
+    (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`),
+  );
+}
+
+function redirectToAuth(req: NextRequest) {
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || req.nextUrl.origin;
+  const url = new URL("/auth", appUrl);
+  url.searchParams.set("redirect_url", req.nextUrl.href);
+  return NextResponse.redirect(url);
 }
 
 export async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
-  if (isProtectedRoute(pathname)) {
-    console.log("Protected route detected:", pathname);
-
-    try {
-      // Better Auth stores session in cookies
-      // Check for session cookie (Better Auth typically uses 'better-auth.session_token' or similar)
-      const sessionCookie =
-        req.cookies.get("better-auth.session_token") ||
-        req.cookies.get("session_token") ||
-        req.cookies.get("better-auth.session");
-
-      if (!sessionCookie) {
-        console.log("No session cookie found, redirecting to auth");
-        const redirectUrl = `${process.env.NEXT_PUBLIC_APP_URL || req.nextUrl.origin}/auth?redirect_url=${encodeURIComponent(req.nextUrl.href)}`;
-        return NextResponse.redirect(new URL(redirectUrl));
-      }
-
-      // Verify session with backend by making a request to the session endpoint
-      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
-      if (backendUrl) {
-        try {
-          // Forward all cookies to backend for session verification
-          const cookieHeader = req.headers.get("cookie") || "";
-
-          const sessionResponse = await fetch(
-            `${backendUrl}/api/auth/session`,
-            {
-              method: "GET",
-              headers: {
-                Cookie: cookieHeader,
-              },
-              credentials: "include",
-            },
-          );
-
-          if (!sessionResponse.ok) {
-            throw new Error("Session verification failed");
-          }
-
-          const session = await sessionResponse.json();
-
-          if (!session?.data) {
-            console.log("Invalid session, redirecting to auth");
-            const redirectUrl = `${process.env.NEXT_PUBLIC_APP_URL || req.nextUrl.origin}/auth?redirect_url=${encodeURIComponent(req.nextUrl.href)}`;
-            return NextResponse.redirect(new URL(redirectUrl));
-          }
-
-          console.log("Protected route protected");
-          return NextResponse.next();
-        } catch (error) {
-          console.error("Session verification error:", error);
-          const redirectUrl = `${process.env.NEXT_PUBLIC_APP_URL || req.nextUrl.origin}/auth?redirect_url=${encodeURIComponent(req.nextUrl.href)}`;
-          return NextResponse.redirect(new URL(redirectUrl));
-        }
-      }
-
-      // If no backend URL configured, just check for cookie presence
-      console.log("Protected route protected (cookie check only)");
-      return NextResponse.next();
-    } catch (error) {
-      console.error("Protected route protection failed:", error);
-      const redirectUrl = `${process.env.NEXT_PUBLIC_APP_URL || req.nextUrl.origin}/auth?redirect_url=${encodeURIComponent(req.nextUrl.href)}`;
-      return NextResponse.redirect(new URL(redirectUrl));
-    }
+  if (!isProtected(pathname)) {
+    return NextResponse.next();
   }
 
-  return NextResponse.next();
+  const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+  if (!backendUrl) {
+    // Without an API there is nothing to validate against. Failing closed is
+    // the only safe reading of a misconfigured deployment.
+    console.error("NEXT_PUBLIC_BACKEND_URL is not set; refusing protected route");
+    return redirectToAuth(req);
+  }
+
+  const cookie = req.headers.get("cookie") ?? "";
+  if (!cookie) {
+    return redirectToAuth(req);
+  }
+
+  try {
+    const res = await fetch(`${backendUrl}/api/auth/get-session`, {
+      headers: { cookie },
+      cache: "no-store",
+    });
+
+    if (!res.ok) return redirectToAuth(req);
+
+    // get-session answers 200 with a null body for an absent or expired
+    // session, so the status alone is not enough.
+    const session = await res.json().catch(() => null);
+    if (!session?.user?.id) return redirectToAuth(req);
+
+    return NextResponse.next();
+  } catch (error) {
+    console.error("Session verification failed:", error);
+    return redirectToAuth(req);
+  }
 }
 
 export const config = {
-  matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/(api|trpc)(.*)"],
+  matcher: ["/((?!.+\\.[\\w]+$|_next).*)"],
 };

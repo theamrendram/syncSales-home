@@ -10,14 +10,14 @@
  * credential, which is why every request opts into sending cookies.
  */
 import { createAuthClient } from "better-auth/react";
-import { organizationClient } from "better-auth/client/plugins";
+import { adminClient, organizationClient } from "better-auth/client/plugins";
 
 const BASE_URL =
   process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000";
 
 export const authClient = createAuthClient({
   baseURL: BASE_URL,
-  plugins: [organizationClient()],
+  plugins: [organizationClient(), adminClient()],
   fetchOptions: {
     // The API is a different origin from this app (a different port in
     // development, a sibling subdomain in production), so the session cookie

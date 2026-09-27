@@ -17,6 +17,7 @@ import { LoadingSwap } from "@/components/ui/loading-swap";
 import { authClient } from "@/lib/auth/auth-client";
 import { toast } from "sonner";
 import { useRouter, useSearchParams } from "next/navigation";
+import { navigateAfterAuth } from "@/lib/auth/redirect";
 import { use } from "react";
 
 const signInSchema = z.object({
@@ -71,8 +72,7 @@ export default function SignInTab({
           console.log("Session with customized user:", session?.data);
 
           if (session?.data) {
-            console.log("redirecting to", redirect_url || "/");
-            router.push(redirect_url || "/");
+            navigateAfterAuth(redirect_url);
           } else {
             console.log("redirecting to", "/auth");
             router.push("/auth");

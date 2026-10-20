@@ -11,9 +11,11 @@ import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { navigateAfterAuth } from "@/lib/auth/redirect";
 
-const SocialAuthButtons = () => {
+const SocialAuthButtons = ({ redirectUrl }: { redirectUrl?: string } = {}) => {
   const searchParams = useSearchParams();
-  const redirect_url = searchParams.get("redirect_url");
+  // Pages other than /auth (the invitation page) say where to come back to
+  // directly rather than through the query string.
+  const redirect_url = redirectUrl ?? searchParams.get("redirect_url");
 
   // Handle the OAuth callback when the component mounts
   useEffect(() => {

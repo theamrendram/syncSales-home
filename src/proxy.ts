@@ -8,6 +8,8 @@ import { NextRequest, NextResponse } from "next/server";
  * cookie nothing set and validated it against an endpoint that did not exist,
  * so every protected route fell through to "allowed".
  */
+// /accept-invitation is deliberately absent: an invitee may have no account
+// yet, and that page offers sign-up and sign-in itself.
 const PROTECTED_PREFIXES = ["/checkout", "/onboarding"];
 
 function isProtected(pathname: string): boolean {

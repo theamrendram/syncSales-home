@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "eslint ."
   },
   "dependencies": {
     "@clerk/nextjs": "^6.36.7",
@@ -32,6 +32,7 @@
     "@zxcvbn-ts/language-common": "^3.0.4",
     "@zxcvbn-ts/language-en": "^3.0.2",
     "axios": "^1.7.7",
+    "better-auth": "^1.7.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "framer-motion": "^11.13.1",
@@ -56,8 +57,8 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "baseline-browser-mapping": "^2.10.22",
-    "eslint": "^8",
-    "eslint-config-next": "15.0.2",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "^16.4.0",
     "postcss": "^8",
     "prettier": "^3.6.2",
     "prettier-plugin-tailwindcss": "^0.6.14",

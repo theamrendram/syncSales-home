@@ -13,6 +13,7 @@ import { Separator } from "@/components/ui/separator";
 import SocialAuthButtons from "./_components/social-auth-buttons";
 import { authClient } from "@/lib/auth/auth-client";
 import { useRouter, useSearchParams } from "next/navigation";
+import { navigateAfterAuth } from "@/lib/auth/redirect";
 import { EmailVerification } from "./_components/email-verification";
 import ForgotPassword from "./_components/forgot-password";
 import SignUpTab from "./_components/sign-up-tab";
@@ -29,9 +30,9 @@ function LoginPageContent() {
     authClient
       .getSession()
       .then((session: Awaited<ReturnType<typeof authClient.getSession>>) => {
-        if (session.data != null) router.push(redirect_url || "/");
+        if (session.data != null) navigateAfterAuth(redirect_url);
       });
-  }, [router, redirect_url]);
+  }, [redirect_url]);
 
   function openEmailVerificationTab(email: string) {
     setEmail(email);

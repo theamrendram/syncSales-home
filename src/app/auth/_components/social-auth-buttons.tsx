@@ -7,11 +7,15 @@ import {
 import { authClient } from "@/lib/auth/auth-client";
 import { SyncsalesActionButton } from "@/components/syncsales-action-button";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
+import { navigateAfterAuth } from "@/lib/auth/redirect";
 
-const SocialAuthButtons = () => {
-  const router = useRouter();
+const SocialAuthButtons = ({ redirectUrl }: { redirectUrl?: string } = {}) => {
+  const searchParams = useSearchParams();
+  // Pages other than /auth (the invitation page) say where to come back to
+  // directly rather than through the query string.
+  const redirect_url = redirectUrl ?? searchParams.get("redirect_url");
 
   // Handle the OAuth callback when the component mounts
   useEffect(() => {
@@ -20,7 +24,7 @@ const SocialAuthButtons = () => {
         const session: Awaited<ReturnType<typeof authClient.getSession>> = await authClient.getSession();
         if (session?.data != null) {
           toast.success("Signed in successfully");
-          router.push("/");
+          navigateAfterAuth(redirect_url);
         }
       } catch (error) {
         console.error("OAuth callback error:", error);
@@ -33,7 +37,7 @@ const SocialAuthButtons = () => {
     if (urlParams.get("code") || urlParams.get("error")) {
       handleOAuthCallback();
     }
-  }, [router]);
+  }, [redirect_url]);
 
   return SUPPORTED_OAUTH_PROVIDERS.map((provider: SupportedOAuthProviders) => {
     const { Icon, name } = SUPPORTED_OAUTH_PROVIDERS_DETAILS[provider];
@@ -43,10 +47,22 @@ const SocialAuthButtons = () => {
         key={provider}
         action={async () => {
           try {
+            // Google sends the browser back to callbackURL, so anything the
+            // callback needs has to survive the round trip inside that URL.
+            // Without redirect_url on it, a user who started at the CRM lands
+            // on this app's home page instead of the dashboard they asked for.
+            const callbackURL = new URL(
+              "/auth/callback",
+              process.env.NEXT_PUBLIC_APP_URL || window.location.origin,
+            );
+            if (redirect_url) {
+              callbackURL.searchParams.set("redirect_url", redirect_url);
+            }
+
             // This will redirect to the OAuth provider
             await authClient.signIn.social({
               provider,
-              callbackURL: `${process.env.NEXT_PUBLIC_APP_URL}/auth/callback`,
+              callbackURL: callbackURL.toString(),
             });
             return { error: null };
           } catch (error) {

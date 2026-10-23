@@ -64,7 +64,9 @@ export function EmailVerification({ email }: { email: string | null }) {
           startEmailVerificationCountdown(30);
           return authClient.sendVerificationEmail({
             email: email!,
-            callbackURL: "/",
+            // Same destination as the original sign-up email, so a resent link
+            // does not drop the user somewhere else.
+            callbackURL: "/onboarding",
           });
         }}>
         {timeToNextResend > 0

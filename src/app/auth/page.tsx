@@ -63,12 +63,12 @@ function LoginPageContent() {
             >
               Sign In
             </TabsTrigger>
-            <TabsTrigger
+            {/* <TabsTrigger
               value="signup"
               className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
             >
               Sign Up
-            </TabsTrigger>
+            </TabsTrigger> */}
           </TabsList>
         )}
         <TabsContent value="signin">
